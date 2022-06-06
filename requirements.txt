@@ -1,0 +1,15 @@
+webpack (imports/exports)
+  +typescript
+  babel
+  scss
+  eslint
+  +stylelint
+    -dev mode
+      devserver
+      sourcemaps
+      eslint
+      stylelint
+    -prod mode
+      minified
+git
+  +CI\CD
