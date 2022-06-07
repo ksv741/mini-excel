@@ -2,10 +2,10 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "target": "es5",
-    "jsx": "react",
+    "target": "es3",
     "allowJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "esModuleInterop": true
   },
   "ts-node": {
     "compilerOptions": {
