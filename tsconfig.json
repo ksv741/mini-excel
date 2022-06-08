@@ -9,7 +9,9 @@
   },
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "CommonJS",
+      "strictPropertyInitialization": true
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }

@@ -1,22 +1,15 @@
-
 import './style.scss';
 
-console.log('Webpack with typescript');
-
-const a = 25;
-
-const Persone = {
-  name: 'huy',
-  age: 25,
-  skils: ['html', 'css', 'js']
+interface SomeObject {
+  name: string,
+  age: number
 }
 
-console.log('Persone', Persone);
+const Ivan: SomeObject = {
+  name: 'Ivan',
+  age: 23,
+};
 
-const start = new Promise((res, rej) => {
-  console.log('ONE!');
-})
+// Ivan.name = someName;
 
-start.then(() => {
-  console.log('DWO');
-})
+console.log('Ivan', Ivan);
