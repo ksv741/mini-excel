@@ -10,6 +10,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import HappyPack from 'happypack';
 
 // FIXME: type of any
 const config = (env: Record<string, any>, argv: Record<string, any>): Configuration => {
@@ -37,9 +38,26 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
           configFile: path.resolve(__dirname, 'tsconfig.json'),
         },
       }),
+      new HappyPack({
+        loaders: [
+          {
+            path: 'ts-loader',
+            query: { happyPackMode: true },
+            options: {
+              transpileOnly: true,
+              diagnosticOptions: {
+                semantic: true,
+                syntactic: true,
+              },
+            },
+          },
+        ],
+        threads: 4,
+      }),
     ];
 
     if (!isProd) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return [...basePluginList, new ESLintPlugin({
         extensions: ['ts'],
         failOnError: true,
@@ -83,20 +101,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
         {
           test: /\.?ts$/,
           exclude: /(node_modules|bower_components)/,
-          use: [
-            // {
-            //   loader: 'babel-loader',
-            //   options: {
-            //     presets: ['@babel/preset-env'],
-            //   },
-            // },
-            {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-              },
-            },
-          ],
+          use: 'happypack/loader',
         },
       ],
     },
@@ -107,6 +112,9 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
       compress: true,
       port: 8080,
       watchFiles: './src',
+    },
+    performance: {
+      maxAssetSize: 600000,
     },
   };
 };

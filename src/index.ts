@@ -2,14 +2,14 @@ import './style.scss';
 
 interface SomeObject {
   name: string,
-  age: number
+  age: string
 }
 
 const Ivan: SomeObject = {
   name: 'Ivan',
-  age: 23,
+  age: '23',
 };
 
 // Ivan.name = someName;
 
-console.log('Ivan', Ivan);
+console.log('Ivan - huy', Ivan);

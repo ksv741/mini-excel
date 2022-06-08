@@ -13,9 +13,10 @@ module.exports = {
     project: './tsconfig.json'
   },
   rules: {
-    "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "no-console": "off"
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "no-console": "off",
   },
   env: {
     browser: true,
