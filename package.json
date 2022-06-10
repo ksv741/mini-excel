@@ -49,5 +49,8 @@
   "homepage": "https://bitbucket.org/ksv741/excel-course#readme",
   "description": "",
   "browserslist": "> 0.25%, not dead",
-  "module": "true"
+  "module": "true",
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  }
 }

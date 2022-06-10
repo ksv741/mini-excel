@@ -81,7 +81,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
       clean: true,
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
       alias: {
         '@': path.resolve(__dirname, 'src'),
         '@core': path.resolve(__dirname, 'src', '@core'),
