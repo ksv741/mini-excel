@@ -1,0 +1,53 @@
+{
+  "name": "excel-course",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/happypack": "^5.0.2",
+    "@types/html-webpack-plugin": "^3.2.6",
+    "@types/node": "^17.0.40",
+    "@types/sass-loader": "^8.0.3",
+    "@types/webpack": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "fork-ts-checker-webpack-plugin": "^7.2.11",
+    "happypack": "^5.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "sass": "^1.52.2",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^8.2.0",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.7.3",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ksv741:SFwZWz868cyAGh3Cps6Y@bitbucket.org/ksv741/excel-course.git"
+  },
+  "scripts": {
+    "start": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack serve --mode=development",
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production"
+  },
+  "keywords": [],
+  "author": "ksv741",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/ksv741/excel-course/issues"
+  },
+  "homepage": "https://bitbucket.org/ksv741/excel-course#readme",
+  "description": "",
+  "browserslist": "> 0.25%, not dead",
+  "module": "true"
+}
