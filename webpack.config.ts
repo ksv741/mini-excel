@@ -17,7 +17,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
   const isProd = argv.mode === 'production';
 
   const getFilename = (ext: string): string => `[name]${isProd ? '-[hash]' : ''}.${ext}`;
-  const getSourceMap = () => (isProd ? false : 'source-map');
+  const getSourceMap = () => (isProd ? false : 'inline-source-map');
 
   const getPluginList = (): any[] => {
     const basePluginList = [
@@ -81,11 +81,11 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
       clean: true,
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
       alias: {
-        '@': path.resolve(__dirname, 'src'),
-        '@core': path.resolve(__dirname, 'src', '@core'),
+        '@': path.resolve(__dirname, 'src/'),
+        '@core': path.resolve(__dirname, 'src/core/'),
       },
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
     },
     plugins: getPluginList(),
     module: {
@@ -110,7 +110,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
         directory: path.join(__dirname, 'static'),
       },
       compress: true,
-      port: 8080,
+      port: 80,
       watchFiles: './src',
     },
     performance: {

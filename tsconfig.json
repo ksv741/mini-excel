@@ -5,7 +5,8 @@
     "target": "es3",
     "allowJs": true,
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "sourceMap": true
   },
   "ts-node": {
     "compilerOptions": {
@@ -13,5 +14,5 @@
       "strictPropertyInitialization": true
     }
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
