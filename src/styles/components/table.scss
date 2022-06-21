@@ -19,14 +19,15 @@
     min-width: $info-cell-width;
     border: 1px solid $border-color;
     background: #f8f9fa;
-    // height: 100%;
     border-top: 0;
     border-left: 0;
+    position: relative;
   }
   .row-data {
     display: flex;
   }
   .column {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,8 +50,39 @@
     outline: none;
     &.selected {
       border: none;
-      outline: 2px solid #3c74ff;
+      outline: 2px solid $primary-color;
       z-index: 2;
+    }
+  }
+  .col-resize{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 4px;
+    background: $primary-color;
+    opacity: 0;
+    z-index: 2;
+
+    &:hover{
+      cursor: col-resize;
+      opacity: 1 !important;
+    }
+  }
+
+  .row-resize{
+    position: absolute;
+    bottom: 0;
+    right: 2px;
+    left: 0;
+    height: 4px;
+    opacity: 0;
+    background: $primary-color;
+    z-index: 2;
+
+    &:hover{
+      cursor: row-resize;
+      opacity: 1 !important;
     }
   }
 }
