@@ -52,6 +52,28 @@ export class Dom implements DomClass {
   off(eventType: string, callback: any) {
     this.$el.removeEventListener(eventType, callback);
   }
+
+  get data() {
+    return this.$el.dataset;
+  }
+
+  closest(selector: string) {
+    return $(this.$el.closest(selector) as HTMLElement);
+  }
+
+  getCoords() {
+    return this.$el.getBoundingClientRect();
+  }
+
+  findAll(selector: string) {
+    return this.$el.querySelectorAll(selector);
+  }
+
+  css(styles: any) {
+    Object.keys(styles).forEach((key: any) => {
+      this.$el.style[key] = styles[key];
+    });
+  }
 }
 
 export function $(selector: SelectorType) {
