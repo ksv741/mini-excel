@@ -34,7 +34,9 @@ export class Table extends ExcelComponent {
 
   onMousedown(event: MouseEvent) {
     if (isCell(event)) {
-      this.selection.select($(event.target as HTMLElement));
+      if (event.shiftKey) this.selection.selectGroup($(event.target as HTMLElement));
+      else this.selection.select($(event.target as HTMLElement));
+
       return;
     }
 

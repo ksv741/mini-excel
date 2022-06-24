@@ -30,6 +30,7 @@ module.exports = {
     "import/prefer-default-export": "off",
     "no-console": "off",
     "no-plusplus": "off",
+    "max-len": "off",
   },
   env: {
     browser: true,
