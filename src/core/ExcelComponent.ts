@@ -2,6 +2,7 @@ import { DomListener } from './DomListener';
 
 interface ExcelComponentClass {
   toHTML: () => string;
+  prepare: () => void;
 }
 
 type OptionsType = {
@@ -15,6 +16,12 @@ export class ExcelComponent extends DomListener implements ExcelComponentClass {
   constructor($root: any, options: OptionsType) {
     super($root, options?.listeners);
     this.name = options?.name;
+
+    this.prepare();
+  }
+
+  prepare() {
+
   }
 
   toHTML() {

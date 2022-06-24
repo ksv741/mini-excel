@@ -65,6 +65,10 @@ export class Dom implements DomClass {
     return this.$el.getBoundingClientRect();
   }
 
+  find(selector: string): Dom {
+    return $(this.$el.querySelector(selector) as HTMLElement);
+  }
+
   findAll(selector: string) {
     return this.$el.querySelectorAll(selector);
   }
@@ -73,6 +77,14 @@ export class Dom implements DomClass {
     Object.keys(styles).forEach((key: any) => {
       this.$el.style[key] = styles[key];
     });
+  }
+
+  addClass(className: string) {
+    this.$el.classList.add(className);
+  }
+
+  removeClass(className: string) {
+    this.$el.classList.remove(className);
   }
 }
 
