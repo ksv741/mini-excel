@@ -12,7 +12,7 @@ export class Table extends ExcelComponent {
   constructor($root: any) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown'],
+      listeners: ['mousedown', 'keydown'],
     });
   }
 
@@ -34,5 +34,9 @@ export class Table extends ExcelComponent {
   onMousedown(event: MouseEvent) {
     selectHandler(event, this.selection);
     resizeHandler(this.$root, event);
+  }
+
+  onKeydown(event: KeyboardEvent) {
+    selectHandler(event, this.selection);
   }
 }

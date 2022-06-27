@@ -53,6 +53,10 @@ export class Dom implements DomClass {
     this.$el.removeEventListener(eventType, callback);
   }
 
+  focus() {
+    this.$el.focus();
+  }
+
   get data() {
     return this.$el.dataset;
   }
@@ -80,11 +84,11 @@ export class Dom implements DomClass {
   }
 
   addClass(className: string) {
-    this.$el.classList.add(className);
+    this.$el?.classList.add(className);
   }
 
   removeClass(className: string) {
-    this.$el.classList.remove(className);
+    this.$el?.classList.remove(className);
   }
 }
 

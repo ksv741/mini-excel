@@ -1,9 +1,10 @@
 import { $, Dom } from '../../core/dom';
+import { getParamsFromCellId } from './table.functions';
 
 export class TableSelection {
   static selectedClassName = 'selected';
   private group: Dom[];
-  private current: Dom;
+  public current: Dom;
 
   constructor() {
     this.group = [];
@@ -15,16 +16,30 @@ export class TableSelection {
     this.group = [$el];
     this.current = $el;
     $el.addClass(TableSelection.selectedClassName);
+    $el.focus();
+  }
+
+  selectByCellId(cellID: { col: number, row: number }) {
+    let { col, row } = cellID;
+
+    if (col <= 0) col = 0;
+    if (row <= 0) row = 0;
+
+    this.clearSelection();
+    this.current = $(`[data-id="${row}:${col}"]`);
+    this.current.focus();
+    this.current.addClass(TableSelection.selectedClassName);
   }
 
   clearSelection() {
-    this.group.forEach(el => el.removeClass(TableSelection.selectedClassName));
+    this.group.forEach(el => el?.removeClass(TableSelection.selectedClassName));
+    this.current?.removeClass(TableSelection.selectedClassName);
     this.group = [];
   }
 
   selectGroup($el: Dom) {
-    const startCellParams = this.getParamsFromCellId(this.current.data.id);
-    const selectedCellParams = this.getParamsFromCellId($el.data.id);
+    const startCellParams = getParamsFromCellId(this.current.data.id);
+    const selectedCellParams = getParamsFromCellId($el.data.id);
 
     const startCol = Math.min(startCellParams.col, selectedCellParams.col);
     const endCol = Math.max(startCellParams.col, selectedCellParams.col);
@@ -41,12 +56,5 @@ export class TableSelection {
         cell.addClass(TableSelection.selectedClassName);
       }
     }
-  }
-
-  getParamsFromCellId(cellId: string) {
-    const row = +cellId.split(':')[0];
-    const col = +cellId.split(':')[1];
-
-    return { col, row };
   }
 }
