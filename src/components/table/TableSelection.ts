@@ -3,14 +3,17 @@ import { $, Dom } from '../../core/dom';
 export class TableSelection {
   static selectedClassName = 'selected';
   private group: Dom[];
+  private current: Dom;
 
   constructor() {
     this.group = [];
+    this.current = null;
   }
 
   select($el: Dom) {
     this.clearSelection();
     this.group = [$el];
+    this.current = $el;
     $el.addClass(TableSelection.selectedClassName);
   }
 
@@ -20,13 +23,13 @@ export class TableSelection {
   }
 
   selectGroup($el: Dom) {
-    const startCellParams = this.getParamsFromCellId(this.group[0].data.id);
+    const startCellParams = this.getParamsFromCellId(this.current.data.id);
     const selectedCellParams = this.getParamsFromCellId($el.data.id);
 
-    const startCol = Math.min(+startCellParams.col, +selectedCellParams.col);
-    const endCol = Math.max(+startCellParams.col, +selectedCellParams.col);
-    const startRow = Math.min(+startCellParams.row, +selectedCellParams.row);
-    const endRow = Math.max(+startCellParams.row, +selectedCellParams.row);
+    const startCol = Math.min(startCellParams.col, selectedCellParams.col);
+    const endCol = Math.max(startCellParams.col, selectedCellParams.col);
+    const startRow = Math.min(startCellParams.row, selectedCellParams.row);
+    const endRow = Math.max(startCellParams.row, selectedCellParams.row);
 
     this.clearSelection();
 
@@ -41,8 +44,8 @@ export class TableSelection {
   }
 
   getParamsFromCellId(cellId: string) {
-    const row = cellId.split(':')[0];
-    const col = cellId.split(':')[1];
+    const row = +cellId.split(':')[0];
+    const col = +cellId.split(':')[1];
 
     return { col, row };
   }

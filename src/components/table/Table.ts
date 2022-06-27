@@ -1,6 +1,5 @@
-import { $ } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
-import { isCell } from './table.functions';
+import { selectHandler } from './handlers/table.select.handler';
 import { TableSelection } from './TableSelection';
 import { createTable } from './table.template';
 import { resizeHandler } from './handlers/table.resize';
@@ -8,7 +7,7 @@ import { resizeHandler } from './handlers/table.resize';
 export class Table extends ExcelComponent {
   static className = 'excel__table';
 
-  private selection: any;
+  private selection: TableSelection;
 
   constructor($root: any) {
     super($root, {
@@ -33,13 +32,7 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(event: MouseEvent) {
-    if (isCell(event)) {
-      if (event.shiftKey) this.selection.selectGroup($(event.target as HTMLElement));
-      else this.selection.select($(event.target as HTMLElement));
-
-      return;
-    }
-
+    selectHandler(event, this.selection);
     resizeHandler(this.$root, event);
   }
 }
