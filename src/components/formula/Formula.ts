@@ -1,28 +1,51 @@
-import { DomClass } from '../../core/dom';
+import { Dom, DomClass } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula';
 
-  constructor($root: DomClass) {
+  private formulaInput: Dom;
+
+  constructor($root: DomClass, options: any) {
     super($root, {
-      listeners: ['input', 'click'],
+      listeners: ['input', 'keydown'],
       name: 'Formula',
+      ...options,
     });
   }
 
   toHTML(): string {
     return `
     <div class="info">fx</div>
-    <div class="input" contenteditable spellcheck="false"></div>
+    <div id="formula-input" class="input" contenteditable spellcheck="false"></div>
     `;
   }
 
-  onInput(event: Event) {
-    console.log('Formula on input listeners', event);
+  init() {
+    super.init();
+
+    this.formulaInput = this.$root.find('#formula-input');
+
+    this.$on('table:input', text => {
+      this.formulaInput.text = text;
+    });
+    this.$on('table:select-cell', text => {
+      this.formulaInput.text = text;
+    });
   }
 
-  onClick() {
+  onInput(event: Event) {
+    const text = (event.target as HTMLElement).textContent.trim();
+    this.$emit('formula:input', text);
+  }
 
+  onKeydown(event: KeyboardEvent) {
+    const preventedKeys = ['Enter', 'Tab'];
+
+    if (preventedKeys.includes(event.key)) event.preventDefault();
+
+    if (event.key === 'Enter') {
+      this.$emit('formula:enter-press');
+    }
   }
 }

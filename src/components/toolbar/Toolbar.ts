@@ -1,13 +1,14 @@
-import { Dom } from '../../core/dom';
+import { DomClass } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
 
 export class Toolbar extends ExcelComponent {
   static className = 'excel__toolbar';
 
-  constructor($root: Dom) {
+  constructor($root: DomClass, options: any) {
     super($root, {
       name: 'Toolbar',
       listeners: ['click'],
+      ...options,
     });
   }
 

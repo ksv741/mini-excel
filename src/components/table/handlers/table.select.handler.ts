@@ -2,7 +2,7 @@ import { $ } from '../../../core/dom';
 import { getParamsFromCellId, isCell } from '../table.functions';
 import { TableSelection } from '../TableSelection';
 
-export function selectHandler(event: MouseEvent | KeyboardEvent, selection: TableSelection) {
+export function selectHandler(event: MouseEvent | KeyboardEvent, selection: TableSelection, callback?: () => void) {
   switch (event.type) {
     case 'mousedown': {
       onMouseDownHandler();
@@ -14,6 +14,8 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
     }
     default: break;
   }
+
+  callback();
 
   function onMouseDownHandler() {
     if (isCell(event)) {

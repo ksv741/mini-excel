@@ -1,3 +1,4 @@
+import { DomClass } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
 import { selectHandler } from './handlers/table.select.handler';
 import { TableSelection } from './TableSelection';
@@ -9,10 +10,11 @@ export class Table extends ExcelComponent {
 
   private selection: TableSelection;
 
-  constructor($root: any) {
+  constructor($root: DomClass, options: any) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'keydown'],
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options,
     });
   }
 
@@ -29,14 +31,33 @@ export class Table extends ExcelComponent {
 
     const $cell = this.$root.find('[data-id="0:0"]');
     this.selection.select($cell);
+
+    this.$emit('table:select-cell', $cell.text);
+
+    this.$on('formula:input', (data) => {
+      this.selection.current.text = data;
+    });
+
+    this.$on('formula:enter-press', () => {
+      this.selection.current.focus();
+    });
+  }
+
+  emitSelectCallback() {
+    this.$emit('table:select-cell', this.selection.current.text);
   }
 
   onMousedown(event: MouseEvent) {
-    selectHandler(event, this.selection);
+    selectHandler(event, this.selection, this.emitSelectCallback.bind(this));
     resizeHandler(this.$root, event);
   }
 
   onKeydown(event: KeyboardEvent) {
-    selectHandler(event, this.selection);
+    selectHandler(event, this.selection, this.emitSelectCallback.bind(this));
+  }
+
+  onInput(event: InputEvent) {
+    const inputText = (event.target as HTMLElement).textContent.trim();
+    this.$emit('table:input', inputText);
   }
 }

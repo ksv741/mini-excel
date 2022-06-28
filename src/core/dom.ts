@@ -24,6 +24,14 @@ export class Dom implements DomClass {
     return this.$el.outerHTML.trim();
   }
 
+  set text(text: string) {
+    this.$el.textContent = text;
+  }
+
+  get text() {
+    return this.$el.textContent;
+  }
+
   clear() {
     this.html('');
 
