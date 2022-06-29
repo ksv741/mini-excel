@@ -1,9 +1,10 @@
-import { DomClass } from '../../core/dom';
+import * as actions from '../../redux/actions';
+import { $, DomClass } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
-import { selectHandler } from './handlers/table.select.handler';
 import { TableSelection } from './TableSelection';
 import { createTable } from './table.template';
 import { resizeHandler } from './handlers/table.resize';
+import { selectHandler } from './handlers/table.select.handler';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -41,15 +42,38 @@ export class Table extends ExcelComponent {
     this.$on('formula:enter-press', () => {
       this.selection.current.focus();
     });
+
+    // this.$subscribe(state => {
+    //   console.log('State in Table', state);
+    // });
+
+    this.initTableSize();
+  }
+
+  initTableSize() {
+    const colSizes = this.store.getState()?.colState;
+    Object.keys(colSizes).forEach(key => {
+      const cols = this.$root.findAll(`[data-col="${key}"]`);
+      cols.forEach(el => $(el as HTMLElement).css({ width: `${colSizes[key]}px` }));
+    });
   }
 
   emitSelectCallback() {
     this.$emit('table:select-cell', this.selection.current.text);
   }
 
+  async resizeTable(event: MouseEvent) {
+    try {
+      const resizeData = await resizeHandler(this.$root, event);
+      this.$dispatch(actions.tableResize({ resizeData }));
+    } catch (e) {
+      console.warn('Resize error', e.message);
+    }
+  }
+
   onMousedown(event: MouseEvent) {
     selectHandler(event, this.selection, this.emitSelectCallback.bind(this));
-    resizeHandler(this.$root, event);
+    this.resizeTable(event);
   }
 
   onKeydown(event: KeyboardEvent) {

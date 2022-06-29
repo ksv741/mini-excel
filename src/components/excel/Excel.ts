@@ -1,20 +1,24 @@
+import { Store } from '../../core/createStore';
 import { $, Dom } from '../../core/dom';
 import { Emitter } from '../../core/Emitter';
 import { ExcelComponent } from '../../core/ExcelComponent';
 
 interface ExcelOptionsType {
-  components: any[]
+  components: any[],
+  store: any,
 }
 
 export class Excel {
   $el: HTMLElement | Dom;
   components: any[];
   emitter: Emitter;
+  store: Store;
 
   constructor(selector: string, options: ExcelOptionsType) {
     this.$el = $(selector);
     this.components = options.components;
     this.emitter = new Emitter();
+    this.store = options.store;
 
     console.log(`Created new Excel class in ${selector} with options: ${options}`);
   }
@@ -24,6 +28,7 @@ export class Excel {
 
     const componentOptions = {
       emitter: this.emitter,
+      store: this.store,
     };
 
     this.components = this.components.map(Component => {
