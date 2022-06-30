@@ -1,4 +1,4 @@
-import { ActionType, StateType, SubscribeType } from '../redux/types';
+import { ActionType, SubscribeType } from '../redux/types';
 import { Store } from './createStore';
 import { DomListener } from './DomListener';
 import { Emitter } from './Emitter';
@@ -6,6 +6,7 @@ import { Emitter } from './Emitter';
 interface ExcelComponentClass {
   toHTML: () => string;
   prepare: () => void;
+  storeChanged?: (args: any) => void;
 }
 
 type OptionsType = {
@@ -13,13 +14,15 @@ type OptionsType = {
   name: string;
   emitter?: Emitter;
   store: Store;
+  subscribe: string[],
 };
 
-export class ExcelComponent extends DomListener implements ExcelComponentClass {
+export abstract class ExcelComponent extends DomListener implements ExcelComponentClass {
   name: string;
   emitter: Emitter;
   store: Store;
   storeSub: SubscribeType;
+  subscribe: string[];
   private unsubscribers: ((args?: any) => any)[];
 
   constructor($root: any, options: OptionsType) {
@@ -27,6 +30,8 @@ export class ExcelComponent extends DomListener implements ExcelComponentClass {
     this.name = options?.name;
     this.emitter = options?.emitter;
     this.store = options?.store;
+    this.subscribe = options?.subscribe;
+
     this.unsubscribers = [];
     this.prepare();
   }
@@ -52,8 +57,12 @@ export class ExcelComponent extends DomListener implements ExcelComponentClass {
     this.store.dispatch(action);
   }
 
-  $subscribe(fn: (state?: StateType) => void) {
-    this.storeSub = this.store.subscribe(fn);
+  storeChanged(args?: any) {
+    console.log('CHANGE STORE: ', args);
+  }
+
+  isWatching(key: string) {
+    return this.subscribe?.includes(key);
   }
 
   init() {

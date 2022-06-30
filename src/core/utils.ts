@@ -11,3 +11,11 @@ export function storage(key: string, data: any = null): any {
 
   return true;
 }
+
+export function isEqual(a: any, b: any) {
+  if (typeof a === 'object' && typeof b === 'object') {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+
+  return a === b;
+}
