@@ -4,9 +4,12 @@ import { ActionType, StateType } from './types';
 export function rootReducer(state: StateType, action: ActionType) {
   switch (action.type) {
     case TABLE_RESIZE: {
-      const prevState = state.colState || {};
-      prevState[action.resizeData?.id] = action.resizeData?.value;
-      return { ...state, colState: prevState };
+      const newState: StateType = { ...state };
+      const fieldName = `${action.resizeData?.type}State`;
+
+      newState[fieldName][action.resizeData?.id] = action.resizeData?.value;
+
+      return { ...state, ...newState };
     }
 
     default: return state;

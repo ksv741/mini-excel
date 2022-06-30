@@ -9,7 +9,6 @@ function createCell(cellContent = '', colIndex = 1, rowIndex = 1) {
       class="cell" 
       contenteditable 
       data-col="${colIndex}" 
-      data-row=${rowIndex}  
       data-id="${rowIndex}:${colIndex}"
       data-type="cell"
     >
@@ -28,9 +27,9 @@ function createCol(columnContent = '', index = 1) {
   `;
 }
 
-function createRow(dataContent = '', infoContent = '', needResize = true) {
+function createRow(dataContent = '', infoContent = '', needResize = true, rowIndex = -1) {
   return `
-    <div class="row" data-type="resizable">
+    <div class="row" data-type="resizable" data-row="${rowIndex}">
       <div class="row-info">
         ${infoContent}
         ${needResize ? '<div class="row-resize" data-resize="row"></div>' : ''}
@@ -58,7 +57,7 @@ export function createTable(rowsCount = 10, columnCount = 10) {
       .map((el, index) => createCell('', index, row))
       .join('');
 
-    rows.push(createRow(cells, `${row + 1}`));
+    rows.push(createRow(cells, `${row + 1}`, true, row));
   }
 
   return rows.join('');

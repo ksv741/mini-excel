@@ -51,10 +51,18 @@ export class Table extends ExcelComponent {
   }
 
   initTableSize() {
-    const colSizes = this.store.getState()?.colState;
-    Object.keys(colSizes).forEach(key => {
+    const size = {
+      col: this.store.getState()?.colState,
+      row: this.store.getState()?.rowState,
+    };
+
+    Object.keys(size.col).forEach(key => {
       const cols = this.$root.findAll(`[data-col="${key}"]`);
-      cols.forEach(el => $(el as HTMLElement).css({ width: `${colSizes[key]}px` }));
+      cols.forEach(el => $(el as HTMLElement).css({ width: `${size.col[key]}px` }));
+    });
+    Object.keys(size.row).forEach(key => {
+      const rows = this.$root.findAll(`[data-row="${key}"]`);
+      rows.forEach(el => $(el as HTMLElement).css({ height: `${size.row[key]}px` }));
     });
   }
 
@@ -65,6 +73,7 @@ export class Table extends ExcelComponent {
   async resizeTable(event: MouseEvent) {
     try {
       const resizeData = await resizeHandler(this.$root, event);
+      console.log('Resize data', resizeData);
       this.$dispatch(actions.tableResize({ resizeData }));
     } catch (e) {
       console.warn('Resize error', e.message);

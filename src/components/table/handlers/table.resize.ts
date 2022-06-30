@@ -1,7 +1,7 @@
 import { $, Dom } from '../../../core/dom';
 
 type CustomElementType = Element & { css: any };
-type ResizeReturnDataType = { value: number, id: string };
+type ResizeReturnDataType = { value: number, id: string, type: string };
 
 export function resizeHandler($root: Dom, event: MouseEvent) {
   return new Promise<ResizeReturnDataType>(res => {
@@ -60,10 +60,12 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
       document.body.style.userSelect = null;
 
       let value: number;
+      // let id: string;
 
       switch (type) {
         case 'col': {
           value = coords.width + delta;
+
           $parent.css({ width: `${value}px` });
           allCols.forEach((el: CustomElementType) => el.css({ width: `${coords.width + delta}px` }));
           break;
@@ -71,6 +73,7 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
 
         case 'row': {
           value = coords.height + delta;
+
           $parent.css({ height: `${value}px` });
           break;
         }
@@ -78,10 +81,7 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
         default: break;
       }
 
-      res({
-        value,
-        id: type === 'col' ? $parent.data.col : null,
-      });
+      res({ value, id: $parent.data[type], type });
 
       $resizer.css({ opacity: 0, bottom: 0, right: 0 });
     };
