@@ -37,6 +37,7 @@ export class Table extends ExcelComponent {
 
     this.$on('formula:input', (data) => {
       this.selection.current.text = data;
+      this.updateCurrentTextInStore(data);
     });
 
     this.$on('formula:enter-press', () => {
@@ -46,8 +47,12 @@ export class Table extends ExcelComponent {
     // this.$subscribe(state => {
     //   console.log('State in Table', state);
     // });
+    this.initTable();
+  }
 
+  initTable() {
     this.initTableSize();
+    this.initTableContent();
   }
 
   initTableSize() {
@@ -66,6 +71,13 @@ export class Table extends ExcelComponent {
     });
   }
 
+  initTableContent() {
+    const tableContent = this.store.getState().dataState;
+    Object.keys(tableContent).forEach(cellId => {
+      this.$root.find(`[data-id="${cellId}"]`).text = tableContent[cellId] || '';
+    });
+  }
+
   emitSelectCallback() {
     this.$emit('table:select-cell', this.selection.current.text);
   }
@@ -73,11 +85,17 @@ export class Table extends ExcelComponent {
   async resizeTable(event: MouseEvent) {
     try {
       const resizeData = await resizeHandler(this.$root, event);
-      console.log('Resize data', resizeData);
       this.$dispatch(actions.tableResize({ resizeData }));
     } catch (e) {
       console.warn('Resize error', e.message);
     }
+  }
+
+  updateCurrentTextInStore(text: string) {
+    this.$dispatch(actions.changeText({
+      text,
+      id: this.selection.current.data.id,
+    }));
   }
 
   onMousedown(event: MouseEvent) {
@@ -90,7 +108,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    const inputText = (event.target as HTMLElement).textContent.trim();
-    this.$emit('table:input', inputText);
+    this.updateCurrentTextInStore((event.target as HTMLElement).textContent.trim());
   }
 }

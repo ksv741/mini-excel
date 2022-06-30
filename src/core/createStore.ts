@@ -6,6 +6,8 @@ import { storage } from './utils';
 const initialState: StateType = {
   colState: {},
   rowState: {},
+  dataState: {},
+  currentText: '',
   ...storage('excel-state'),
 };
 
