@@ -11,6 +11,10 @@ export class TableSelection {
     this.current = null;
   }
 
+  get selectedIds() {
+    return this.group.map(el => el.data.id);
+  }
+
   select($el: Dom) {
     this.clearSelection();
     this.group = [$el];
@@ -56,5 +60,9 @@ export class TableSelection {
         cell.addClass(TableSelection.selectedClassName);
       }
     }
+  }
+
+  applyStyle(style: CSSStyleRule) {
+    this.group.forEach(el => el.css(style));
   }
 }

@@ -1,4 +1,4 @@
-import { CHANGE_TEXT, TABLE_RESIZE } from './constants';
+import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE } from './constants';
 
 export function tableResize(resizeData: any) {
   return {
@@ -10,6 +10,27 @@ export function tableResize(resizeData: any) {
 export function changeText(data: { text: string, id: string }) {
   return {
     type: CHANGE_TEXT,
+    data,
+  };
+}
+
+export function changeCurrentStyles(data: any) {
+  return {
+    type: CHANGE_STYLES,
+    data,
+  };
+}
+
+export function applyStyle(data: any) {
+  return {
+    type: APPLY_STYLES,
+    data,
+  };
+}
+
+export function changeTitle(data: string) {
+  return {
+    type: CHANGE_TITLE,
     data,
   };
 }

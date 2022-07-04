@@ -33,6 +33,7 @@ module.exports = {
     "max-len": "off",
     "no-console": "off",
     "no-plusplus": "off",
+    "object-curly-newline": "off",
   },
   env: {
     browser: true,

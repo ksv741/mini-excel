@@ -1,19 +1,7 @@
-import {
-  ActionType, ReducerType, StateType, SubscribeType,
-} from '../redux/types';
-import { storage } from './utils';
-
-const initialState: StateType = {
-  colState: {},
-  rowState: {},
-  dataState: {},
-  currentText: '',
-  ...storage('excel-state'),
-};
+import { initialState } from '../constants';
+import { ActionType, ReducerType, StateType, SubscribeType } from '../redux/types';
 
 export class Store {
-  static initialState = {};
-
   state: StateType;
   listeners: ((args?: any) => void)[];
 

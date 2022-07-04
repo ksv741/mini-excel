@@ -1,3 +1,5 @@
+import { initialStyleState } from '../constants';
+
 type SelectorType = string | HTMLElement;
 
 export interface DomClass {
@@ -29,6 +31,7 @@ export class Dom implements DomClass {
   }
 
   get text() {
+    if (this.$el.closest('input')) return (this.$el as HTMLInputElement).value;
     return this.$el.textContent;
   }
 
@@ -86,7 +89,9 @@ export class Dom implements DomClass {
   }
 
   css(styles: any) {
-    Object.keys(styles).forEach((key: any) => {
+    if (!styles) return;
+
+    Object.keys(styles)?.forEach((key: any) => {
       this.$el.style[key] = styles[key];
     });
   }
@@ -97,6 +102,13 @@ export class Dom implements DomClass {
 
   removeClass(className: string) {
     this.$el?.classList.remove(className);
+  }
+
+  getStyles(styles: (keyof Partial<CSSStyleDeclaration>)[]) {
+    return styles.reduce((res: Partial<CSSStyleDeclaration>, s: any) => {
+      res[s] = this.$el.style[s] || initialStyleState[s];
+      return res;
+    }, {});
   }
 }
 

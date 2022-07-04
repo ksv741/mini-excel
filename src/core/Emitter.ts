@@ -7,7 +7,7 @@ export class Emitter {
     this.listeners = {};
   }
 
-  emit(eventName: string, ...args: any[]) {
+  emit(eventName: string, args: any[]) {
     if (!Array.isArray(this.listeners[eventName])) return false;
 
     this.listeners[eventName].forEach(listener => {

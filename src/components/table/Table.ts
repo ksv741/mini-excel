@@ -1,17 +1,19 @@
-import * as actions from '../../redux/actions';
-import { $, DomClass } from '../../core/dom';
+import { initialStyleState } from '../../constants';
+import { $, Dom } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
-import { TableSelection } from './TableSelection';
-import { createTable } from './table.template';
+import { changeCurrentStyles } from '../../redux/actions';
+import * as actions from '../../redux/actions';
 import { resizeHandler } from './handlers/table.resize';
 import { selectHandler } from './handlers/table.select.handler';
+import { createTable } from './table.template';
+import { TableSelection } from './TableSelection';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
 
   private selection: TableSelection;
 
-  constructor($root: DomClass, options: any) {
+  constructor($root: Dom, options: any) {
     super($root, {
       name: 'Table',
       listeners: ['mousedown', 'keydown', 'input'],
@@ -44,15 +46,21 @@ export class Table extends ExcelComponent {
       this.selection.current.focus();
     });
 
-    // this.$subscribe(state => {
-    //   console.log('State in Table', state);
-    // });
+    this.$on('toolbar:applyStyle', (value) => {
+      this.selection.applyStyle(value);
+
+      this.$dispatch(actions.applyStyle({
+        value,
+        ids: this.selection.selectedIds,
+      }));
+    });
+
     this.initTable();
   }
 
   initTable() {
     this.initTableSize();
-    this.initTableContent();
+    this.initTableContentAndStyles();
   }
 
   initTableSize() {
@@ -71,15 +79,25 @@ export class Table extends ExcelComponent {
     });
   }
 
-  initTableContent() {
-    const tableContent = this.store.getState().dataState;
+  initTableContentAndStyles() {
+    const tableState = this.store.getState();
+    const tableContent = tableState?.dataState;
+    const tableStyles = tableState?.stylesState;
+
     Object.keys(tableContent).forEach(cellId => {
-      this.$root.find(`[data-id="${cellId}"]`).text = tableContent[cellId] || '';
+      const $cell = this.$root.find(`[data-id="${cellId}"]`);
+      const styles = tableStyles[cellId];
+
+      $cell.text = tableContent[cellId] || '';
+      $cell.css(styles);
     });
   }
 
   emitSelectCallback() {
     this.$emit('table:select-cell', this.selection.current.text);
+
+    const styles = this.selection.current?.getStyles(Object.keys(initialStyleState) as (keyof Partial<CSSStyleDeclaration>)[]);
+    this.$dispatch(changeCurrentStyles(styles));
   }
 
   async resizeTable(event: MouseEvent) {

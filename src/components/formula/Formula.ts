@@ -1,4 +1,4 @@
-import { Dom, DomClass } from '../../core/dom';
+import { Dom } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
@@ -6,7 +6,7 @@ export class Formula extends ExcelComponent {
 
   private formulaInput: Dom;
 
-  constructor($root: DomClass, options: any) {
+  constructor($root: Dom, options: any) {
     super($root, {
       listeners: ['input', 'keydown'],
       name: 'Formula',
