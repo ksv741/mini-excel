@@ -19,3 +19,17 @@ export function isEqual(a: any, b: any) {
 
   return a === b;
 }
+
+export function debounce(fn: (fnArgs?: any) => void, wait: number) {
+  let timeout: NodeJS.Timeout;
+
+  return function (...args: any[]) {
+    const later = () => {
+      clearTimeout(timeout);
+      fn.apply(this, args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}

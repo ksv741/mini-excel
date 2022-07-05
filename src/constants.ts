@@ -16,5 +16,5 @@ export const initialState: StateType = {
   stylesState: {},
   title: 'New excel table',
   ...storage('excel-state'),
-  currentStyles: { ...storage('excel-state').stylesState['0:0'] },
+  currentStyles: { ...storage('excel-state')?.stylesState?.['0:0'] },
 };

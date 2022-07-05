@@ -1,4 +1,5 @@
 .idea
 dist
 node_modules
-configs/deploy/sftp-config.js
+.gitignore
+configs

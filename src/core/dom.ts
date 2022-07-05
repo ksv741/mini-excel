@@ -72,6 +72,10 @@ export class Dom implements DomClass {
     return this.$el.dataset;
   }
 
+  setData(name: string, value: string) {
+    this.$el.setAttribute(`data-${name}`, value);
+  }
+
   closest(selector: string) {
     return $(this.$el.closest(selector) as HTMLElement);
   }
@@ -109,6 +113,15 @@ export class Dom implements DomClass {
       res[s] = this.$el.style[s] || initialStyleState[s];
       return res;
     }, {});
+  }
+
+  attr(name: string, value: string) {
+    if (value) {
+      this.$el.setAttribute(name, value);
+      return this;
+    }
+
+    return this.$el.getAttribute(name);
   }
 }
 

@@ -1,6 +1,7 @@
 import { initialStyleState } from '../../constants';
 import { $, Dom } from '../../core/dom';
 import { ExcelComponent } from '../../core/ExcelComponent';
+import { parse } from '../../core/parse';
 import { changeCurrentStyles } from '../../redux/actions';
 import * as actions from '../../redux/actions';
 import { resizeHandler } from './handlers/table.resize';
@@ -35,10 +36,11 @@ export class Table extends ExcelComponent {
     const $cell = this.$root.find('[data-id="0:0"]');
     this.selection.select($cell);
 
-    this.$emit('table:select-cell', $cell.text);
+    this.$emit('table:select-cell', $cell.data.value);
 
     this.$on('formula:input', (data) => {
-      this.selection.current.text = data;
+      this.selection.current.attr('data-value', data);
+      this.selection.current.text = parse(data);
       this.updateCurrentTextInStore(data);
     });
 
@@ -73,6 +75,7 @@ export class Table extends ExcelComponent {
       const cols = this.$root.findAll(`[data-col="${key}"]`);
       cols.forEach(el => $(el as HTMLElement).css({ width: `${size.col[key]}px` }));
     });
+
     Object.keys(size.row).forEach(key => {
       const rows = this.$root.findAll(`[data-row="${key}"]`);
       rows.forEach(el => $(el as HTMLElement).css({ height: `${size.row[key]}px` }));
@@ -88,13 +91,14 @@ export class Table extends ExcelComponent {
       const $cell = this.$root.find(`[data-id="${cellId}"]`);
       const styles = tableStyles[cellId];
 
-      $cell.text = tableContent[cellId] || '';
+      $cell.text = parse(tableContent[cellId]) || '';
+      $cell.setData('value', tableContent[cellId]);
       $cell.css(styles);
     });
   }
 
   emitSelectCallback() {
-    this.$emit('table:select-cell', this.selection.current.text);
+    this.$emit('table:select-cell', this.selection.current.data.value);
 
     const styles = this.selection.current?.getStyles(Object.keys(initialStyleState) as (keyof Partial<CSSStyleDeclaration>)[]);
     this.$dispatch(changeCurrentStyles(styles));
