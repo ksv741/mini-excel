@@ -1,9 +1,9 @@
+import { $, Dom } from 'core/dom';
+import { ExcelComponent } from 'core/ExcelComponent';
+import { parse } from 'core/parse';
+import { changeCurrentStyles } from 'redux/actions';
+import * as actions from 'redux/actions';
 import { initialStyleState } from '../../constants';
-import { $, Dom } from '../../core/dom';
-import { ExcelComponent } from '../../core/ExcelComponent';
-import { parse } from '../../core/parse';
-import { changeCurrentStyles } from '../../redux/actions';
-import * as actions from '../../redux/actions';
 import { resizeHandler } from './handlers/table.resize';
 import { selectHandler } from './handlers/table.select.handler';
 import { createTable } from './table.template';

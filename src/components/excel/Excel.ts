@@ -1,8 +1,8 @@
-import { Store } from '../../core/createStore';
-import { $, Dom } from '../../core/dom';
-import { Emitter } from '../../core/Emitter';
-import { ExcelComponent } from '../../core/ExcelComponent';
-import { StoreSubscriber } from '../../core/StoreSubscriber';
+import { Store } from 'core/createStore';
+import { $, Dom } from 'core/dom';
+import { Emitter } from 'core/Emitter';
+import { ExcelComponent } from 'core/ExcelComponent';
+import { StoreSubscriber } from 'core/StoreSubscriber';
 
 interface ExcelOptionsType {
   components: any[],
@@ -16,14 +16,11 @@ export class Excel {
   store: Store;
   subscriber: StoreSubscriber;
 
-  constructor(selector: string, options: ExcelOptionsType) {
-    this.$el = $(selector);
+  constructor(options: ExcelOptionsType) {
     this.components = options.components;
     this.emitter = new Emitter();
     this.store = options.store;
     this.subscriber = new StoreSubscriber(this.store);
-
-    console.log(`Created new Excel class in ${selector} with options: ${options}`);
   }
 
   getRoot() {
@@ -44,12 +41,10 @@ export class Excel {
       return component;
     });
 
-    return $root.$el;
+    return $root;
   }
 
-  render() {
-    this.$el.append(this.getRoot());
-
+  init() {
     this.subscriber.subscribeComponents(this.components);
     this.components.forEach(component => component.init());
   }

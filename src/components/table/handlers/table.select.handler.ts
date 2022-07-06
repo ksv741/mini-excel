@@ -1,4 +1,4 @@
-import { $ } from '../../../core/dom';
+import { $ } from 'core/dom';
 import { getParamsFromCellId, isCell } from '../table.functions';
 import { TableSelection } from '../TableSelection';
 

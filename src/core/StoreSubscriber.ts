@@ -1,4 +1,4 @@
-import { StateType } from '../redux/types';
+import { StateType } from 'redux/types';
 import { Store } from './createStore';
 import { isEqual } from './utils';
 

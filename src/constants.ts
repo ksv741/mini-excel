@@ -8,13 +8,16 @@ export const initialStyleState: Partial<CSSStyleDeclaration> = {
   fontStyle: 'normal',
 };
 
-export const initialState: StateType = {
-  colState: {},
-  rowState: {},
-  dataState: {},
-  currentText: '',
-  stylesState: {},
-  title: 'New excel table',
-  ...storage('excel-state'),
-  currentStyles: { ...storage('excel-state')?.stylesState?.['0:0'] },
-};
+export function getNormalizeInitialState(params: string): StateType {
+  return {
+    colState: {},
+    rowState: {},
+    dataState: {},
+    currentText: '',
+    stylesState: {},
+    title: 'New excel table',
+    ...storage(`excel:${params}`),
+    currentStyles: { ...storage(`excel:${params}`)?.stylesState?.['0:0'] },
+    id: params,
+  };
+}

@@ -1,4 +1,4 @@
-import { ActionType, SubscribeType } from '../redux/types';
+import { ActionType, SubscribeType } from 'redux/types';
 import { Store } from './createStore';
 import { Dom } from './dom';
 import { DomListener } from './DomListener';
@@ -73,6 +73,5 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
   destroy() {
     this.removeDOMListeners();
     this.unsubscribers.forEach(unsub => unsub());
-    this.storeSub.unsubscribe();
   }
 }

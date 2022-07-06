@@ -1,4 +1,5 @@
-import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE } from './constants';
+import { storageName } from 'pages/ExcelPage';
+import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE, DELETE_TABLE } from './constants';
 import { ActionType, StateType } from './types';
 
 export function rootReducer(state: StateType, action: ActionType) {
@@ -42,6 +43,15 @@ export function rootReducer(state: StateType, action: ActionType) {
 
     case CHANGE_TITLE: {
       return { ...state, title: action.data };
+    }
+
+    case DELETE_TABLE: {
+      const name = storageName(action.data);
+      console.log('delete table item', name);
+      localStorage.removeItem(name);
+      window.location.hash = '';
+
+      return { ...state };
     }
 
     default: return state;

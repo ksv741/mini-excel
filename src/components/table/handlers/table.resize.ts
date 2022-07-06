@@ -1,4 +1,4 @@
-import { $, Dom } from '../../../core/dom';
+import { $, Dom } from 'core/dom';
 
 type CustomElementType = Element & { css: any };
 type ResizeReturnDataType = { value: number, id: string, type: string };

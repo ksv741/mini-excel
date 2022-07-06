@@ -1,4 +1,4 @@
-import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE } from './constants';
+import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE, DELETE_TABLE } from './constants';
 
 export function tableResize(resizeData: any) {
   return {
@@ -31,6 +31,13 @@ export function applyStyle(data: any) {
 export function changeTitle(data: string) {
   return {
     type: CHANGE_TITLE,
+    data,
+  };
+}
+
+export function deleteTable(data: string) {
+  return {
+    type: DELETE_TABLE,
     data,
   };
 }

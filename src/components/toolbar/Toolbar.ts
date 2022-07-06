@@ -1,8 +1,8 @@
-import { initialStyleState } from '../../constants';
-import { $, Dom } from '../../core/dom';
-import { OptionsType } from '../../core/ExcelComponent';
-import { ExcelStateComponent } from '../../core/ExcelStateComponent';
+import { $, Dom } from 'core/dom';
+import { ExcelStateComponent } from 'core/ExcelStateComponent';
+import { OptionsType } from 'core/ExcelComponent';
 import { createToolbar } from './toolbar.template';
+import { initialStyleState } from '../../constants';
 
 export class Toolbar extends ExcelStateComponent {
   static className = 'excel__toolbar';
@@ -18,7 +18,6 @@ export class Toolbar extends ExcelStateComponent {
 
   prepare() {
     const currentToolbarState = this.toolbarState;
-    console.log('Current state', currentToolbarState);
 
     this.initState(currentToolbarState);
   }
@@ -44,7 +43,10 @@ export class Toolbar extends ExcelStateComponent {
 
   onClick(event: MouseEvent) {
     const target = $(event.target as HTMLElement);
-    const value = JSON.parse(target.data.value);
+    const stringValue = target?.data?.value;
+    if (!stringValue) return;
+
+    const value = JSON.parse(stringValue);
     const key = Object.keys(value)[0];
 
     this.$emit('toolbar:applyStyle', value);

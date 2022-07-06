@@ -5,9 +5,13 @@ export function capitalize(string: string): string {
 }
 
 export function storage(key: string, data: any = null): any {
-  if (!data) return JSON.parse(localStorage.getItem(key));
+  if (!data) {
+    console.log('RETURN KEY', key, data);
+    return JSON.parse(localStorage.getItem(key));
+  }
 
   localStorage.setItem(key, JSON.stringify(data));
+  console.log('SET ITEM', key, data);
 
   return true;
 }
