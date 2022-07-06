@@ -6,15 +6,21 @@
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["src/components/*"],
+      "core/*": ["src/core/*"],
+      "pages/*": ["src/pages/*"],
+      "redux/*": ["src/redux/*"],
+    }
   },
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS",
-      "strictPropertyInitialization": true
+      "strictPropertyInitialization": true,
+      "sourceMap": true
     }
   },
-  "exclude": ["node_modules",
-    "deploy-config.js"
-  ],
+  "exclude": ["node_modules"],
 }

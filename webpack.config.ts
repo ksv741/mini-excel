@@ -1,4 +1,5 @@
-import * as path from 'path';
+// import * as path from 'path';
+import path from 'path';
 
 // FIXME:
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,50 +10,32 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import HappyPack from 'happypack';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 // FIXME: type of any
 const config = (env: Record<string, any>, argv: Record<string, any>): Configuration => {
   const isProd = argv.mode === 'production';
 
-  const getFilename = (ext: string): string => `[name]${isProd ? '-[hash]' : ''}.${ext}`;
-  const getSourceMap = () => (isProd ? false : 'inline-source-map');
+  const getFilename = (ext: string): string => `[name]${isProd ? '-[fullhash]' : ''}.${ext}`;
+  const getSourceMap = () => (isProd ? false : 'cheap-source-map');
+
+  const extensions = ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'];
 
   const getPluginList = (): any[] => {
     const basePluginList = [
       new HtmlWebpackPlugin({
-        minify: false,
+        minify: isProd,
         template: './index.html',
       }),
+
       new CopyWebpackPlugin({
         patterns: [
           { from: 'favicon.ico', to: './' },
         ],
       }),
+
       new MiniCssExtractPlugin({
         filename: getFilename('css'),
-      }),
-      new ForkTsCheckerWebpackPlugin({
-        typescript: {
-          configFile: path.resolve(__dirname, 'tsconfig.json'),
-        },
-      }),
-      new HappyPack({
-        loaders: [
-          {
-            path: 'ts-loader',
-            query: { happyPackMode: true },
-            options: {
-              transpileOnly: true,
-              diagnosticOptions: {
-                semantic: true,
-                syntactic: true,
-              },
-            },
-          },
-        ],
-        threads: 4,
       }),
     ];
 
@@ -69,42 +52,67 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
 
   return {
     context: path.resolve(__dirname, 'src'),
+
     entry: [
       // 'core-js/stable',
       // 'regenerator-runtime/runtime',
       './index.ts',
     ],
+
     devtool: getSourceMap(),
+
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: getFilename('js'),
       clean: true,
     },
+
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src/'),
-        '@core': path.resolve(__dirname, 'src/core/'),
-      },
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
+      extensions,
+      plugins: [new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, 'tsconfig.json'),
+        extensions,
+      })],
     },
+
     plugins: getPluginList(),
+
     module: {
       rules: [
         {
           test: /\.s[ac]ss$/i,
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
           ],
         },
+
         {
           test: /\.?ts$/,
           exclude: /(node_modules|bower_components)/,
-          use: 'happypack/loader',
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+              },
+            },
+          ],
         },
       ],
     },
+
     devServer: {
       static: {
         directory: path.join(__dirname, 'static'),
@@ -113,6 +121,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
       port: 80,
       watchFiles: './src',
     },
+
     performance: {
       maxAssetSize: 600000,
     },
