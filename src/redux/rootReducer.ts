@@ -1,5 +1,14 @@
+import { ActiveRoute } from 'core/routes/ActiveRoute';
 import { storageName } from 'pages/ExcelPage';
-import { CHANGE_TEXT, CHANGE_STYLES, TABLE_RESIZE, APPLY_STYLES, CHANGE_TITLE, DELETE_TABLE } from './constants';
+import {
+  CHANGE_TEXT,
+  CHANGE_STYLES,
+  TABLE_RESIZE,
+  APPLY_STYLES,
+  CHANGE_TITLE,
+  DELETE_TABLE,
+  UPDATE_DATE,
+} from './constants';
 import { ActionType, StateType } from './types';
 
 export function rootReducer(state: StateType, action: ActionType) {
@@ -47,19 +56,16 @@ export function rootReducer(state: StateType, action: ActionType) {
 
     case DELETE_TABLE: {
       const name = storageName(action.data);
-      console.log('delete table item', name);
       localStorage.removeItem(name);
-      window.location.hash = '';
+      ActiveRoute.navigateTo = '';
 
-      return { ...state };
+      return null;
+    }
+
+    case UPDATE_DATE: {
+      return { ...this.state, openDate: action.data };
     }
 
     default: return state;
   }
 }
-
-// function value(state, field, action) {
-//   const val = state[field] || {};
-//   val[action.data.id] = action.data.value;
-//   return val;
-// }

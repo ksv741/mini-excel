@@ -1,5 +1,6 @@
 import { $, Dom } from 'core/dom';
 import { ExcelStateComponent } from 'core/ExcelStateComponent';
+import { ActiveRoute } from 'core/routes/ActiveRoute';
 import { deleteTable } from 'redux/actions';
 import * as actions from 'redux/actions';
 
@@ -48,14 +49,12 @@ export class Header extends ExcelStateComponent {
 
     switch (btnEvent) {
       case 'exit': {
-        window.location.hash = '';
+        ActiveRoute.navigateTo = '';
         break;
       }
 
       case 'delete-table': {
-        this.$dispatch(deleteTable(this.store.getState().id));
-        console.log('THIS', this);
-        this.destroy();
+        confirm('Действительно хочешь удалить ?') && this.$dispatch(deleteTable(this.store.getState().id));
         break;
       }
 

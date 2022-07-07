@@ -1,19 +1,17 @@
 import { storage } from 'core/utils';
 
 function toHtml(key: string) {
-  const date = +key.split(':')[1];
-  const params = storage(key);
-  const link = `#excel/${date}`;
+  const params = +key.split(':')[1];
+  const state = storage(key);
+  const link = `#excel/${params}`;
+  const date = new Date(+state.openDate);
+
   return `
     <li class="db__record">
-      <a href=${link}>${params.title}</a>
-      <strong>${new Date(date).toLocaleDateString()}</strong>
+      <a href=${link}>${state.title}</a>
+      <strong>${date.toLocaleDateString()} ${date.toLocaleTimeString()}</strong>
     </li>
   `;
-}
-
-export function getAllRecords() {
-
 }
 
 export function createRecordsTable() {

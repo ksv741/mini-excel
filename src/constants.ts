@@ -19,5 +19,6 @@ export function getNormalizeInitialState(params: string): StateType {
     ...storage(`excel:${params}`),
     currentStyles: { ...storage(`excel:${params}`)?.stylesState?.['0:0'] },
     id: params,
+    openDate: Date.now(),
   };
 }

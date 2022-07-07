@@ -1,4 +1,4 @@
-import { ActionType, SubscribeType } from 'redux/types';
+import { ActionType } from 'redux/types';
 import { Store } from './createStore';
 import { Dom } from './dom';
 import { DomListener } from './DomListener';
@@ -22,7 +22,6 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
   name: string;
   emitter: Emitter;
   store: Store;
-  storeSub: SubscribeType;
   subscribe: string[];
   private unsubscribers: ((args?: any) => any)[];
 

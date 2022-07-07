@@ -15,6 +15,8 @@ export class StoreSubscriber {
     this.prevState = this.store.getState();
 
     this.sub = this.store.subscribe((state: StateType) => {
+      if (!state) return;
+
       Object.keys(state).forEach(key => {
         if (!isEqual(this.prevState[key], state[key])) {
           components.forEach(component => {

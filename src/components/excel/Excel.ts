@@ -1,8 +1,9 @@
 import { Store } from 'core/createStore';
-import { $, Dom } from 'core/dom';
+import { $ } from 'core/dom';
 import { Emitter } from 'core/Emitter';
 import { ExcelComponent } from 'core/ExcelComponent';
 import { StoreSubscriber } from 'core/StoreSubscriber';
+import { updateOpenDate } from 'redux/actions';
 
 interface ExcelOptionsType {
   components: any[],
@@ -10,7 +11,6 @@ interface ExcelOptionsType {
 }
 
 export class Excel {
-  $el: HTMLElement | Dom;
   components: any[];
   emitter: Emitter;
   store: Store;
@@ -47,6 +47,8 @@ export class Excel {
   init() {
     this.subscriber.subscribeComponents(this.components);
     this.components.forEach(component => component.init());
+
+    this.store.dispatch(updateOpenDate(Date.now().toString()));
   }
 
   destroy() {
