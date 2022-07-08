@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', "jest"],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -27,6 +27,7 @@ module.exports = {
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/quotes": "warn",
+    "@typescript-eslint/no-unused-expressions": "off",
     "arrow-parens": "off",
     "class-methods-use-this": "off",
     "func-names": "off",
@@ -38,11 +39,14 @@ module.exports = {
     "no-continue": "off",
     "no-plusplus": "off",
     "object-curly-newline": "off",
+    "no-alert": "off",
+    "no-restricted-globals": "off",
   },
   env: {
     browser: true,
     node: true,
     es6: true,
+    jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'deploy-config.js']
+  ignorePatterns: ['.eslintrc.js', 'deploy-config.js'],
 };

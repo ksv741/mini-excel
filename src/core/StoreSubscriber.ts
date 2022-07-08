@@ -1,5 +1,5 @@
 import { StateType } from 'redux/types';
-import { Store } from './createStore';
+import { Store } from './store/createStore';
 import { isEqual } from './utils';
 
 export class StoreSubscriber {

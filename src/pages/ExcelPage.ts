@@ -3,7 +3,7 @@ import { Formula } from 'components/formula/Formula';
 import { Header } from 'components/header/Header';
 import { Table } from 'components/table/Table';
 import { Toolbar } from 'components/toolbar/Toolbar';
-import { Store } from 'core/createStore';
+import { Store } from 'core/store/createStore';
 import { Page } from 'core/Page';
 import { debounce, storage } from 'core/utils';
 import { rootReducer } from 'redux/rootReducer';

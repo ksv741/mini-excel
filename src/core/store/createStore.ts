@@ -1,4 +1,4 @@
-import { ActionType, ReducerType, StateType, SubscribeType } from '../redux/types';
+import { ActionType, ReducerType, StateType, SubscribeType } from 'redux/types';
 
 export class Store {
   state: StateType;

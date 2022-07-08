@@ -1,4 +1,4 @@
-import { Store } from 'core/createStore';
+import { Store } from 'core/store/createStore';
 import { $ } from 'core/dom';
 import { Emitter } from 'core/Emitter';
 import { ExcelComponent } from 'core/ExcelComponent';

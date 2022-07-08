@@ -1,8 +1,8 @@
 import { ActionType } from 'redux/types';
-import { Store } from './createStore';
-import { Dom } from './dom';
-import { DomListener } from './DomListener';
-import { Emitter } from './Emitter';
+import { Store } from 'core/store/createStore';
+import { Dom } from 'core/dom';
+import { DomListener } from 'core/DomListener';
+import { Emitter } from 'core/Emitter';
 
 interface ExcelComponentClass {
   toHTML: () => string;

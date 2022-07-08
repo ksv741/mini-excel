@@ -1,6 +1,6 @@
 import { initialStyleState } from '../constants';
 
-type SelectorType = string | HTMLElement;
+export type SelectorType = string | HTMLElement;
 
 export interface DomClass {
   html(html?: string): string | DomClass;

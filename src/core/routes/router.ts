@@ -1,17 +1,19 @@
 import { DashboardPage } from 'pages/DashboardPage';
 import { ExcelPage } from 'pages/ExcelPage';
-import { $, Dom } from 'core/dom';
+import { $, Dom, SelectorType } from 'core/dom';
 import { ActiveRoute } from './ActiveRoute';
+
+type RoutesType = {
+  dashboard: DashboardPage
+  excel: ExcelPage
+};
 
 export class Router {
   private $placeholder: Dom;
-  private routes: {
-    dashboard: DashboardPage
-    excel: ExcelPage
-  };
-  private page: DashboardPage | ExcelPage;
+  private routes: RoutesType;
+  private page: DashboardPage | ExcelPage | null;
 
-  constructor(selector: string, routes: any) {
+  constructor(selector: SelectorType, routes: RoutesType) {
     if (!selector) throw new Error('Selector not provided');
 
     this.$placeholder = $(selector);
@@ -47,8 +49,8 @@ export class Router {
     // @ts-ignore
     this.page = new Page(ActiveRoute.param);
 
-    this.$placeholder.append(this.page.getRoot());
-    this.page.afterRender();
+    this.$placeholder.append(this.page?.getRoot());
+    this.page?.afterRender();
   }
 
   destroy() {
