@@ -1,4 +1,3 @@
-// import * as path from 'path';
 import path from 'path';
 
 // FIXME:
@@ -30,7 +29,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
 
       new CopyWebpackPlugin({
         patterns: [
-          { from: 'favicon.ico', to: './' },
+          { from: 'assets', to: './assets' },
         ],
       }),
 
@@ -54,7 +53,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
     context: path.resolve(__dirname, 'src'),
 
     entry: [
-      // 'core-js/stable',
+      // 'core-js/actual',
       // 'regenerator-runtime/runtime',
       './index.ts',
     ],
@@ -69,10 +68,7 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
 
     resolve: {
       extensions,
-      plugins: [new TsconfigPathsPlugin({
-        configFile: path.resolve(__dirname, 'tsconfig.json'),
-        extensions,
-      })],
+      plugins: [new TsconfigPathsPlugin({})],
     },
 
     plugins: getPluginList(),
@@ -86,13 +82,13 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
             {
               loader: 'css-loader',
               options: {
-                sourceMap: true,
+                sourceMap: !isProd,
               },
             },
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: true,
+                sourceMap: !isProd,
               },
             },
           ],
