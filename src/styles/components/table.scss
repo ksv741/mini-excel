@@ -48,6 +48,9 @@
     border-left: 0;
     white-space: nowrap;
     outline: none;
+    &:hover:not(.selected) {
+      cursor: cell;
+    }
     &.selected {
       border: none;
       outline: 2px solid $primary-color;

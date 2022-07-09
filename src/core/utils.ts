@@ -6,12 +6,11 @@ export function capitalize(string: string): string {
 
 export function storage(key: string, data: any = null): any {
   if (!data) {
-    console.log('RETURN KEY', key, data);
-    return JSON.parse(localStorage.getItem(key));
+    const localData = localStorage.getItem(key);
+    return localData ? JSON.parse(localData) : false;
   }
 
   localStorage.setItem(key, JSON.stringify(data));
-  console.log('SET ITEM', key, data);
 
   return true;
 }
@@ -27,7 +26,7 @@ export function isEqual(a: any, b: any) {
 export function debounce(fn: (fnArgs?: any) => void, wait: number) {
   let timeout: NodeJS.Timeout;
 
-  return function (...args: any[]) {
+  return function (...args: any) {
     const later = () => {
       clearTimeout(timeout);
       fn.apply(this, args);
@@ -36,4 +35,17 @@ export function debounce(fn: (fnArgs?: any) => void, wait: number) {
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   };
+}
+
+export function parse(value: string) {
+  if (value.startsWith('=')) {
+    try {
+      // eslint-disable-next-line no-eval
+      return eval(value.slice(1));
+    } catch (e) {
+      return value;
+    }
+  }
+
+  return value;
 }

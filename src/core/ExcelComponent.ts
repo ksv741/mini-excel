@@ -19,10 +19,10 @@ export type OptionsType = {
 };
 
 export abstract class ExcelComponent extends DomListener implements ExcelComponentClass {
-  name: string;
-  emitter: Emitter;
-  store: Store;
-  subscribe: string[];
+  private name: string | undefined;
+  private emitter: Emitter | undefined;
+  private store: Store | undefined;
+  private subscribe: string[] | undefined;
   private unsubscribers: ((args?: any) => any)[];
 
   constructor($root: Dom, options?: OptionsType) {
@@ -45,16 +45,16 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
   }
 
   $emit(event: string, args?: any): void {
-    this.emitter.emit(event, args);
+    this.emitter?.emit(event, args);
   }
 
   $on(event: string, callback: (args: any) => any) {
-    const unsub = this.emitter.subscribe(event, callback);
-    this.unsubscribers.push(unsub);
+    const unsub = this.emitter?.subscribe(event, callback);
+    unsub && this.unsubscribers.push(unsub);
   }
 
   $dispatch(action: ActionType) {
-    this.store.dispatch(action);
+    this.store?.dispatch(action);
   }
 
   storeChanged(args?: any) {

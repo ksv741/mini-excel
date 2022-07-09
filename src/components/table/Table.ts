@@ -1,6 +1,6 @@
 import { $, Dom } from 'core/dom';
 import { ExcelComponent } from 'core/ExcelComponent';
-import { parse } from 'core/parse';
+import { parse } from 'core/utils';
 import { changeCurrentStyles } from 'redux/actions';
 import * as actions from 'redux/actions';
 import { initialStyleState } from '../../constants';

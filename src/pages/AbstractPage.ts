@@ -1,8 +1,8 @@
-export abstract class Page {
+export abstract class AbstractPage {
   params: any;
 
   constructor(params: any) {
-    this.params = params;
+    this.params = params || Date.now().toString();
   }
 
   getRoot() {

@@ -9,7 +9,7 @@ export interface DomClass {
 }
 
 export class Dom implements DomClass {
-  $el: HTMLElement;
+  $el: HTMLElement | null;
 
   constructor(selector: SelectorType) {
     this.$el = typeof selector === 'string'
@@ -31,8 +31,8 @@ export class Dom implements DomClass {
   }
 
   get text() {
-    if (this.$el.closest('input')) return (this.$el as HTMLInputElement).value;
-    return this.$el.textContent;
+    if (this.$el?.closest('input')) return (this.$el as HTMLInputElement).value;
+    return this.$el?.textContent;
   }
 
   clear() {

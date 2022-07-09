@@ -9,8 +9,8 @@ export class Toolbar extends ExcelStateComponent {
 
   constructor($root: Dom, options: OptionsType) {
     super($root, {
-      name: 'Toolbar',
       listeners: ['click'],
+      name: 'Toolbar',
       subscribe: ['currentStyles'],
       ...options,
     });
@@ -25,7 +25,7 @@ export class Toolbar extends ExcelStateComponent {
   get toolbarState() {
     return {
       ...initialStyleState,
-      ...this.store.getState().stylesState['0:0'],
+      ...this.store?.getState()?.stylesState?.['0:0'],
     };
   }
 
