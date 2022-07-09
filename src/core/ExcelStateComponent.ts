@@ -1,5 +1,5 @@
-import { Dom } from './dom';
-import { ExcelComponent, OptionsType } from './ExcelComponent';
+import { Dom } from 'core/dom';
+import { ExcelComponent, OptionsType } from 'core/ExcelComponent';
 
 type ExcelComponentStateType = {
   [k: string]: any;

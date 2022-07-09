@@ -1,6 +1,6 @@
 import { $ } from 'core/dom';
-import { getParamsFromCellId, isCell } from '../table.functions';
-import { TableSelection } from '../TableSelection';
+import { TableSelection } from 'components/table/TableSelection';
+import { getParamsFromCellId, isCell } from 'components/table/table.functions';
 
 export function selectHandler(event: MouseEvent | KeyboardEvent, selection: TableSelection, callback?: () => void) {
   switch (event.type) {

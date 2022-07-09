@@ -7,7 +7,7 @@ import {
   CHANGE_TITLE,
   DELETE_TABLE,
   UPDATE_DATE,
-} from './constants';
+} from 'redux/constants';
 
 export function tableResize(resizeData: any) {
   return {

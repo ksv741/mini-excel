@@ -1,5 +1,5 @@
-import { initialStyleState } from '../../constants';
-import { ToolbarStateType } from './toolbar-types';
+import { ToolbarStateType } from 'components/toolbar/toolbar-types';
+import { initialStyleState } from 'src/constants';
 
 type ButtonConfigType = {
   icon: string;

@@ -1,4 +1,4 @@
-import { initialStyleState } from '../constants';
+import { initialStyleState } from 'src/constants';
 
 export type SelectorType = string | HTMLElement;
 

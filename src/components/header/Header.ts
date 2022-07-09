@@ -1,8 +1,8 @@
-import { $, Dom } from 'core/dom';
-import { ExcelStateComponent } from 'core/ExcelStateComponent';
-import { ActiveRoute } from 'core/routes/ActiveRoute';
-import { deleteTable } from 'redux/actions';
 import * as actions from 'redux/actions';
+import { $, Dom } from 'core/dom';
+import { ActiveRoute } from 'core/routes/ActiveRoute';
+import { ExcelStateComponent } from 'core/ExcelStateComponent';
+import { deleteTable } from 'redux/actions';
 
 export class Header extends ExcelStateComponent {
   static className = 'excel__header';

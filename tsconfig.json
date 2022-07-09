@@ -20,7 +20,8 @@
       "components/*": ["src/components/*"],
       "core/*": ["src/core/*"],
       "pages/*": ["src/pages/*"],
-      "redux/*": ["src/redux/*"]
+      "redux/*": ["src/redux/*"],
+      "src/*": ["src/*"],
     },
   },
   "exclude": ["node_modules"],

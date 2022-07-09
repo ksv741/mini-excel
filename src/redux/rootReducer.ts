@@ -1,3 +1,4 @@
+import { ActionType, StateType } from 'redux/types';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
 import { storageName } from 'pages/ExcelPage';
 import {
@@ -8,8 +9,7 @@ import {
   CHANGE_TITLE,
   DELETE_TABLE,
   UPDATE_DATE,
-} from './constants';
-import { ActionType, StateType } from './types';
+} from 'redux/constants';
 
 export function rootReducer(state: StateType, action: ActionType) {
   switch (action.type) {

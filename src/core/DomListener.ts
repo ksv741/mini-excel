@@ -1,5 +1,5 @@
-import { Dom } from './dom';
-import { capitalize } from './utils';
+import { Dom } from 'core/dom';
+import { capitalize } from 'core/utils';
 
 export class DomListener {
   $root: Dom;

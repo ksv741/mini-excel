@@ -1,13 +1,13 @@
+import * as actions from 'redux/actions';
 import { $, Dom } from 'core/dom';
 import { ExcelComponent } from 'core/ExcelComponent';
-import { parse } from 'core/utils';
+import { TableSelection } from 'components/table/TableSelection';
 import { changeCurrentStyles } from 'redux/actions';
-import * as actions from 'redux/actions';
-import { initialStyleState } from '../../constants';
-import { resizeHandler } from './handlers/table.resize';
-import { selectHandler } from './handlers/table.select.handler';
-import { createTable } from './table.template';
-import { TableSelection } from './TableSelection';
+import { createTable } from 'components/table/table.template';
+import { initialStyleState } from 'src/constants';
+import { parse } from 'core/utils';
+import { resizeHandler } from 'components/table/handlers/table.resize';
+import { selectHandler } from 'components/table/handlers/table.select.handler';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';

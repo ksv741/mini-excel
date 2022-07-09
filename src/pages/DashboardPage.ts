@@ -1,6 +1,6 @@
 import { $ } from 'core/dom';
-import { storage } from 'core/utils';
 import { AbstractPage } from 'pages/AbstractPage';
+import { storage } from 'core/utils';
 
 export class DashboardPage extends AbstractPage {
   getRoot() {

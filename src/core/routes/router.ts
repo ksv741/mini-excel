@@ -1,8 +1,8 @@
 import { $, Dom, SelectorType } from 'core/dom';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
-import { Loader } from 'components/Loader';
 import { DashboardPage } from 'pages/DashboardPage';
 import { ExcelPage } from 'pages/ExcelPage';
+import { Loader } from 'components/Loader';
 
 type RoutesType = {
   dashboard: typeof DashboardPage

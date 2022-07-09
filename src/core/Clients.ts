@@ -1,7 +1,7 @@
 import { storage } from 'core/utils';
 import { storageName } from 'pages/ExcelPage';
 import { StateType } from 'redux/types';
-import { getNormalizeInitialState } from '../constants';
+import { getNormalizeInitialState } from 'src/constants';
 
 export class LocalStorageClient {
   private name: string;

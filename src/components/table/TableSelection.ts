@@ -1,5 +1,5 @@
 import { $, Dom } from 'core/dom';
-import { getParamsFromCellId } from './table.functions';
+import { getParamsFromCellId } from 'components/table/table.functions';
 
 export class TableSelection {
   static selectedClassName = 'selected';

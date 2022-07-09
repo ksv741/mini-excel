@@ -1,5 +1,5 @@
-import { storage } from './core/utils';
-import { StateType } from './redux/types';
+import { StateType } from 'redux/types';
+import { storage } from 'core/utils';
 
 export const initialStyleState: Partial<CSSStyleDeclaration> = {
   textAlign: 'left',
