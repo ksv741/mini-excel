@@ -48,5 +48,5 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'deploy-config.js'],
+  ignorePatterns: ['.eslintrc.js', 'deploy-config.js', 'test/**/*'],
 };
