@@ -12,7 +12,7 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "target": "ES5",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -30,7 +30,6 @@
       "module": "CommonJS",
       "strictPropertyInitialization": true,
       "sourceMap": true,
-      "exclude": ["node_modules"]
     }
   },
 }

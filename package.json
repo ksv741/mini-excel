@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
+    "@babel/core": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+    "@types/element-closest": "^3.0.0",
     "@types/happypack": "^5.0.2",
     "@types/html-webpack-plugin": "^3.2.6",
     "@types/jest": "^28.1.4",
@@ -14,7 +16,10 @@
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "babel-jest": "^28.1.2",
+    "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
+    "core-js": "^3.23.3",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "eslint": "^8.17.0",
@@ -36,14 +41,15 @@
     "typescript": "^4.7.3",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.2"
+    "webpack-dev-server": "^4.9.2",
+    "webpack-notifier": "^1.15.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://ksv741:SFwZWz868cyAGh3Cps6Y@bitbucket.org/ksv741/excel-course.git"
   },
   "scripts": {
-    "start": "webpack serve --mode=development",
+    "start": "cross-env SERVER_PORT=3000 webpack serve --mode=development",
     "build": "webpack --mode=production",
     "deploy": "node deploy-config",
     "test": "npx jest",
@@ -60,11 +66,16 @@
   "browserslist": "> 0.25%, not dead",
   "module": "true",
   "dependencies": {
+    "element-closest": "^3.0.2",
     "normalize.css": "^8.0.1"
   },
   "jest": {
     "transform": {
       "\\.[jt]sx?$": "babel-jest"
-    }
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
   }
 }
