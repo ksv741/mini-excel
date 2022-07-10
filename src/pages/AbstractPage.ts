@@ -1,7 +1,7 @@
 export abstract class AbstractPage {
-  params: any;
+  params: string[];
 
-  constructor(params: any) {
+  constructor(params: string[]) {
     this.params = params || Date.now().toString();
   }
 

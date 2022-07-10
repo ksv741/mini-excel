@@ -1,18 +1,18 @@
+import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import * as actions from 'redux/action-creators';
-import { $, Dom } from 'core/dom';
+import { $, Dom } from 'core/Dom';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
-import { ExcelComponentState } from 'core/ExcelComponentState';
 import { deleteTable } from 'redux/action-creators';
 
-export class Header extends ExcelComponentState {
+export class Header extends ExcelComponent {
   static className = 'excel__header';
 
-  constructor($root: Dom, options: any) {
+  constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
+      ...options,
       name: 'Header',
       eventListeners: ['input', 'click'],
       subscribe: ['title'],
-      ...options,
     });
   }
 

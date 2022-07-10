@@ -1,4 +1,4 @@
-import { $, Dom, SelectorType } from 'core/dom';
+import { $, Dom, SelectorType } from 'core/Dom';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
 import { DashboardPage } from 'pages/DashboardPage';
 import { ExcelPage } from 'pages/ExcelPage';
@@ -34,8 +34,8 @@ export class Router {
   }
 
   async changePageHandler() {
-    this.$placeholder.clear().append(this.loader);
     this.page?.destroy();
+    this.$placeholder.clear().append(this.loader);
 
     let Page;
 

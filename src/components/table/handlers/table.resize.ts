@@ -1,5 +1,5 @@
 import { startCellId } from 'components/table/table.functions';
-import { $, Dom } from 'core/dom';
+import { $, Dom } from 'core/Dom';
 
 type CustomElementType = Element & { css: any };
 type ResizeReturnDataType = { value: number, id: string, type: string };

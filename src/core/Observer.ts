@@ -1,20 +1,10 @@
-export class Emitter {
+export class Observer {
   private listeners: {
     [k: string]: Array<(args?: any) => any>
   };
 
   constructor() {
     this.listeners = {};
-  }
-
-  emit(eventName: string, args: any[]) {
-    if (!Array.isArray(this.listeners[eventName])) return false;
-
-    this.listeners[eventName].forEach(listener => {
-      listener(args);
-    });
-
-    return true;
   }
 
   subscribe(eventName: string, callback: (args?: any) => any) {
@@ -24,5 +14,13 @@ export class Emitter {
     return () => {
       this.listeners[eventName] = this.listeners[eventName].filter(listener => listener !== callback);
     };
+  }
+
+  emit(eventName: string, args: any[]) {
+    if (!Array.isArray(this.listeners[eventName])) return false;
+
+    this.listeners[eventName].forEach(listener => listener(args));
+
+    return true;
   }
 }

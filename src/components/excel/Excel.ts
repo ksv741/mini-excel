@@ -1,5 +1,5 @@
-import { $ } from 'core/dom';
-import { Emitter } from 'core/Emitter';
+import { $ } from 'core/Dom';
+import { Observer } from 'core/Observer';
 import { ExcelComponent } from 'core/ExcelComponent';
 import { Store } from 'core/store/Store';
 import { StoreSubscriber } from 'core/StoreSubscriber';
@@ -10,15 +10,20 @@ interface ExcelOptionsType {
   store: any,
 }
 
+type BaseComponentOption = {
+  observer: Observer;
+  store: Store;
+};
+
 export class Excel {
   components: any[];
-  emitter: Emitter;
+  observer: Observer;
   store: Store;
   subscriber: StoreSubscriber;
 
   constructor(options: ExcelOptionsType) {
     this.components = options.components;
-    this.emitter = new Emitter();
+    this.observer = new Observer();
     this.store = options.store;
     this.subscriber = new StoreSubscriber(this.store);
   }
@@ -26,8 +31,8 @@ export class Excel {
   getRoot() {
     const $root = $.create('div', 'excel');
 
-    const componentOptions = {
-      emitter: this.emitter,
+    const componentOptions: BaseComponentOption = {
+      observer: this.observer,
       store: this.store,
     };
 

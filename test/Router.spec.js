@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Router } from '../src/core/routes/router';
+import { Router } from '../src/core/routes/Router';
 import { AbstractPage } from '../src/pages/AbstractPage';
 
 class DashboardPage extends AbstractPage {

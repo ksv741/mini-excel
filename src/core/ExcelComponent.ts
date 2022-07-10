@@ -1,34 +1,28 @@
-import { ActionType } from 'redux/types';
-import { Dom } from 'core/dom';
+import { ActionType, StateType } from 'redux/types';
+import { Dom } from 'core/Dom';
 import { DomListener } from 'core/DomListener';
-import { Emitter } from 'core/Emitter';
+import { Observer } from 'core/Observer';
 import { Store } from 'core/store/Store';
-
-interface ExcelComponentClass {
-  toHTML: () => string;
-  prepare: () => void;
-  storeChanged?: (args: any) => void;
-}
 
 export type ComponentOptionsType = {
   eventListeners: string[];
   name: string;
-  emitter: Emitter;
+  observer: Observer;
   store: Store;
-  subscribe: string[],
+  subscribe: (keyof StateType)[],
 };
 
-export abstract class ExcelComponent extends DomListener implements ExcelComponentClass {
+export abstract class ExcelComponent extends DomListener {
   private name: string;
-  private emitter: Emitter;
+  private observer: Observer;
   public store: Store;
-  private subscribe: string[];
+  private subscribe: (keyof StateType)[];
   private unsubscribers: ((args?: any) => any)[];
 
   constructor($root: Dom, options: ComponentOptionsType) {
     super($root, options.eventListeners);
     this.name = options.name;
-    this.emitter = options.emitter;
+    this.observer = options.observer;
     this.store = options.store;
     this.subscribe = options.subscribe;
 
@@ -44,12 +38,12 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
     return '';
   }
 
-  $emit(event: string, args?: any): void {
-    this.emitter?.emit(event, args);
+  $emitEventToObserver(event: string, args?: any): void {
+    this.observer?.emit(event, args);
   }
 
-  $on(event: string, callback: (args: any) => any) {
-    const unsub = this.emitter?.subscribe(event, callback);
+  $onEventFromObserver(event: string, callback: (args: any) => any) {
+    const unsub = this.observer?.subscribe(event, callback);
     unsub && this.unsubscribers.push(unsub);
   }
 
@@ -58,10 +52,10 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
   }
 
   storeChanged(args?: any) {
-    console.log('CHANGE STORE: ', args);
+    console.log('CHANGE STORE: ', args, ' in component ', this.name);
   }
 
-  isWatching(key: string) {
+  isWatching(key: keyof StateType) {
     return this.subscribe?.includes(key);
   }
 

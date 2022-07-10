@@ -4,30 +4,29 @@ import { isEqual } from 'core/utils';
 
 export class StoreSubscriber {
   sub: any;
-  prevState: StateType;
+  currentState: StateType;
 
   constructor(private store: Store) {
     this.sub = null;
-    this.prevState = {};
   }
 
   subscribeComponents(components: any[]) {
-    this.prevState = this.store.getState();
+    this.currentState = this.store.getState();
 
-    this.sub = this.store.subscribeFromStore((state: StateType) => {
-      if (!state) return;
+    this.sub = this.store.subscribeToStore((newState: StateType) => {
+      if (!newState) return;
 
-      Object.keys(state).forEach(key => {
-        if (!isEqual(this.prevState[key], state[key])) {
+      Object.keys(newState).forEach((key) => {
+        if (!isEqual(this.currentState[key as keyof StateType], newState[key as keyof StateType])) {
           components.forEach(component => {
             if (component.isWatching(key)) {
-              const changes = { [key]: state[key] };
-              component.storeChanged(changes);
+              component.storeChanged({ [key]: newState[key as keyof StateType] });
             }
           });
         }
       });
-      this.prevState = this.store.getState();
+
+      this.currentState = this.store.getState();
     });
   }
 

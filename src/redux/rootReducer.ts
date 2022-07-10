@@ -17,13 +17,13 @@ export function rootReducer(state: StateType, action: ActionType) {
       const newState: StateType = { ...state };
       const fieldName = `${action.resizeData?.type}State`;
 
-      newState[fieldName][action.resizeData?.id] = action.resizeData?.value;
+      newState[fieldName as 'colState' | 'rowState'][action.resizeData?.id] = action.resizeData?.value;
 
       return { ...state, ...newState };
     }
 
     case CHANGE_TEXT: {
-      const newState: StateType = state.dataState || {};
+      const newState: { [k: string]: string } = state.dataState || {};
       const fieldName = action.data.id;
 
       newState[fieldName] = action.data.text;

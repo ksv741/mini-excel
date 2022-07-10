@@ -1,4 +1,4 @@
-import { Store } from '../src/core/store/createStore';
+import { Store } from '../src/core/store/Store';
 
 const initialState = {
   count: 0,
@@ -24,7 +24,7 @@ describe('Create store', () => {
   test('should return store object', () => {
     expect(store).toBeDefined();
     expect(store.dispatchToStore).toBeDefined();
-    expect(store.subscribeFromStore).toBeDefined();
+    expect(store.subscribeToStore).toBeDefined();
     expect(store.getState).not.toBeUndefined();
   });
 
@@ -47,7 +47,7 @@ describe('Create store', () => {
   });
 
   test('should call subscriber', () => {
-    store.subscribeFromStore(handler);
+    store.subscribeToStore(handler);
     store.dispatchToStore({ type: 'ADD' });
 
     expect(handler).toHaveBeenCalled();
@@ -55,7 +55,7 @@ describe('Create store', () => {
   });
 
   test('should NOT call sub if unsubscribe', () => {
-    const unsub = store.subscribeFromStore(handler);
+    const unsub = store.subscribeToStore(handler);
     unsub.unsubscribe();
     store.dispatchToStore({ type: 'ADD' });
 

@@ -1,4 +1,4 @@
-import { Dom } from 'core/dom';
+import { Dom } from 'core/Dom';
 import { ExcelComponent, ComponentOptionsType } from 'core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
@@ -8,13 +8,10 @@ export class Formula extends ExcelComponent {
 
   constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
-      // @ts-ignore next-line
-      eventListeners: ['input', 'keydown'],
-      // @ts-ignore next-line
-      name: 'Formula',
-      // @ts-ignore next-line
-      subscribe: ['currentText'],
       ...options,
+      eventListeners: ['input', 'keydown'],
+      name: 'Formula',
+      subscribe: ['currentText'],
     });
   }
 
@@ -30,7 +27,7 @@ export class Formula extends ExcelComponent {
 
     this.formulaInput = this.$root.find('#formula-input');
 
-    this.$on('table:select-cell', (cell: Dom) => {
+    this.$onEventFromObserver('table:select-cell', (cell: Dom) => {
       this.formulaInput.text = cell.data.value || '';
     });
   }
@@ -44,7 +41,8 @@ export class Formula extends ExcelComponent {
     if (!target) return;
 
     const text = (target as HTMLElement).innerText.trim();
-    this.$emit('formula:input', text);
+
+    this.$emitEventToObserver('formula:input', text);
   }
 
   onKeydown(event: KeyboardEvent) {
@@ -53,7 +51,7 @@ export class Formula extends ExcelComponent {
     if (preventedKeys.includes(event.key)) event.preventDefault();
 
     if (event.key === 'Enter') {
-      this.$emit('formula:enter-press');
+      this.$emitEventToObserver('formula:enter-press');
     }
   }
 }

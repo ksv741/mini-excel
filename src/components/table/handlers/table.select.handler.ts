@@ -1,4 +1,4 @@
-import { $ } from 'core/dom';
+import { $ } from 'core/Dom';
 import { TableSelection } from 'components/table/TableSelection';
 import { getParamsFromCellId, isCell, startCellId } from 'components/table/table.functions';
 
@@ -68,7 +68,10 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       }
       case 'Tab': {
         event.preventDefault();
-        col++;
+
+        if (event.shiftKey) col--;
+        else col++;
+
         break;
       }
       default: break;

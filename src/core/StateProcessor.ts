@@ -5,9 +5,9 @@ import { StateType } from 'redux/types';
 export class StateProcessor {
   private client: ClientDataType;
 
-  constructor(client: ClientDataType, dalay = 300) {
+  constructor(client: ClientDataType, delay = 300) {
     this.client = client;
-    this.listen = debounce(this.listen.bind(this), dalay);
+    this.listen = debounce(this.listen.bind(this), delay);
   }
 
   listen(state: StateType) {

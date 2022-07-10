@@ -32,7 +32,7 @@ export class ExcelPage extends AbstractPage {
     const state = await this.processor.get();
     const store = new Store(rootReducer, state);
 
-    this.storeSub = store.subscribeFromStore(this.processor.listen);
+    this.storeSub = store.subscribeToStore(this.processor.listen);
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],

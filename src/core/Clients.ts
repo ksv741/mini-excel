@@ -31,7 +31,7 @@ export class LocalStorageClient implements ClientDataType {
     });
   }
 
-  norm(state) {
+  norm(state: StateType) {
     return {
       ...state,
       currentStyles: { ...state.stylesState?.[startCellId] },

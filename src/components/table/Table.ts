@@ -1,7 +1,7 @@
 import { startCellId } from 'components/table/table.functions';
 import * as actions from 'redux/action-creators';
-import { $, Dom } from 'core/dom';
-import { ExcelComponent } from 'core/ExcelComponent';
+import { $, Dom } from 'core/Dom';
+import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
 import { changeCurrentStyles } from 'redux/action-creators';
 import { createTable } from 'components/table/table.template';
@@ -15,11 +15,11 @@ export class Table extends ExcelComponent {
 
   private selection: TableSelection;
 
-  constructor($root: Dom, options: any) {
+  constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
+      ...options,
       name: 'Table',
       eventListeners: ['mousedown', 'keydown', 'input'],
-      ...options,
     });
   }
 
@@ -36,9 +36,9 @@ export class Table extends ExcelComponent {
 
     this.initTable();
 
-    this.$on('formula:input', this.updateCurrentText);
-    this.$on('formula:enter-press', () => this.selection.current.focus());
-    this.$on('toolbar:applyStyle', this.updateCurrentStyles);
+    this.$onEventFromObserver('formula:input', this.updateCurrentText);
+    this.$onEventFromObserver('formula:enter-press', () => this.selection.current.focus());
+    this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
   }
 
   initTable() {
@@ -55,12 +55,12 @@ export class Table extends ExcelComponent {
 
     Object.keys(size.col).forEach(key => {
       const cols = this.$root.findAll(`[data-col="${key}"]`);
-      cols.forEach(el => $(el as HTMLElement).css({ width: `${size.col[key]}px` }));
+      cols.forEach(el => $(el as HTMLElement).css({ width: `${size.col[+key]}px` }));
     });
 
     Object.keys(size.row).forEach(key => {
       const rows = this.$root.findAll(`[data-row="${key}"]`);
-      rows.forEach(el => $(el as HTMLElement).css({ height: `${size.row[key]}px` }));
+      rows.forEach(el => $(el as HTMLElement).css({ height: `${size.row[+key]}px` }));
     });
   }
 
@@ -83,11 +83,11 @@ export class Table extends ExcelComponent {
     const $cell = this.$root.find(`[data-id="${startCellId}"]`);
     this.selection.select($cell);
 
-    this.$emit('table:select-cell', $cell);
+    this.$emitEventToObserver('table:select-cell', $cell);
   }
 
   emitSelectCallback() {
-    this.$emit('table:select-cell', this.selection.current);
+    this.$emitEventToObserver('table:select-cell', this.selection.current);
 
     const styles = this.selection.current?.getStyles(Object.keys(initialStyleState));
     this.dispatchToStore(changeCurrentStyles(styles));

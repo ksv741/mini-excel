@@ -1,4 +1,4 @@
-import { Dom } from 'core/dom';
+import { Dom } from 'core/Dom';
 import { capitalize } from 'core/utils';
 
 export class DomListener {

@@ -4,5 +4,5 @@ export type ToolbarStateType = {
   textDecoration?: 'none' | 'underline';
   justifyContent?: 'start' | 'center' | 'end';
   alignItems?: 'start' | 'center' | 'end';
-  fontSize?: any;
+  fontSize?: string;
 };

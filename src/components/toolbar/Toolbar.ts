@@ -1,5 +1,5 @@
 import { startCellId } from 'components/table/table.functions';
-import { $, Dom } from 'core/dom';
+import { $, Dom } from 'core/Dom';
 import { ExcelComponentState } from 'core/ExcelComponentState';
 import { ComponentOptionsType } from 'core/ExcelComponent';
 import { createToolbar } from 'components/toolbar/toolbar.template';
@@ -50,14 +50,14 @@ export class Toolbar extends ExcelComponentState {
     const value = JSON.parse(stringValue);
     const key = Object.keys(value)[0];
 
-    this.$emit('toolbar:applyStyle', value);
+    this.$emitEventToObserver('toolbar:applyStyle', value);
     this.setComponentState({ [key]: value[key] });
   }
 
   onChange(e: any) {
     const value = `${e.target.value.toString()}px`;
 
-    this.$emit('toolbar:applyStyle', { fontSize: value });
+    this.$emitEventToObserver('toolbar:applyStyle', { fontSize: value });
     this.setComponentState({ fontSize: value });
   }
 }

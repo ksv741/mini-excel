@@ -1,4 +1,4 @@
-import { $ } from 'core/dom';
+import { $ } from 'core/Dom';
 import { AbstractPage } from 'pages/AbstractPage';
 import { storage } from 'core/utils';
 

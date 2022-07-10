@@ -9,8 +9,9 @@ export class Store {
     this.listeners = [];
   }
 
-  subscribeFromStore(fn: (state: StateType) => void): SubscribeType {
+  subscribeToStore(fn: (state: StateType) => void): SubscribeType {
     this.listeners.push(fn);
+
     return {
       unsubscribe: () => {
         this.listeners = this.listeners.filter((l: any) => l !== fn);
@@ -23,7 +24,7 @@ export class Store {
     this.listeners.forEach(listener => listener(this.state));
   }
 
-  getState() {
+  getState(): StateType {
     return JSON.parse(JSON.stringify(this.state));
   }
 }

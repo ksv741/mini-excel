@@ -1,4 +1,4 @@
-import { Dom } from 'core/dom';
+import { Dom } from 'core/Dom';
 import { ExcelComponent, ComponentOptionsType } from 'core/ExcelComponent';
 
 type ExcelComponentStateType = {

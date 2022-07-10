@@ -1,4 +1,4 @@
-import { $, Dom } from 'core/dom';
+import { $, Dom } from 'core/Dom';
 import { getParamsFromCellId, startCellId } from 'components/table/table.functions';
 
 export class TableSelection {

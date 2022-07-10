@@ -85,7 +85,7 @@ export function createToolbar(state: ToolbarStateType): string {
   return buttons.join(' ');
 }
 
-function createFontSizeButton(currentSize: string) {
+function createFontSizeButton(currentSize = '12px') {
   const fontSizeInPixels = +currentSize.slice(0, -2);
   const options = [];
 
@@ -95,9 +95,11 @@ function createFontSizeButton(currentSize: string) {
   }
 
   return `
-    <select class="button__size" id="button-size">
-      ${options.join('')}
-    </select>
+    <div class="button">
+      <select class="button__size" id="button-size">
+        ${options.join('')}
+      </select>
+    </div>
   `;
 }
 
