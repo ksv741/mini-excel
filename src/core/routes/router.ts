@@ -12,7 +12,7 @@ type RoutesType = {
 export class Router {
   private $placeholder: Dom;
   private routes: RoutesType;
-  private page: DashboardPage | ExcelPage | null;
+  private page: DashboardPage | ExcelPage;
   private loader: Dom;
 
   constructor(selector: SelectorType, routes: RoutesType) {
@@ -20,7 +20,6 @@ export class Router {
 
     this.$placeholder = $(selector);
     this.routes = routes;
-    this.page = null;
     this.loader = Loader();
 
     this.changePageHandler = this.changePageHandler.bind(this);
@@ -50,14 +49,13 @@ export class Router {
         Page = this.routes.dashboard;
         break;
     }
-    // @ts-ignore
     this.page = new Page(ActiveRoute.param);
 
-    const root = await this.page?.getRoot();
+    const root = await this.page.getRoot();
 
     this.$placeholder.clear().append(root);
 
-    this.page?.afterRender();
+    this.page.afterRender();
   }
 
   destroy() {

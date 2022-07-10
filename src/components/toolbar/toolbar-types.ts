@@ -2,5 +2,6 @@ export type ToolbarStateType = {
   fontWeight?: 'normal' | 'bold';
   fontStyle?: 'normal' | 'italic';
   textDecoration?: 'none' | 'underline';
-  textAlign?: 'left' | 'center' | 'right';
+  justifyContent?: 'start' | 'center' | 'end';
+  alignItems?: 'start' | 'center' | 'end';
 };

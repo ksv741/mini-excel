@@ -48,6 +48,7 @@
     border-left: 0;
     white-space: nowrap;
     outline: none;
+    display: flex;
     &:hover:not(.selected) {
       cursor: cell;
     }

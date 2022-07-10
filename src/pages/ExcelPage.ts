@@ -29,8 +29,8 @@ export class ExcelPage extends AbstractPage {
   }
 
   async getRoot() {
-    const normalizeState = await this.processor.get();
-    const store = new Store(rootReducer, normalizeState);
+    const state = await this.processor.get();
+    const store = new Store(rootReducer, state);
 
     this.storeSub = store.subscribe(this.processor.listen);
 

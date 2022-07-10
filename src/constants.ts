@@ -4,7 +4,7 @@ import { StateType } from 'redux/types';
 import { storage } from 'core/utils';
 
 export const initialStyleState: ToolbarStateType = {
-  textAlign: 'left',
+  justifyContent: 'start',
   fontWeight: 'normal',
   textDecoration: 'none',
   fontStyle: 'normal',

@@ -15,4 +15,11 @@
   .button {
     @include button(green)
   }
+
+  .button__group {
+    border-right: 1px solid #c0c0c0;
+    &:last-child {
+      border: none;
+    }
+  }
 }
