@@ -10,3 +10,5 @@ export function getParamsFromCellId(cellId: string) {
 
   return { col, row };
 }
+
+export const startCellId = '0:0';

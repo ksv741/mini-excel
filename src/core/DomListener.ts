@@ -5,7 +5,7 @@ export class DomListener {
   $root: Dom;
   listeners: string[];
 
-  constructor($root: Dom, listeners?: string[]) {
+  constructor($root: Dom, listeners: string[]) {
     if (!$root) throw new Error('Не передали корневой элемент');
 
     this.$root = $root;

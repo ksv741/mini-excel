@@ -1,3 +1,4 @@
+import { ToolbarStateType } from 'components/toolbar/toolbar-types';
 import { initialStyleState } from 'src/constants';
 
 export type SelectorType = string | HTMLElement;
@@ -9,30 +10,33 @@ export interface DomClass {
 }
 
 export class Dom implements DomClass {
-  $el: HTMLElement | null;
+  $el: HTMLElement;
 
   constructor(selector: SelectorType) {
-    this.$el = typeof selector === 'string'
-      ? document.querySelector(selector)
-      : selector;
+    // Could not find element with selector in DOM, need a check
+    if (typeof selector === 'string') {
+      const elementFromDOM = document.querySelector(selector);
+      if (!elementFromDOM) throw new Error(`Can't find element with "${selector}" selector`);
+      else this.$el = elementFromDOM as HTMLElement;
+    } else {
+      this.$el = selector;
+    }
   }
 
   html(html = '') {
-    if (typeof html === 'string') {
-      this.$el.innerHTML = html;
-      return this;
-    }
+    this.$el.innerHTML = html;
 
-    return this.$el.outerHTML.trim();
+    return this;
   }
 
   set text(text: string) {
+    if (!text) this.$el.textContent = '';
     this.$el.textContent = text;
   }
 
   get text() {
-    if (this.$el?.closest('input')) return (this.$el as HTMLInputElement).value;
-    return this.$el?.textContent;
+    if (this.$el.closest('input')) return (this.$el as HTMLInputElement).value;
+    return (this.$el as HTMLElement).innerText;
   }
 
   clear() {
@@ -47,11 +51,8 @@ export class Dom implements DomClass {
 
     if (node instanceof Dom) child = node.$el;
 
-    if (Element.prototype.append) {
-      this.$el.append(child);
-    } else {
-      this.$el.appendChild(child);
-    }
+    if (this.$el.append) this.$el.append(child);
+    else this.$el.appendChild(child);
 
     return this;
   }
@@ -69,7 +70,7 @@ export class Dom implements DomClass {
   }
 
   get data() {
-    return this.$el.dataset;
+    return this.$el.dataset || '';
   }
 
   setData(name: string, value: string) {
@@ -108,9 +109,9 @@ export class Dom implements DomClass {
     this.$el?.classList.remove(className);
   }
 
-  getStyles(styles: (keyof Partial<CSSStyleDeclaration>)[]) {
-    return styles.reduce((res: Partial<CSSStyleDeclaration>, s: any) => {
-      res[s] = this.$el.style[s] || initialStyleState[s];
+  getStyles(styles: any[]) {
+    return styles.reduce((res, s) => {
+      res[s] = this.$el.style[s] || initialStyleState[s as keyof ToolbarStateType];
       return res;
     }, {});
   }

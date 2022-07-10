@@ -1,3 +1,4 @@
+import { startCellId } from 'components/table/table.functions';
 import * as actions from 'redux/actions';
 import { $, Dom } from 'core/dom';
 import { ExcelComponent } from 'core/ExcelComponent';
@@ -33,7 +34,7 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
-    const $cell = this.$root.find('[data-id="0:0"]');
+    const $cell = this.$root.find(`[data-id="${startCellId}"]`);
     this.selection.select($cell);
 
     this.$emit('table:select-cell', $cell.data.value);
@@ -86,7 +87,6 @@ export class Table extends ExcelComponent {
     const tableState = this.store.getState();
     const tableContent = tableState?.dataState;
     const tableStyles = tableState?.stylesState;
-
     Object.keys(tableContent).forEach(cellId => {
       const $cell = this.$root.find(`[data-id="${cellId}"]`);
       const styles = tableStyles[cellId];
@@ -100,7 +100,7 @@ export class Table extends ExcelComponent {
   emitSelectCallback() {
     this.$emit('table:select-cell', this.selection.current.data.value);
 
-    const styles = this.selection.current?.getStyles(Object.keys(initialStyleState) as (keyof Partial<CSSStyleDeclaration>)[]);
+    const styles = this.selection.current?.getStyles(Object.keys(initialStyleState));
     this.$dispatch(changeCurrentStyles(styles));
   }
 
@@ -116,7 +116,7 @@ export class Table extends ExcelComponent {
   updateCurrentTextInStore(text: string) {
     this.$dispatch(actions.changeText({
       text,
-      id: this.selection.current.data.id,
+      id: this.selection.current.data.id || startCellId,
     }));
   }
 
@@ -130,6 +130,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    this.updateCurrentTextInStore((event.target as HTMLElement).textContent.trim());
+    this.updateCurrentTextInStore((event.target as HTMLElement).innerText.trim());
   }
 }

@@ -9,7 +9,7 @@ export class Store {
     this.listeners = [];
   }
 
-  subscribe(fn: (state?: StateType) => void): SubscribeType {
+  subscribe(fn: (state: StateType) => void): SubscribeType {
     this.listeners.push(fn);
     return {
       unsubscribe: () => {

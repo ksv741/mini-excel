@@ -3,20 +3,25 @@ import { storageName } from 'pages/ExcelPage';
 import { StateType } from 'redux/types';
 import { getNormalizeInitialState } from 'src/constants';
 
-export class LocalStorageClient {
+export interface ClientDataType {
+  save: (state: StateType) => Promise<any>;
+  get: () => Promise<any>;
+}
+
+export class LocalStorageClient implements ClientDataType {
   private name: string;
 
   constructor(name: string) {
-    this.name = storageName(name);
+    this.name = name;
   }
 
   save(state: StateType): Promise<void> {
-    storage(this.name, state);
+    storage(storageName(this.name), state);
     return Promise.resolve();
   }
 
   get() {
-    const data = storage(this.name) || getNormalizeInitialState(this.name);
+    const data = storage(storageName(this.name)) || getNormalizeInitialState(this.name);
 
     return new Promise(resolve => {
       setTimeout(() => {

@@ -4,9 +4,7 @@ import { initialStyleState } from 'src/constants';
 type ButtonConfigType = {
   icon: string;
   isActive: boolean;
-  value: {
-    [k: string]: string | number
-  }
+  value: ToolbarStateType;
 };
 
 export function createToolbar(state: ToolbarStateType): string {

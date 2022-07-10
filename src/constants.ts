@@ -1,7 +1,9 @@
+import { startCellId } from 'components/table/table.functions';
+import { ToolbarStateType } from 'components/toolbar/toolbar-types';
 import { StateType } from 'redux/types';
 import { storage } from 'core/utils';
 
-export const initialStyleState: Partial<CSSStyleDeclaration> = {
+export const initialStyleState: ToolbarStateType = {
   textAlign: 'left',
   fontWeight: 'normal',
   textDecoration: 'none',
@@ -16,9 +18,9 @@ export function getNormalizeInitialState(params: string): StateType {
     currentText: '',
     stylesState: {},
     title: 'New excel table',
-    ...storage(`excel:${params}`),
-    currentStyles: { ...storage(`excel:${params}`)?.stylesState?.['0:0'] },
     id: params,
     openDate: Date.now(),
+    ...storage(`excel:${params}`),
+    currentStyles: { ...storage(`excel:${params}`)?.stylesState?.[startCellId] },
   };
 }

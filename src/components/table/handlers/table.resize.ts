@@ -1,3 +1,4 @@
+import { startCellId } from 'components/table/table.functions';
 import { $, Dom } from 'core/dom';
 
 type CustomElementType = Element & { css: any };
@@ -57,17 +58,17 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
     document.onmouseup = () => {
       document.onmousemove = null;
       document.onmouseup = null;
-      document.body.style.userSelect = null;
+      document.body.style.userSelect = '';
 
-      let value: number;
-      // let id: string;
+      let value = 0;
+      const id = $parent.data[type || ''] || startCellId;
 
       switch (type) {
         case 'col': {
           value = coords.width + delta;
 
           $parent.css({ width: `${value}px` });
-          allCols.forEach((el: CustomElementType) => el.css({ width: `${coords.width + delta}px` }));
+          allCols.forEach(el => $(el as HTMLElement).css({ width: `${coords.width + delta}px` }));
           break;
         }
 
@@ -78,10 +79,10 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
           break;
         }
 
-        default: break;
+        default: return;
       }
 
-      res({ value, id: $parent.data[type], type });
+      res({ value, id, type });
 
       $resizer.css({ opacity: 0, bottom: 0, right: 0 });
     };

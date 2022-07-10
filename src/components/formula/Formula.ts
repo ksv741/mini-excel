@@ -17,8 +17,8 @@ export class Formula extends ExcelComponent {
 
   toHTML(): string {
     return `
-    <div class="info">fx</div>
-    <div id="formula-input" class="input" contenteditable spellcheck="false"></div>
+      <div class="info">fx</div>
+      <div id="formula-input" class="input" contenteditable spellcheck="false"></div>
     `;
   }
 
@@ -28,7 +28,7 @@ export class Formula extends ExcelComponent {
     this.formulaInput = this.$root.find('#formula-input');
 
     this.$on('table:select-cell', text => {
-      this.formulaInput.text = text;
+      this.formulaInput.text = text || '';
     });
   }
 
@@ -36,8 +36,11 @@ export class Formula extends ExcelComponent {
     this.formulaInput.text = currentText;
   }
 
-  onInput(event: Event) {
-    const text = (event.target as HTMLElement).textContent.trim();
+  onInput(event: InputEvent) {
+    const { target } = event;
+    if (!target) return;
+
+    const text = (target as HTMLElement).innerText.trim();
     this.$emit('formula:input', text);
   }
 

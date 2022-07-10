@@ -1,6 +1,6 @@
 import { $ } from 'core/dom';
 import { TableSelection } from 'components/table/TableSelection';
-import { getParamsFromCellId, isCell } from 'components/table/table.functions';
+import { getParamsFromCellId, isCell, startCellId } from 'components/table/table.functions';
 
 export function selectHandler(event: MouseEvent | KeyboardEvent, selection: TableSelection, callback?: () => void) {
   switch (event.type) {
@@ -15,7 +15,8 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
     default: break;
   }
 
-  callback();
+  // Analog callback && callback();
+  callback?.();
 
   function onMouseDownHandler() {
     if (isCell(event)) {
@@ -37,7 +38,8 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
 
     if (!selection?.current || !handleKeys.includes(key)) return;
 
-    const currentCellId = selection.current?.data?.id;
+    // If something goes wrong, go to start line
+    const currentCellId = selection.current.data.id || startCellId;
     let { row, col } = getParamsFromCellId(currentCellId);
 
     switch (key) {

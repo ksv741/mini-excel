@@ -1,5 +1,5 @@
 import { $, Dom } from 'core/dom';
-import { getParamsFromCellId } from 'components/table/table.functions';
+import { getParamsFromCellId, startCellId } from 'components/table/table.functions';
 
 export class TableSelection {
   static selectedClassName = 'selected';
@@ -8,7 +8,6 @@ export class TableSelection {
 
   constructor() {
     this.group = [];
-    this.current = null;
   }
 
   get selectedIds() {
@@ -42,8 +41,8 @@ export class TableSelection {
   }
 
   selectGroup($el: Dom) {
-    const startCellParams = getParamsFromCellId(this.current.data.id);
-    const selectedCellParams = getParamsFromCellId($el.data.id);
+    const startCellParams = getParamsFromCellId(this.current.data.id || startCellId);
+    const selectedCellParams = getParamsFromCellId($el.data.id || startCellId);
 
     const startCol = Math.min(startCellParams.col, selectedCellParams.col);
     const endCol = Math.max(startCellParams.col, selectedCellParams.col);

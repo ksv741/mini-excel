@@ -2,7 +2,7 @@ import path from 'path';
 
 // FIXME:
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Configuration as DevServerConfiguration } from 'webpack-dev-server';
+import 'webpack-dev-server';
 import type { Configuration } from 'webpack';
 
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -93,6 +93,18 @@ const config = (env: Record<string, any>, argv: Record<string, any>): Configurat
               loader: 'css-loader',
               options: {
                 sourceMap: !isProd,
+              },
+            },
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  plugins: [
+                    [
+                      'postcss-preset-env',
+                    ],
+                  ],
+                },
               },
             },
             {

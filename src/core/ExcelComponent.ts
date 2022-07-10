@@ -11,26 +11,26 @@ interface ExcelComponentClass {
 }
 
 export type OptionsType = {
-  listeners?: string[];
+  listeners: string[];
   name: string;
-  emitter?: Emitter;
+  emitter: Emitter;
   store: Store;
   subscribe: string[],
 };
 
 export abstract class ExcelComponent extends DomListener implements ExcelComponentClass {
-  private name: string | undefined;
-  private emitter: Emitter | undefined;
-  private store: Store | undefined;
-  private subscribe: string[] | undefined;
+  private name: string;
+  private emitter: Emitter;
+  public store: Store;
+  private subscribe: string[];
   private unsubscribers: ((args?: any) => any)[];
 
-  constructor($root: Dom, options?: OptionsType) {
-    super($root, options?.listeners);
-    this.name = options?.name;
-    this.emitter = options?.emitter;
-    this.store = options?.store;
-    this.subscribe = options?.subscribe;
+  constructor($root: Dom, options: OptionsType) {
+    super($root, options.listeners);
+    this.name = options.name;
+    this.emitter = options.emitter;
+    this.store = options.store;
+    this.subscribe = options.subscribe;
 
     this.unsubscribers = [];
     this.prepare();

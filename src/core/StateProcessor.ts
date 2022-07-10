@@ -1,12 +1,16 @@
+import { ClientDataType } from 'core/Clients';
 import { debounce } from 'core/utils';
+import { StateType } from 'redux/types';
 
 export class StateProcessor {
-  constructor(client, dalay = 300) {
+  private client: ClientDataType;
+
+  constructor(client: ClientDataType, dalay = 300) {
     this.client = client;
     this.listen = debounce(this.listen.bind(this), dalay);
   }
 
-  listen(state) {
+  listen(state: StateType) {
     this.client.save(state);
   }
 

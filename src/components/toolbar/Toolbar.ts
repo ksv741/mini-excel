@@ -1,3 +1,4 @@
+import { startCellId } from 'components/table/table.functions';
 import { $, Dom } from 'core/dom';
 import { ExcelStateComponent } from 'core/ExcelStateComponent';
 import { OptionsType } from 'core/ExcelComponent';
@@ -9,10 +10,10 @@ export class Toolbar extends ExcelStateComponent {
 
   constructor($root: Dom, options: OptionsType) {
     super($root, {
+      ...options,
       listeners: ['click'],
       name: 'Toolbar',
       subscribe: ['currentStyles'],
-      ...options,
     });
   }
 
@@ -25,7 +26,7 @@ export class Toolbar extends ExcelStateComponent {
   get toolbarState() {
     return {
       ...initialStyleState,
-      ...this.store?.getState()?.stylesState?.['0:0'],
+      ...this.store?.getState()?.stylesState?.[startCellId],
     };
   }
 
