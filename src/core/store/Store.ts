@@ -9,7 +9,7 @@ export class Store {
     this.listeners = [];
   }
 
-  subscribe(fn: (state: StateType) => void): SubscribeType {
+  subscribeFromStore(fn: (state: StateType) => void): SubscribeType {
     this.listeners.push(fn);
     return {
       unsubscribe: () => {
@@ -18,7 +18,7 @@ export class Store {
     };
   }
 
-  dispatch(action: ActionType) {
+  dispatchToStore(action: ActionType) {
     this.state = this.reducer(this.state, action);
     this.listeners.forEach(listener => listener(this.state));
   }

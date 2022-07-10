@@ -1,9 +1,9 @@
 import { startCellId } from 'components/table/table.functions';
-import * as actions from 'redux/actions';
+import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/dom';
 import { ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
-import { changeCurrentStyles } from 'redux/actions';
+import { changeCurrentStyles } from 'redux/action-creators';
 import { createTable } from 'components/table/table.template';
 import { initialStyleState } from 'src/constants';
 import { parse } from 'core/utils';
@@ -18,7 +18,7 @@ export class Table extends ExcelComponent {
   constructor($root: Dom, options: any) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'keydown', 'input'],
+      eventListeners: ['mousedown', 'keydown', 'input'],
       ...options,
     });
   }
@@ -34,36 +34,17 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
 
-    const $cell = this.$root.find(`[data-id="${startCellId}"]`);
-    this.selection.select($cell);
-
-    this.$emit('table:select-cell', $cell.data.value);
-
-    this.$on('formula:input', (data) => {
-      this.selection.current.attr('data-value', data);
-      this.selection.current.text = parse(data);
-      this.updateCurrentTextInStore(data);
-    });
-
-    this.$on('formula:enter-press', () => {
-      this.selection.current.focus();
-    });
-
-    this.$on('toolbar:applyStyle', (value) => {
-      this.selection.applyStyle(value);
-
-      this.$dispatch(actions.applyStyle({
-        value,
-        ids: this.selection.selectedIds,
-      }));
-    });
-
     this.initTable();
+
+    this.$on('formula:input', this.updateCurrentText);
+    this.$on('formula:enter-press', () => this.selection.current.focus());
+    this.$on('toolbar:applyStyle', this.updateCurrentStyles);
   }
 
   initTable() {
     this.initTableSize();
     this.initTableContentAndStyles();
+    this.initStartCellFocus();
   }
 
   initTableSize() {
@@ -87,6 +68,7 @@ export class Table extends ExcelComponent {
     const tableState = this.store.getState();
     const tableContent = tableState?.dataState;
     const tableStyles = tableState?.stylesState;
+
     Object.keys(tableContent).forEach(cellId => {
       const $cell = this.$root.find(`[data-id="${cellId}"]`);
       const styles = tableStyles[cellId];
@@ -97,28 +79,46 @@ export class Table extends ExcelComponent {
     });
   }
 
+  initStartCellFocus() {
+    const $cell = this.$root.find(`[data-id="${startCellId}"]`);
+    this.selection.select($cell);
+
+    this.$emit('table:select-cell', $cell);
+  }
+
   emitSelectCallback() {
-    this.$emit('table:select-cell', this.selection.current.data.value);
+    this.$emit('table:select-cell', this.selection.current);
 
     const styles = this.selection.current?.getStyles(Object.keys(initialStyleState));
-    this.$dispatch(changeCurrentStyles(styles));
+    this.dispatchToStore(changeCurrentStyles(styles));
   }
 
   async resizeTable(event: MouseEvent) {
     try {
       const resizeData = await resizeHandler(this.$root, event);
-      this.$dispatch(actions.tableResize({ resizeData }));
+      this.dispatchToStore(actions.tableResize({ resizeData }));
     } catch (e) {
       console.warn('Resize error', e.message);
     }
   }
 
-  updateCurrentTextInStore(text: string) {
-    this.$dispatch(actions.changeText({
+  updateCurrentText = (text: string) => {
+    this.selection.current.attr('data-value', text);
+    this.selection.current.text = parse(text);
+
+    this.dispatchToStore(actions.changeText({
       text,
       id: this.selection.current.data.id || startCellId,
     }));
-  }
+  };
+
+  updateCurrentStyles = (style: CSSStyleRule) => {
+    this.selection.applyStyle(style);
+    this.dispatchToStore(actions.applyStyle({
+      value: style,
+      ids: this.selection.selectedIds,
+    }));
+  };
 
   onMousedown(event: MouseEvent) {
     selectHandler(event, this.selection, this.emitSelectCallback.bind(this));
@@ -130,6 +130,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    this.updateCurrentTextInStore((event.target as HTMLElement).innerText.trim());
+    this.updateCurrentText((event.target as HTMLElement).innerText.trim());
   }
 }

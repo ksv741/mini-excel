@@ -80,7 +80,25 @@ export function createToolbar(state: ToolbarStateType): string {
     ],
   ];
 
-  return btns.map(btn => (Array.isArray(btn) ? toButtonGroup(btn) : toButton(btn))).join(' ');
+  const buttons = btns.map(btn => (Array.isArray(btn) ? toButtonGroup(btn) : toButton(btn)));
+  buttons.push(createFontSizeButton(state.fontSize));
+  return buttons.join(' ');
+}
+
+function createFontSizeButton(currentSize: string) {
+  const fontSizeInPixels = +currentSize.slice(0, -2);
+  const options = [];
+
+  for (let i = 8; i <= 24; i += 2) {
+    if (fontSizeInPixels === i) options.push(`<option value="${i}" selected>${i}</option>`);
+    else options.push(`<option value="${i}">${i}</option>`);
+  }
+
+  return `
+    <select class="button__size" id="button-size">
+      ${options.join('')}
+    </select>
+  `;
 }
 
 function toButtonGroup(buttons: ButtonConfigType[]) {

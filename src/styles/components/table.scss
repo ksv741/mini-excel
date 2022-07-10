@@ -7,6 +7,7 @@
   right: 0;
   top: $header-height + $toolbar-height + $formula-height;
   overflow: auto;
+  font-size: $default-cell-font-size;
   .row{
     display: flex;
     flex-direction: row;

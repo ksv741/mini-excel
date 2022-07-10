@@ -1,16 +1,16 @@
-import * as actions from 'redux/actions';
+import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/dom';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
-import { ExcelStateComponent } from 'core/ExcelStateComponent';
-import { deleteTable } from 'redux/actions';
+import { ExcelComponentState } from 'core/ExcelComponentState';
+import { deleteTable } from 'redux/action-creators';
 
-export class Header extends ExcelStateComponent {
+export class Header extends ExcelComponentState {
   static className = 'excel__header';
 
   constructor($root: Dom, options: any) {
     super($root, {
       name: 'Header',
-      listeners: ['input', 'click'],
+      eventListeners: ['input', 'click'],
       subscribe: ['title'],
       ...options,
     });
@@ -35,7 +35,7 @@ export class Header extends ExcelStateComponent {
   onInput(event: InputEvent) {
     const $target = $(event.target as HTMLInputElement);
 
-    this.$dispatch(actions.changeTitle($target.text));
+    this.dispatchToStore(actions.changeTitle($target.text));
   }
 
   onClick(event: MouseEvent) {
@@ -54,7 +54,7 @@ export class Header extends ExcelStateComponent {
       }
 
       case 'delete-table': {
-        confirm('Действительно хочешь удалить ?') && this.$dispatch(deleteTable(this.store.getState().id));
+        confirm('Действительно хочешь удалить ?') && this.dispatchToStore(deleteTable(this.store.getState().id));
         break;
       }
 

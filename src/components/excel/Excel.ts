@@ -1,9 +1,9 @@
 import { $ } from 'core/dom';
 import { Emitter } from 'core/Emitter';
 import { ExcelComponent } from 'core/ExcelComponent';
-import { Store } from 'core/store/createStore';
+import { Store } from 'core/store/Store';
 import { StoreSubscriber } from 'core/StoreSubscriber';
-import { updateOpenDate } from 'redux/actions';
+import { updateOpenDate } from 'redux/action-creators';
 
 interface ExcelOptionsType {
   components: any[],
@@ -48,7 +48,7 @@ export class Excel {
     this.subscriber.subscribeComponents(this.components);
     this.components.forEach(component => component.init());
 
-    this.store.dispatch(updateOpenDate(Date.now().toString()));
+    this.store.dispatchToStore(updateOpenDate(Date.now().toString()));
   }
 
   destroy() {

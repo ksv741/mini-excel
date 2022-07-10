@@ -7,7 +7,7 @@ import {
   CHANGE_TITLE,
   DELETE_TABLE,
   UPDATE_DATE,
-} from 'redux/constants';
+} from 'redux/action-constants';
 
 export function tableResize(resizeData: any) {
   return {
@@ -30,7 +30,7 @@ export function changeCurrentStyles(data: any) {
   };
 }
 
-export function applyStyle(data: any) {
+export function applyStyle(data: { ids: (string | undefined)[], value: CSSStyleRule }) {
   return {
     type: APPLY_STYLES,
     data,

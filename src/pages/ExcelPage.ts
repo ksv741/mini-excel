@@ -4,7 +4,7 @@ import { Formula } from 'components/formula/Formula';
 import { Header } from 'components/header/Header';
 import { LocalStorageClient } from 'core/Clients';
 import { StateProcessor } from 'core/StateProcessor';
-import { Store } from 'core/store/createStore';
+import { Store } from 'core/store/Store';
 import { SubscribeType } from 'redux/types';
 import { Table } from 'components/table/Table';
 import { Toolbar } from 'components/toolbar/Toolbar';
@@ -32,7 +32,7 @@ export class ExcelPage extends AbstractPage {
     const state = await this.processor.get();
     const store = new Store(rootReducer, state);
 
-    this.storeSub = store.subscribe(this.processor.listen);
+    this.storeSub = store.subscribeFromStore(this.processor.listen);
 
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],

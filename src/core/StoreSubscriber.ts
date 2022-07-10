@@ -1,5 +1,5 @@
 import { StateType } from 'redux/types';
-import { Store } from 'core/store/createStore';
+import { Store } from 'core/store/Store';
 import { isEqual } from 'core/utils';
 
 export class StoreSubscriber {
@@ -14,7 +14,7 @@ export class StoreSubscriber {
   subscribeComponents(components: any[]) {
     this.prevState = this.store.getState();
 
-    this.sub = this.store.subscribe((state: StateType) => {
+    this.sub = this.store.subscribeFromStore((state: StateType) => {
       if (!state) return;
 
       Object.keys(state).forEach(key => {

@@ -1,15 +1,18 @@
 import { Dom } from 'core/dom';
-import { ExcelComponent } from 'core/ExcelComponent';
+import { ExcelComponent, ComponentOptionsType } from 'core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula';
 
   private formulaInput: Dom;
 
-  constructor($root: Dom, options: any) {
+  constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
-      listeners: ['input', 'keydown'],
+      // @ts-ignore next-line
+      eventListeners: ['input', 'keydown'],
+      // @ts-ignore next-line
       name: 'Formula',
+      // @ts-ignore next-line
       subscribe: ['currentText'],
       ...options,
     });
@@ -27,8 +30,8 @@ export class Formula extends ExcelComponent {
 
     this.formulaInput = this.$root.find('#formula-input');
 
-    this.$on('table:select-cell', text => {
-      this.formulaInput.text = text || '';
+    this.$on('table:select-cell', (cell: Dom) => {
+      this.formulaInput.text = cell.data.value || '';
     });
   }
 

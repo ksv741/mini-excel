@@ -9,7 +9,7 @@ import {
   CHANGE_TITLE,
   DELETE_TABLE,
   UPDATE_DATE,
-} from 'redux/constants';
+} from 'redux/action-constants';
 
 export function rootReducer(state: StateType, action: ActionType) {
   switch (action.type) {

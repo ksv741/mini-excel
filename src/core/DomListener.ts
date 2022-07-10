@@ -3,19 +3,19 @@ import { capitalize } from 'core/utils';
 
 export class DomListener {
   $root: Dom;
-  listeners: string[];
+  eventListeners: string[];
 
-  constructor($root: Dom, listeners: string[]) {
+  constructor($root: Dom, eventNames: string[]) {
     if (!$root) throw new Error('Не передали корневой элемент');
 
     this.$root = $root;
-    this.listeners = listeners;
+    this.eventListeners = eventNames;
   }
 
   initDOMListeners() {
-    if (!this.listeners) return;
+    if (!this.eventListeners) return;
 
-    this.listeners.forEach((listener: string) => {
+    this.eventListeners.forEach((listener: string) => {
       const method: any = getMethodName(listener);
       // @ts-ignore FIXME:
       this[method] = this[method]?.bind(this);
@@ -27,7 +27,7 @@ export class DomListener {
   }
 
   removeDOMListeners() {
-    this.listeners.forEach(listener => {
+    this.eventListeners.forEach(listener => {
       // @ts-ignore FIXME:
       const method: any = getMethodName(listener);
       // @ts-ignore FIXME:

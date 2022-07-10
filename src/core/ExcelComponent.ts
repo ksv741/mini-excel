@@ -2,7 +2,7 @@ import { ActionType } from 'redux/types';
 import { Dom } from 'core/dom';
 import { DomListener } from 'core/DomListener';
 import { Emitter } from 'core/Emitter';
-import { Store } from 'core/store/createStore';
+import { Store } from 'core/store/Store';
 
 interface ExcelComponentClass {
   toHTML: () => string;
@@ -10,8 +10,8 @@ interface ExcelComponentClass {
   storeChanged?: (args: any) => void;
 }
 
-export type OptionsType = {
-  listeners: string[];
+export type ComponentOptionsType = {
+  eventListeners: string[];
   name: string;
   emitter: Emitter;
   store: Store;
@@ -25,8 +25,8 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
   private subscribe: string[];
   private unsubscribers: ((args?: any) => any)[];
 
-  constructor($root: Dom, options: OptionsType) {
-    super($root, options.listeners);
+  constructor($root: Dom, options: ComponentOptionsType) {
+    super($root, options.eventListeners);
     this.name = options.name;
     this.emitter = options.emitter;
     this.store = options.store;
@@ -53,8 +53,8 @@ export abstract class ExcelComponent extends DomListener implements ExcelCompone
     unsub && this.unsubscribers.push(unsub);
   }
 
-  $dispatch(action: ActionType) {
-    this.store?.dispatch(action);
+  dispatchToStore(action: ActionType) {
+    this.store?.dispatchToStore(action);
   }
 
   storeChanged(args?: any) {

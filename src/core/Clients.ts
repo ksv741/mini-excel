@@ -1,3 +1,4 @@
+import { startCellId } from 'components/table/table.functions';
 import { storage } from 'core/utils';
 import { storageName } from 'pages/ExcelPage';
 import { StateType } from 'redux/types';
@@ -21,12 +22,20 @@ export class LocalStorageClient implements ClientDataType {
   }
 
   get() {
-    const data = storage(storageName(this.name)) || getNormalizeInitialState(this.name);
+    const data = this.norm(storage(storageName(this.name))) || getNormalizeInitialState(this.name);
 
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(data);
       }, 1500);
     });
+  }
+
+  norm(state) {
+    return {
+      ...state,
+      currentStyles: { ...state.stylesState?.[startCellId] },
+      currentText: state.dataState?.[startCellId],
+    };
   }
 }

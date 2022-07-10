@@ -23,8 +23,8 @@ describe('Create store', () => {
 
   test('should return store object', () => {
     expect(store).toBeDefined();
-    expect(store.dispatch).toBeDefined();
-    expect(store.subscribe).toBeDefined();
+    expect(store.dispatchToStore).toBeDefined();
+    expect(store.subscribeFromStore).toBeDefined();
     expect(store.getState).not.toBeUndefined();
   });
 
@@ -37,27 +37,27 @@ describe('Create store', () => {
   });
 
   test('should change state if actions exist', () => {
-    store.dispatch({ type: 'ADD' });
+    store.dispatchToStore({ type: 'ADD' });
     expect(store.getState().count).toBe(1);
   });
 
   test("should NOT change state if actions don't exist", () => {
-    store.dispatch({ type: 'NOT_EXISTING_TYPE' });
+    store.dispatchToStore({ type: 'NOT_EXISTING_TYPE' });
     expect(store.getState().count).toBe(0);
   });
 
   test('should call subscriber', () => {
-    store.subscribe(handler);
-    store.dispatch({ type: 'ADD' });
+    store.subscribeFromStore(handler);
+    store.dispatchToStore({ type: 'ADD' });
 
     expect(handler).toHaveBeenCalled();
     expect(handler).toHaveBeenCalledWith(store.getState());
   });
 
   test('should NOT call sub if unsubscribe', () => {
-    const unsub = store.subscribe(handler);
+    const unsub = store.subscribeFromStore(handler);
     unsub.unsubscribe();
-    store.dispatch({ type: 'ADD' });
+    store.dispatchToStore({ type: 'ADD' });
 
     expect(handler).not.toHaveBeenCalled();
   });
@@ -65,7 +65,7 @@ describe('Create store', () => {
   test('should dispatch in async way', () => {
     return new Promise(resolve => {
       setTimeout(() => {
-        store.dispatch({ type: 'ADD' });
+        store.dispatchToStore({ type: 'ADD' });
       }, 500);
 
       setTimeout(() => {

@@ -8,6 +8,7 @@ export const initialStyleState: ToolbarStateType = {
   fontWeight: 'normal',
   textDecoration: 'none',
   fontStyle: 'normal',
+  fontSize: '12px',
 };
 
 export function getNormalizeInitialState(params: string): StateType {
@@ -15,12 +16,12 @@ export function getNormalizeInitialState(params: string): StateType {
     colState: {},
     rowState: {},
     dataState: {},
-    currentText: '',
     stylesState: {},
     title: 'New excel table',
     id: params,
     openDate: Date.now(),
     ...storage(`excel:${params}`),
     currentStyles: { ...storage(`excel:${params}`)?.stylesState?.[startCellId] },
+    currentText: { ...storage(`excel:${params}`)?.dataState?.[startCellId] },
   };
 }

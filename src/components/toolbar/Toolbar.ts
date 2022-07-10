@@ -1,17 +1,17 @@
 import { startCellId } from 'components/table/table.functions';
 import { $, Dom } from 'core/dom';
-import { ExcelStateComponent } from 'core/ExcelStateComponent';
-import { OptionsType } from 'core/ExcelComponent';
+import { ExcelComponentState } from 'core/ExcelComponentState';
+import { ComponentOptionsType } from 'core/ExcelComponent';
 import { createToolbar } from 'components/toolbar/toolbar.template';
 import { initialStyleState } from 'src/constants';
 
-export class Toolbar extends ExcelStateComponent {
+export class Toolbar extends ExcelComponentState {
   static className = 'excel__toolbar';
 
-  constructor($root: Dom, options: OptionsType) {
+  constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
       ...options,
-      listeners: ['click'],
+      eventListeners: ['click', 'change'],
       name: 'Toolbar',
       subscribe: ['currentStyles'],
     });
@@ -20,7 +20,7 @@ export class Toolbar extends ExcelStateComponent {
   prepare() {
     const currentToolbarState = this.toolbarState;
 
-    this.initState(currentToolbarState);
+    this.initComponentState(currentToolbarState);
   }
 
   get toolbarState() {
@@ -31,7 +31,7 @@ export class Toolbar extends ExcelStateComponent {
   }
 
   get template(): string {
-    return createToolbar(this.state);
+    return createToolbar(this.componentState);
   }
 
   toHTML(): string {
@@ -39,7 +39,7 @@ export class Toolbar extends ExcelStateComponent {
   }
 
   storeChanged(args?: any) {
-    this.setState(args.currentStyles);
+    this.setComponentState(args.currentStyles);
   }
 
   onClick(event: MouseEvent) {
@@ -51,7 +51,13 @@ export class Toolbar extends ExcelStateComponent {
     const key = Object.keys(value)[0];
 
     this.$emit('toolbar:applyStyle', value);
+    this.setComponentState({ [key]: value[key] });
+  }
 
-    this.setState({ [key]: value[key] });
+  onChange(e: any) {
+    const value = `${e.target.value.toString()}px`;
+
+    this.$emit('toolbar:applyStyle', { fontSize: value });
+    this.setComponentState({ fontSize: value });
   }
 }
