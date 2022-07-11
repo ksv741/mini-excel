@@ -14,13 +14,16 @@ export class Table extends ExcelComponent {
   static className = 'excel__table';
 
   private selection: TableSelection;
+  private isMouseDowned: boolean;
 
   constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
       ...options,
       name: 'Table',
-      eventListeners: ['mousedown', 'keydown', 'input'],
+      eventListeners: ['mousedown', 'keydown', 'input', 'mouseover', 'mouseup'],
     });
+
+    this.isMouseDowned = false;
   }
 
   toHTML(): string {
@@ -123,6 +126,7 @@ export class Table extends ExcelComponent {
   };
 
   onMousedown(event: MouseEvent) {
+    this.isMouseDowned = true;
     selectHandler(event, this.selection, this.emitSelectCallback.bind(this));
     this.resizeTable(event);
   }
@@ -133,5 +137,13 @@ export class Table extends ExcelComponent {
 
   onInput(event: InputEvent) {
     this.updateCurrentText((event.target as HTMLElement).innerText);
+  }
+
+  onMouseover(event: MouseEvent) {
+    this.isMouseDowned && selectHandler(event, this.selection);
+  }
+
+  onMouseup() {
+    this.isMouseDowned = false;
   }
 }

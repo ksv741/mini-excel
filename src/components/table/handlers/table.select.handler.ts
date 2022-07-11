@@ -8,10 +8,17 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       onMouseDownHandler();
       break;
     }
+
     case 'keydown': {
       onKeyDownHandler();
       break;
     }
+
+    case 'mouseover': {
+      onMouseOverHandler();
+      break;
+    }
+
     default: break;
   }
 
@@ -98,5 +105,11 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
     }
 
     selection.selectByCellId({ row, col });
+  }
+
+  function onMouseOverHandler() {
+    if (selection.current.$el) {
+      selection.selectTo($((event as any).toElement));
+    }
   }
 }
