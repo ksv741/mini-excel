@@ -81,11 +81,13 @@ export function createToolbar(state: ToolbarStateType): string {
   ];
 
   const buttons = btns.map(btn => (Array.isArray(btn) ? toButtonGroup(btn) : toButton(btn)));
-  buttons.push(createFontSizeButton(state.fontSize));
+
+  const selectGroup = createGroup(createFontSizeButton(state.fontSize), createFontFamilyButton(state.fontFamily));
+  buttons.push(selectGroup);
   return buttons.join(' ');
 }
 
-function createFontSizeButton(currentSize = '12px') {
+function createFontSizeButton(currentSize = initialStyleState.fontSize) {
   const fontSizeInPixels = +currentSize.slice(0, -2);
   const options = [];
 
@@ -103,15 +105,38 @@ function createFontSizeButton(currentSize = '12px') {
   `;
 }
 
-function toButtonGroup(buttons: ButtonConfigType[]) {
-  if (buttons.length === 1) return toButton(buttons[0]);
-  const btns = buttons.map(btn => toButton(btn));
+function createFontFamilyButton(font = initialStyleState.fontFamily) {
+  const fonts = ['Roboto', 'Cormorant SC', 'Kanit', 'Playfair Display'];
+  const options = fonts.map(fontName => createFontFamilyOption(fontName, fontName === font));
 
+  function createFontFamilyOption(name: string, selected: boolean) {
+    return selected
+      ? `<option value="${name}" selected style="font-family: ${name}">${name}</option>`
+      : `<option value="${name}" style="font-family: ${name}">${name}</option>`;
+  }
+
+  return `
+    <div class="button">
+      <select class="button__font" id="button-font">
+        ${options.join('')}
+      </select>
+    </div>
+  `;
+}
+
+function createGroup(...btns: string[]) {
   return `
     <div class="button__group"> 
       ${btns.join('')}
     </div>
   `;
+}
+
+function toButtonGroup(buttons: ButtonConfigType[]) {
+  if (buttons.length === 1) return toButton(buttons[0]);
+  const btns = buttons.map(btn => toButton(btn));
+
+  return createGroup(...btns);
 }
 
 function toButton(button: ButtonConfigType) {

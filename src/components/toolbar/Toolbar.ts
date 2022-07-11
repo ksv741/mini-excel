@@ -55,9 +55,27 @@ export class Toolbar extends ExcelComponentState {
   }
 
   onChange(e: any) {
-    const value = `${e.target.value.toString()}px`;
+    const target = $(e.target);
+    let value = '';
+    let key = '';
 
-    this.$emitEventToObserver('toolbar:applyStyle', { fontSize: value });
-    this.setComponentState({ fontSize: value });
+    switch (true) {
+      case !!target.closest('#button-size').$el:
+        value = `${e.target.value.toString()}px`;
+        key = 'fontSize';
+        break;
+
+      case !!target.closest('#button-font').$el:
+        value = e.target.value;
+        key = 'fontFamily';
+        break;
+
+      default: break;
+    }
+
+    if (key && value) {
+      this.$emitEventToObserver('toolbar:applyStyle', { [key]: value });
+      this.setComponentState({ [key]: value });
+    }
   }
 }

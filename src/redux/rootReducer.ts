@@ -8,7 +8,7 @@ import {
   APPLY_STYLES,
   CHANGE_TITLE,
   DELETE_TABLE,
-  UPDATE_DATE,
+  UPDATE_DATE, CHANGE_CURRENT_TEXT,
 } from 'redux/action-constants';
 
 export function rootReducer(state: StateType, action: ActionType) {
@@ -63,7 +63,11 @@ export function rootReducer(state: StateType, action: ActionType) {
     }
 
     case UPDATE_DATE: {
-      return { ...this.state, openDate: action.data };
+      return { ...state, openDate: action.data };
+    }
+
+    case CHANGE_CURRENT_TEXT: {
+      return { ...state, currentText: action.data };
     }
 
     default: return state;

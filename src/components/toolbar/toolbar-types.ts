@@ -5,4 +5,5 @@ export type ToolbarStateType = {
   justifyContent?: 'start' | 'center' | 'end';
   alignItems?: 'start' | 'center' | 'end';
   fontSize?: string;
+  fontFamily?: string
 };

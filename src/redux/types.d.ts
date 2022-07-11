@@ -10,8 +10,8 @@ export type StateType = {
   rowState: { [k: number]: number };
   currentStyles: ToolbarStateType;
   dataState: { [k: string]: string };
-  id: string;
-  openDate: string;
+  id?: string;
+  openDate: number;
   stylesState: { [k: string]: ToolbarStateType };
   title: string;
   currentText: string;

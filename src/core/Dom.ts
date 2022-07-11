@@ -111,7 +111,9 @@ export class Dom implements DomClass {
 
   getStyles(styles: any[]) {
     return styles.reduce((res, s) => {
-      res[s] = this.$el.style[s] || initialStyleState[s as keyof ToolbarStateType];
+      // replace all need if case style value have 2 or more word, this.$el.style[s] return ""word value""
+      // for example font-family
+      res[s] = this.$el.style[s].replaceAll('"', '') || initialStyleState[s as keyof ToolbarStateType];
       return res;
     }, {});
   }

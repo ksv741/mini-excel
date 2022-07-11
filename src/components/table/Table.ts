@@ -3,7 +3,7 @@ import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
 import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
-import { changeCurrentStyles } from 'redux/action-creators';
+import { changeCurrentStyles, changeCurrentText } from 'redux/action-creators';
 import { createTable } from 'components/table/table.template';
 import { initialStyleState } from 'src/constants';
 import { parse } from 'core/utils';
@@ -90,7 +90,9 @@ export class Table extends ExcelComponent {
     this.$emitEventToObserver('table:select-cell', this.selection.current);
 
     const styles = this.selection.current?.getStyles(Object.keys(initialStyleState));
+
     this.dispatchToStore(changeCurrentStyles(styles));
+    this.dispatchToStore(changeCurrentText(this.selection.current.text));
   }
 
   async resizeTable(event: MouseEvent) {
