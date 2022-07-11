@@ -19,9 +19,29 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
   callback?.();
 
   function onMouseDownHandler() {
+    const target = $(event.target as HTMLElement);
+
     if (isCell(event)) {
-      if (event.shiftKey) selection.selectGroup($(event.target as HTMLElement));
-      else selection.select($(event.target as HTMLElement));
+      if (event.shiftKey) selection.selectTo(target);
+      else if (event.ctrlKey) selection.addCellToSelection(target);
+      else selection.select(target);
+    } else {
+      const row = target.closest('[data-header="row"]');
+      const col = target.closest('[data-header="col"]');
+      const resizer = target.closest('[data-resizer]');
+
+      if (row.$el && !resizer.$el) {
+        const cells = row.closest('[data-row]').findAll('[data-type="cell"]');
+        const $cells = Array.from(cells).map(cell => $(cell as HTMLElement));
+
+        selection.selectGroupies($cells);
+      } else if (col.$el && !resizer.$el) {
+        const colNumber = col.data.col;
+        const colls = selection.rootTable.findAll(`[data-col="${colNumber}"]`);
+        const $cells = Array.from(colls).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
+
+        selection.selectGroupies($cells);
+      }
     }
   }
 

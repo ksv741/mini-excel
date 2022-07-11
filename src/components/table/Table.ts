@@ -28,7 +28,7 @@ export class Table extends ExcelComponent {
   }
 
   prepare() {
-    this.selection = new TableSelection();
+    this.selection = new TableSelection(this.$root);
   }
 
   init() {

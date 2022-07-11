@@ -5,9 +5,11 @@ export class TableSelection {
   static selectedClassName = 'selected';
   private group: Dom[];
   public current: Dom;
+  public rootTable: Dom;
 
-  constructor() {
+  constructor(rootTable: Dom) {
     this.group = [];
+    this.rootTable = rootTable;
   }
 
   get selectedIds() {
@@ -40,7 +42,7 @@ export class TableSelection {
     this.group = [];
   }
 
-  selectGroup($el: Dom) {
+  selectTo($el: Dom) {
     const startCellParams = getParamsFromCellId(this.current.data.id || startCellId);
     const selectedCellParams = getParamsFromCellId($el.data.id || startCellId);
 
@@ -53,12 +55,20 @@ export class TableSelection {
 
     for (let row = startRow; row <= endRow; row++) {
       for (let col = startCol; col <= endCol; col++) {
-        const cell = $(`[data-id="${row}:${col}"]`);
-
-        this.group.push(cell);
-        cell.addClass(TableSelection.selectedClassName);
+        const $cell = $(`[data-id="${row}:${col}"]`);
+        this.addCellToSelection($cell);
       }
     }
+  }
+
+  selectGroupies($cells: Dom[]) {
+    this.clearSelection();
+    $cells.forEach($cell => this.addCellToSelection($cell));
+  }
+
+  addCellToSelection($cell: Dom) {
+    this.group.push($cell);
+    $cell.addClass(TableSelection.selectedClassName);
   }
 
   applyStyle(style: CSSStyleRule) {

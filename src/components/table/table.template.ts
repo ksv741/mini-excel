@@ -20,7 +20,7 @@ function createCell(cellContent = '', colIndex = 1, rowIndex = 1) {
 
 function createCol(columnContent = '', index = 1) {
   return `
-    <div class="column" data-type="resizable" data-col="${index}">
+    <div class="column" data-type="resizable" data-col="${index}" data-header="col">
         ${columnContent}
         <div class="col-resize" data-resize="col"></div>
     </div>
@@ -30,7 +30,7 @@ function createCol(columnContent = '', index = 1) {
 function createRow(dataContent = '', infoContent = '', needResize = true, rowIndex = -1) {
   return `
     <div class="row" data-type="resizable" data-row="${rowIndex}">
-      <div class="row-info">
+      <div class="row-info" data-header="row">
         ${infoContent}
         ${needResize ? '<div class="row-resize" data-resize="row"></div>' : ''}
       </div>
