@@ -1,5 +1,6 @@
 import { ToolbarStateType } from 'components/toolbar/toolbar-types';
-import { initialStyleState } from 'src/constants';
+import { isLargestFontSize, isSmallestFontSize } from 'core/utils';
+import { fontFamilies, fontSizes, initialStyleState } from 'src/constants';
 
 type ButtonConfigType = {
   icon: string;
@@ -80,21 +81,38 @@ export function createToolbar(state: ToolbarStateType): string {
     ],
   ];
 
-  const buttons = btns.map(btn => (Array.isArray(btn) ? toButtonGroup(btn) : toButton(btn)));
+  const buttons = btns.map(btn => (Array.isArray(btn) ? createButtonsFromConfigGroup(btn) : createButtonFromConfig(btn)));
 
   const selectGroup = createGroup(createFontSizeButton(state.fontSize), createFontFamilyButton(state.fontFamily));
+  const increaseDecreaseFontSize = createSizeUpDownButtons(state.fontSize);
+
+  buttons.push(increaseDecreaseFontSize);
   buttons.push(selectGroup);
-  return buttons.join(' ');
+
+  return buttons.join('');
+}
+
+function createSizeUpDownButtons(currentSize = initialStyleState.fontSize) {
+  const buttons = ['increase', 'decrease'];
+
+  return buttons.map(btn => {
+    const disable = btn === 'increase' ? isLargestFontSize(currentSize) : isSmallestFontSize(currentSize);
+    return `
+      <div class="button${disable ? ' disable' : ''}" data-change-size="${btn}"> 
+        <i class="material-icons">text_${btn}</i>
+      </div>
+    `;
+  }).join('');
 }
 
 function createFontSizeButton(currentSize = initialStyleState.fontSize) {
-  const fontSizeInPixels = +currentSize.slice(0, -2);
-  const options = [];
-
-  for (let i = 8; i <= 24; i += 2) {
-    if (fontSizeInPixels === i) options.push(`<option value="${i}" selected>${i}</option>`);
-    else options.push(`<option value="${i}">${i}</option>`);
-  }
+  const options = fontSizes.map(size => {
+    // remove 'px' part
+    const sizeValue = size.slice(0, -2);
+    return size === currentSize
+      ? `<option value="${sizeValue}" selected>${sizeValue}</option>`
+      : `<option value="${sizeValue}">${sizeValue}</option>`;
+  });
 
   return `
     <div class="button">
@@ -106,12 +124,11 @@ function createFontSizeButton(currentSize = initialStyleState.fontSize) {
 }
 
 function createFontFamilyButton(font = initialStyleState.fontFamily) {
-  const fonts = ['Roboto', 'Cormorant SC', 'Kanit', 'Playfair Display'];
-  const options = fonts.map(fontName => createFontFamilyOption(fontName, fontName === font));
+  const options = fontFamilies.map(fontName => createFontFamilyOption(fontName, fontName === font));
 
   function createFontFamilyOption(name: string, selected: boolean) {
     return selected
-      ? `<option value="${name}" selected style="font-family: ${name}">${name}</option>`
+      ? `<option value="${name}" style="font-family: ${name}" selected >${name}</option>`
       : `<option value="${name}" style="font-family: ${name}">${name}</option>`;
   }
 
@@ -132,22 +149,22 @@ function createGroup(...btns: string[]) {
   `;
 }
 
-function toButtonGroup(buttons: ButtonConfigType[]) {
-  if (buttons.length === 1) return toButton(buttons[0]);
-  const btns = buttons.map(btn => toButton(btn));
+function createButtonsFromConfigGroup(buttons: ButtonConfigType[]) {
+  if (buttons.length === 1) return createButtonFromConfig(buttons[0]);
+  const btns = buttons.map(btn => createButtonFromConfig(btn));
 
   return createGroup(...btns);
 }
 
-function toButton(button: ButtonConfigType) {
+function createButtonFromConfig(btnConfig: ButtonConfigType) {
   const meta = `
     data-type="button"
-    data-value='${JSON.stringify(button.value)}'
+    data-value='${JSON.stringify(btnConfig.value)}'
   `;
 
   return `
-    <div class="button ${button.isActive ? 'active' : ''}"${meta}> 
-      <i class="material-icons" ${meta}>${button.icon}</i>
+    <div class="button ${btnConfig.isActive ? 'active' : ''}"${meta}> 
+      <i class="material-icons" ${meta}>${btnConfig.icon}</i>
     </div>
   `;
 }

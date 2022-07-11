@@ -16,6 +16,10 @@
     @include button(green)
   }
 
+  .button.disable {
+    cursor: not-allowed;
+  }
+
   .button__group {
     border-right: 1px solid #c0c0c0;
     &:last-child {

@@ -3,7 +3,7 @@ import { $, Dom } from 'core/Dom';
 import { ExcelComponentState } from 'core/ExcelComponentState';
 import { ComponentOptionsType } from 'core/ExcelComponent';
 import { createToolbar } from 'components/toolbar/toolbar.template';
-import { initialStyleState } from 'src/constants';
+import { fontSizes, initialStyleState } from 'src/constants';
 
 export class Toolbar extends ExcelComponentState {
   static className = 'excel__toolbar';
@@ -44,11 +44,41 @@ export class Toolbar extends ExcelComponentState {
 
   onClick(event: MouseEvent) {
     const target = $(event.target as HTMLElement);
-    const stringValue = target?.data?.value;
-    if (!stringValue) return;
 
-    const value = JSON.parse(stringValue);
-    const key = Object.keys(value)[0];
+    let stringValue;
+    let value;
+    let key;
+
+    switch (true) {
+      case !!target.closest('[data-change-size]').$el: {
+        const el = target.closest('[data-change-size]');
+
+        if (el.hasClass('disable')) return;
+
+        const currentSize = this.store.getState().currentStyles.fontSize;
+        let idx = fontSizes.findIndex(font => font === currentSize);
+        let nextSize;
+
+        if (el.data.changeSize === 'increase') {
+          nextSize = fontSizes[++idx];
+        } else if (el.data.changeSize === 'decrease') {
+          nextSize = fontSizes[--idx];
+        }
+
+        value = { fontSize: nextSize };
+        key = 'fontSize';
+
+        break;
+      }
+
+      default: {
+        stringValue = target?.data?.value;
+        if (!stringValue) return;
+
+        value = JSON.parse(stringValue);
+        key = Object.keys(value)[0];
+      }
+    }
 
     this.$emitEventToObserver('toolbar:applyStyle', value);
     this.setComponentState({ [key]: value[key] });

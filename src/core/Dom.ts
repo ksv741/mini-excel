@@ -105,6 +105,10 @@ export class Dom implements DomClass {
     this.$el?.classList.add(className);
   }
 
+  hasClass(className: string) {
+    return Array.from(this.$el.classList).includes(className);
+  }
+
   removeClass(className: string) {
     this.$el?.classList.remove(className);
   }

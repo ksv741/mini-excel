@@ -1,3 +1,5 @@
+import { fontSizes } from 'src/constants';
+
 export function capitalize(string: string): string {
   if (!string) return '';
 
@@ -48,4 +50,14 @@ export function parse(value: string) {
   }
 
   return value;
+}
+
+export function isLargestFontSize(fontSize?: string): number | boolean {
+  if (!fontSize) return false;
+  return fontSizes.length - 1 === fontSizes.findIndex(el => el === fontSize);
+}
+
+export function isSmallestFontSize(fontSize?: string): number | boolean {
+  if (!fontSize) return false;
+  return fontSizes.findIndex(el => el === fontSize) === 0;
 }
