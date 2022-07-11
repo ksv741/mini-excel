@@ -130,6 +130,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    this.updateCurrentText((event.target as HTMLElement).innerText.trim());
+    this.updateCurrentText((event.target as HTMLElement).innerText);
   }
 }
