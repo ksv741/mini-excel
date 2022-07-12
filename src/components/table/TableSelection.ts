@@ -1,3 +1,4 @@
+import { Table } from 'components/table/Table';
 import { $, Dom } from 'core/Dom';
 import { getParamsFromCellId, startCellId } from 'components/table/table.functions';
 
@@ -5,9 +6,9 @@ export class TableSelection {
   static selectedClassName = 'selected';
   private group: Dom[];
   public current: Dom;
-  public rootTable: Dom;
+  public rootTable: Table;
 
-  constructor(rootTable: Dom) {
+  constructor(rootTable: Table) {
     this.group = [];
     this.rootTable = rootTable;
   }
@@ -16,12 +17,23 @@ export class TableSelection {
     return this.group.map(el => el.data.id);
   }
 
+  // TODO make a focus manager
+  focusToCell($cell: Dom) {
+    const range = new Range();
+    const node = $cell.$el;
+
+    range.setStartAfter(node.childNodes[0]);
+
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
+  }
+
   select($el: Dom) {
     this.clearSelection();
     this.group = [$el];
     this.current = $el;
     $el.addClass(TableSelection.selectedClassName);
-    $el.focus();
+    this.focusToCell($el);
   }
 
   selectByCellId(cellID: { col: number, row: number }) {
@@ -32,7 +44,7 @@ export class TableSelection {
 
     this.clearSelection();
     this.current = $(`[data-id="${row}:${col}"]`);
-    this.current.focus();
+    this.focusToCell(this.current);
     this.current.addClass(TableSelection.selectedClassName);
   }
 

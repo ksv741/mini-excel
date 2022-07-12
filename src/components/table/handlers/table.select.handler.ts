@@ -35,7 +35,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
     } else {
       const row = target.closest('[data-header="row"]');
       const col = target.closest('[data-header="col"]');
-      const resizer = target.closest('[data-resizer]');
+      const resizer = target.closest('[data-resize]');
 
       if (row.$el && !resizer.$el) {
         const cells = row.closest('[data-row]').findAll('[data-type="cell"]');
@@ -44,7 +44,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
         selection.selectGroupies($cells);
       } else if (col.$el && !resizer.$el) {
         const colNumber = col.data.col;
-        const colls = selection.rootTable.findAll(`[data-col="${colNumber}"]`);
+        const colls = selection.rootTable.$root.findAll(`[data-col="${colNumber}"]`);
         const $cells = Array.from(colls).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
 
         selection.selectGroupies($cells);
@@ -88,9 +88,9 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       }
       case 'Enter': {
         if (event.shiftKey) return;
-
         event.preventDefault();
         row++;
+        if (row === selection.rootTable.tableSize.row) selection.rootTable.addNewRowHandler();
         break;
       }
       case 'Tab': {

@@ -4,7 +4,7 @@ import { $, Dom } from 'core/Dom';
 import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
 import { changeCurrentStyles, changeCurrentText } from 'redux/action-creators';
-import { createTable } from 'components/table/table.template';
+import { createTable, getNewRowHTML } from 'components/table/table.template';
 import { initialStyleState } from 'src/constants';
 import { parse } from 'core/utils';
 import { resizeHandler } from 'components/table/handlers/table.resize';
@@ -15,6 +15,10 @@ export class Table extends ExcelComponent {
 
   private selection: TableSelection;
   private isMouseDowned: boolean;
+  public tableSize = {
+    row: 50,
+    col: 24,
+  };
 
   constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
@@ -27,11 +31,11 @@ export class Table extends ExcelComponent {
   }
 
   toHTML(): string {
-    return createTable(50, 24);
+    return createTable(this.tableSize.row, this.tableSize.col);
   }
 
   prepare() {
-    this.selection = new TableSelection(this.$root);
+    this.selection = new TableSelection(this);
   }
 
   init() {
@@ -42,6 +46,7 @@ export class Table extends ExcelComponent {
     this.$onEventFromObserver('formula:input', this.updateCurrentText);
     this.$onEventFromObserver('formula:enter-press', () => this.selection.current.focus());
     this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
+    this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
   }
 
   initTable() {
@@ -56,14 +61,25 @@ export class Table extends ExcelComponent {
       row: this.store.getState()?.rowState,
     };
 
-    Object.keys(size.col).forEach(key => {
-      const cols = this.$root.findAll(`[data-col="${key}"]`);
-      cols.forEach(el => $(el as HTMLElement).css({ width: `${size.col[+key]}px` }));
-    });
+    this.initColSizes(this.$root, size.col);
+    this.initRowSizes(this.$root, size.row);
+  }
 
-    Object.keys(size.row).forEach(key => {
-      const rows = this.$root.findAll(`[data-row="${key}"]`);
-      rows.forEach(el => $(el as HTMLElement).css({ height: `${size.row[+key]}px` }));
+  initRowSizes(rootElem: Dom, rowState = this.store.getState()?.rowState) {
+    if (!rootElem || !rootElem?.$el) return;
+
+    Object.keys(rowState).forEach(key => {
+      const rows = rootElem.findAll(`[data-row="${key}"]`);
+      rows.forEach(el => $(el as HTMLElement).css({ height: `${rowState[+key]}px` }));
+    });
+  }
+
+  initColSizes(rootElem: Dom, colState = this.store.getState()?.colState) {
+    if (!rootElem || !rootElem?.$el) return;
+
+    Object.keys(colState).forEach(key => {
+      const cols = rootElem.findAll(`[data-col="${key}"]`);
+      cols.forEach(el => $(el as HTMLElement).css({ width: `${colState[+key]}px` }));
     });
   }
 
@@ -123,6 +139,13 @@ export class Table extends ExcelComponent {
       value: style,
       ids: this.selection.selectedIds,
     }));
+  };
+
+  addNewRowHandler = () => {
+    this.tableSize.row++;
+    this.$root.$el.insertAdjacentHTML('beforeend', getNewRowHTML(this.tableSize.row, this.tableSize.col));
+    const $newRow = $(`[data-row="${this.tableSize.row - 1}"]`);
+    this.initColSizes($newRow);
   };
 
   onMousedown(event: MouseEvent) {

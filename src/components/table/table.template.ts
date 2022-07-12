@@ -27,7 +27,7 @@ function createCol(columnContent = '', index = 1) {
   `;
 }
 
-function createRow(dataContent = '', infoContent = '', needResize = true, rowIndex = -1) {
+function createRow(dataContent = '', infoContent = '', needResize = true, rowIndex = -1): string {
   return `
     <div class="row" data-type="resizable" data-row="${rowIndex}">
       <div class="row-info" data-header="row">
@@ -61,4 +61,13 @@ export function createTable(rowsCount = 10, columnCount = 10) {
   }
 
   return rows.join('');
+}
+
+export function getNewRowHTML(rowIndex: number, colCount: number): string {
+  const cells = new Array(colCount)
+    .fill('')
+    .map((el, colIndex) => createCell('', colIndex, rowIndex - 1))
+    .join('');
+
+  return createRow(cells, rowIndex.toString(), true, rowIndex - 1);
 }

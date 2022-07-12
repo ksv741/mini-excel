@@ -8,7 +8,7 @@
   top: $header-height + $toolbar-height + $formula-height;
   overflow: auto;
   font-size: $default-cell-font-size;
-  cursor: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Small_arrow_pointing_left.svg/1200px-Small_arrow_pointing_left.svg.png') !important;
+
   .row{
     display: flex;
     flex-direction: row;

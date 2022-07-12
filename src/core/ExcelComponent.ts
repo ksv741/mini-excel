@@ -38,8 +38,8 @@ export abstract class ExcelComponent extends DomListener {
     return '';
   }
 
-  $emitEventToObserver(event: string, args?: any): void {
-    this.observer?.emit(event, args);
+  $emitEventToObserver(event: string, args?: any): boolean {
+    return this.observer?.emit(event, args);
   }
 
   $onEventFromObserver(event: string, callback: (args: any) => any) {

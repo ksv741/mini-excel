@@ -88,6 +88,7 @@ export function createToolbar(state: ToolbarStateType): string {
 
   buttons.push(increaseDecreaseFontSize);
   buttons.push(selectGroup);
+  buttons.push(createAddRowTable());
 
   return buttons.join('');
 }
@@ -165,6 +166,14 @@ function createButtonFromConfig(btnConfig: ButtonConfigType) {
   return `
     <div class="button ${btnConfig.isActive ? 'active' : ''}"${meta}> 
       <i class="material-icons" ${meta}>${btnConfig.icon}</i>
+    </div>
+  `;
+}
+
+function createAddRowTable() {
+  return `
+    <div class="button" data-addbtn>
+      <i class="material-icons" data-addbtn>add_circle</i>
     </div>
   `;
 }

@@ -43,7 +43,13 @@ export class Toolbar extends ExcelComponentState {
   }
 
   onClick(event: MouseEvent) {
+    //TODO refactor, make style handler
     const target = $(event.target as HTMLElement);
+
+    if (target.closest('[data-addbtn]')) {
+      this.$emitEventToObserver('toolbar:add-row');
+      return;
+    }
 
     let stringValue;
     let value;
@@ -80,8 +86,10 @@ export class Toolbar extends ExcelComponentState {
       }
     }
 
-    this.$emitEventToObserver('toolbar:applyStyle', value);
-    this.setComponentState({ [key]: value[key] });
+    if (value && key) {
+      this.$emitEventToObserver('toolbar:applyStyle', value);
+      this.setComponentState({ [key]: value[key] });
+    }
   }
 
   onChange(e: any) {
