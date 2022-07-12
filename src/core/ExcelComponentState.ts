@@ -21,6 +21,8 @@ export abstract class ExcelComponentState extends ExcelComponent {
   }
 
   setComponentState(newState: ExcelComponentStateType) {
+    if (!newState) return;
+
     this.componentState = { ...this.componentState, ...newState };
     this.$root.html(this.template);
   }

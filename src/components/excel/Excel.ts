@@ -5,9 +5,10 @@ import { Store } from 'core/store/Store';
 import { StoreSubscriber } from 'core/StoreSubscriber';
 import { updateOpenDate } from 'redux/action-creators';
 
+// TODO type for components array
 interface ExcelOptionsType {
   components: any[],
-  store: any,
+  store: Store,
 }
 
 type BaseComponentOption = {

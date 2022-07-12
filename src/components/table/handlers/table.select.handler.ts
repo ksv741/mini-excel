@@ -26,7 +26,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
   callback?.();
 
   function onMouseDownHandler() {
-    const target = $(event.target as HTMLElement);
+    const target = $(event.target);
 
     if (isCell(event)) {
       if (event.shiftKey) selection.selectTo(target);
@@ -44,8 +44,8 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
         selection.selectGroupies($cells);
       } else if (col.$el && !resizer.$el) {
         const colNumber = col.data.col;
-        const colls = selection.rootTable.$root.findAll(`[data-col="${colNumber}"]`);
-        const $cells = Array.from(colls).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
+        const columns = selection.rootTable.$root.findAll(`[data-col="${colNumber}"]`);
+        const $cells = Array.from(columns).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
 
         selection.selectGroupies($cells);
       }
@@ -109,6 +109,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
 
   function onMouseOverHandler() {
     if (selection.current.$el) {
+      // TODO find event type
       selection.selectTo($((event as any).toElement));
     }
   }

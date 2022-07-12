@@ -10,15 +10,17 @@ export type StateType = {
   rowState: { [k: number]: number };
   currentStyles: ToolbarStateType;
   dataState: { [k: string]: string };
-  id?: string;
+  id: string;
   openDate: number;
   stylesState: { [k: string]: ToolbarStateType };
   title: string;
   currentText: string;
 };
 
-export type ReducerType = (state: StateType, action: ActionType) => StateType;
+export type ReducerType = (state: StateType, action: ActionType) => StateType | null;
 
 export type SubscribeType = {
   unsubscribe: () => void
 };
+
+export type CallbackType = (...args: any[]) => void;

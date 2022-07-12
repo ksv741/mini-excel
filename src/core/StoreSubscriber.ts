@@ -1,9 +1,9 @@
-import { StateType } from 'redux/types';
+import { StateType, SubscribeType } from 'redux/types';
 import { Store } from 'core/store/Store';
 import { isEqual } from 'core/utils';
 
 export class StoreSubscriber {
-  sub: any;
+  sub: SubscribeType | null;
   currentState: StateType;
 
   constructor(private store: Store) {
@@ -31,6 +31,6 @@ export class StoreSubscriber {
   }
 
   unsubscribeFromStore() {
-    this.sub.unsubscribe();
+    this.sub?.unsubscribe();
   }
 }

@@ -4,12 +4,12 @@ import { StateType } from 'redux/types';
 import { getNormalizeInitialState } from 'src/constants';
 
 export interface ClientDataType {
-  save: (state: StateType) => Promise<any>;
-  get: () => Promise<any>;
+  save: (state: StateType) => Promise<void>;
+  get: () => Promise<StateType>;
 }
 
 export class LocalStorageClient implements ClientDataType {
-  private name: string;
+  private readonly name: string;
 
   constructor(name: string) {
     this.name = name;
@@ -20,7 +20,7 @@ export class LocalStorageClient implements ClientDataType {
     return Promise.resolve();
   }
 
-  get() {
+  get(): Promise<StateType> {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(getNormalizeInitialState(this.name));

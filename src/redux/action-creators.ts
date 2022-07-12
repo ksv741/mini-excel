@@ -1,3 +1,4 @@
+import { ResizeReturnDataType } from 'components/table/handlers/table.resize';
 import { ActionType } from 'redux/types';
 import {
   CHANGE_TEXT,
@@ -9,42 +10,42 @@ import {
   UPDATE_DATE, CHANGE_CURRENT_TEXT,
 } from 'redux/action-constants';
 
-export function tableResize(resizeData: any) {
+export function tableResize(resizeData: ResizeReturnDataType): ActionType {
   return {
     type: TABLE_RESIZE,
-    ...resizeData,
+    resizeData,
   };
 }
 
-export function changeText(data: { text: string, id: string }) {
+export function changeText(data: { text: string, id: string }): ActionType {
   return {
     type: CHANGE_TEXT,
     data,
   };
 }
 
-export function changeCurrentStyles(data: any) {
+export function changeCurrentStyles(data: Partial<CSSStyleDeclaration>): ActionType {
   return {
     type: CHANGE_STYLES,
     data,
   };
 }
 
-export function applyStyle(data: { ids: (string | undefined)[], value: CSSStyleRule }) {
+export function applyStyle(data: { ids: (string | undefined)[], value: CSSStyleDeclaration }): ActionType {
   return {
     type: APPLY_STYLES,
     data,
   };
 }
 
-export function changeTitle(data: string) {
+export function changeTitle(data: string): ActionType {
   return {
     type: CHANGE_TITLE,
     data,
   };
 }
 
-export function deleteTable(data: string) {
+export function deleteTable(data: string): ActionType {
   return {
     type: DELETE_TABLE,
     data,

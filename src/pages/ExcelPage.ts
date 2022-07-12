@@ -19,7 +19,7 @@ export class ExcelPage extends AbstractPage {
   private storeSub: SubscribeType | null;
   private processor: StateProcessor;
 
-  constructor(props: any) {
+  constructor(props: string[]) {
     super(props);
 
     this.storeSub = null;

@@ -13,7 +13,7 @@ export class Router {
   private $placeholder: Dom;
   private routes: RoutesType;
   private page: DashboardPage | ExcelPage;
-  private loader: Dom;
+  private readonly loader: Dom;
 
   constructor(selector: SelectorType, routes: RoutesType) {
     if (!selector) throw new Error('Selector not provided');

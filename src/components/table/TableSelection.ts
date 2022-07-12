@@ -19,13 +19,17 @@ export class TableSelection {
 
   // TODO make a focus manager
   focusToCell($cell: Dom) {
-    const range = new Range();
-    const node = $cell.$el;
+    try {
+      const range = new Range();
+      const node = $cell.$el;
 
-    range.setStartAfter(node.childNodes[0]);
+      range.setStartAfter(node.childNodes[0]);
 
-    window.getSelection()?.removeAllRanges();
-    window.getSelection()?.addRange(range);
+      window.getSelection()?.removeAllRanges();
+      window.getSelection()?.addRange(range);
+    } catch (e) {
+      console.log('Error focus', e.message);
+    }
   }
 
   select($el: Dom) {
@@ -83,7 +87,7 @@ export class TableSelection {
     $cell.addClass(TableSelection.selectedClassName);
   }
 
-  applyStyle(style: CSSStyleRule) {
+  applyStyle(style: CSSStyleDeclaration) {
     this.group.forEach(el => el.css(style));
   }
 }

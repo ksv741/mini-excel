@@ -1,8 +1,7 @@
 import { startCellId } from 'components/table/table.functions';
 import { $, Dom } from 'core/Dom';
 
-type CustomElementType = Element & { css: any };
-type ResizeReturnDataType = { value: number, id: string, type: string };
+export type ResizeReturnDataType = { value: number, id: string, type: string };
 
 export function resizeHandler($root: Dom, event: MouseEvent) {
   return new Promise<ResizeReturnDataType>(res => {
@@ -18,13 +17,7 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
 
     let delta: number;
 
-    (Element.prototype as CustomElementType).css = function (styles: any) {
-      Object.keys(styles).forEach((key: any) => {
-        this.style[key] = styles[key];
-      });
-    };
-
-    $resizer.css({ opacity: 1 });
+    $resizer.css({ opacity: '1' });
 
     document.onmousemove = e => {
       document.body.style.userSelect = 'none';
@@ -84,7 +77,7 @@ export function resizeHandler($root: Dom, event: MouseEvent) {
 
       res({ value, id, type });
 
-      $resizer.css({ opacity: 0, bottom: 0, right: 0 });
+      $resizer.css({ opacity: '0', bottom: '0', right: '0' });
     };
   });
 }

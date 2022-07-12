@@ -12,6 +12,7 @@ import {
 } from 'redux/action-constants';
 
 export function rootReducer(state: StateType, action: ActionType) {
+// export const rootReducer: ReducerType = function (state: StateType, action: ActionType) {
   switch (action.type) {
     case TABLE_RESIZE: {
       const newState: StateType = { ...state };

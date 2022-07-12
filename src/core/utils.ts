@@ -1,3 +1,4 @@
+import { CallbackType, StateType } from 'redux/types';
 import { fontSizes } from 'src/constants';
 
 export function capitalize(string: string): string {
@@ -6,7 +7,7 @@ export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function storage(key: string, data: any = null): any {
+export function storage(key: string, data: StateType | null = null): any {
   if (!data) {
     const localData = localStorage.getItem(key);
     return localData ? JSON.parse(localData) : false;
@@ -25,7 +26,7 @@ export function isEqual(a: any, b: any) {
   return a === b;
 }
 
-export function debounce(fn: (fnArgs?: any) => void, wait: number) {
+export function debounce(fn: CallbackType, wait: number) {
   let timeout: NodeJS.Timeout;
 
   return function (...args: any) {
@@ -60,4 +61,8 @@ export function isLargestFontSize(fontSize?: string): number | boolean {
 export function isSmallestFontSize(fontSize?: string): number | boolean {
   if (!fontSize) return false;
   return fontSizes.findIndex(el => el === fontSize) === 0;
+}
+
+export function getMethodNameByEventName(eventName: string): string {
+  return `on${capitalize(eventName)}`;
 }

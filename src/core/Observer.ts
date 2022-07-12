@@ -1,13 +1,15 @@
+import { CallbackType } from 'redux/types';
+
 export class Observer {
-  private listeners: {
-    [k: string]: Array<(args?: any) => any>
+  private readonly listeners: {
+    [k: string]: Array<CallbackType>
   };
 
   constructor() {
     this.listeners = {};
   }
 
-  subscribe(eventName: string, callback: (args?: any) => any) {
+  subscribe(eventName: string, callback: CallbackType) {
     this.listeners[eventName] = this.listeners[eventName] || [];
     this.listeners[eventName].push(callback);
 

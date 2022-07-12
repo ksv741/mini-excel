@@ -1,4 +1,4 @@
-import { ActionType, StateType } from 'redux/types';
+import { ActionType, CallbackType, StateType } from 'redux/types';
 import { Dom } from 'core/Dom';
 import { DomListener } from 'core/DomListener';
 import { Observer } from 'core/Observer';
@@ -13,13 +13,12 @@ export type ComponentOptionsType = {
 };
 
 export abstract class ExcelComponent extends DomListener {
-  private name: string;
   private observer: Observer;
   public store: Store;
   private subscribe: (keyof StateType)[];
-  private unsubscribers: ((args?: any) => any)[];
+  private unsubscribers: CallbackType[];
 
-  constructor($root: Dom, options: ComponentOptionsType) {
+  protected constructor($root: Dom, options: ComponentOptionsType) {
     super($root, options.eventListeners);
     this.name = options.name;
     this.observer = options.observer;
@@ -51,7 +50,7 @@ export abstract class ExcelComponent extends DomListener {
     this.store?.dispatchToStore(action);
   }
 
-  storeChanged(args?: any) {
+  storeChanged(args: StateType) {
     console.log('CHANGE STORE: ', args, ' in component ', this.name);
   }
 

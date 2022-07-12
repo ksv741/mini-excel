@@ -15,6 +15,7 @@ export class Table extends ExcelComponent {
 
   private selection: TableSelection;
   private isMouseDowned: boolean;
+  private tableResizing = false;
   public tableSize = {
     row: 50,
     col: 24,
@@ -92,6 +93,8 @@ export class Table extends ExcelComponent {
       const $cell = this.$root.find(`[data-id="${cellId}"]`);
       const styles = tableStyles[cellId];
 
+      if (!$cell.isExist) return;
+
       $cell.text = parse(tableContent[cellId]) || '';
       $cell.setData('value', tableContent[cellId]);
       $cell.css(styles);
@@ -116,8 +119,11 @@ export class Table extends ExcelComponent {
 
   async resizeTable(event: MouseEvent) {
     try {
+      if (!$(event.target).closest('[data-resize]').isExist) return;
+      this.tableResizing = true;
       const resizeData = await resizeHandler(this.$root, event);
-      this.dispatchToStore(actions.tableResize({ resizeData }));
+      this.dispatchToStore(actions.tableResize(resizeData));
+      this.tableResizing = false;
     } catch (e) {
       console.warn('Resize error', e.message);
     }
@@ -133,7 +139,7 @@ export class Table extends ExcelComponent {
     }));
   };
 
-  updateCurrentStyles = (style: CSSStyleRule) => {
+  updateCurrentStyles = (style: CSSStyleDeclaration) => {
     this.selection.applyStyle(style);
     this.dispatchToStore(actions.applyStyle({
       value: style,
@@ -163,7 +169,7 @@ export class Table extends ExcelComponent {
   }
 
   onMouseover(event: MouseEvent) {
-    this.isMouseDowned && selectHandler(event, this.selection);
+    this.isMouseDowned && !this.tableResizing && selectHandler(event, this.selection);
   }
 
   onMouseup() {

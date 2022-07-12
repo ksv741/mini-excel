@@ -36,7 +36,8 @@ export const initialState: StateType = {
   title: 'New excel table',
   openDate: Date.now(),
   currentStyles: initialStyleState,
-  currentText: 'huy',
+  currentText: 'initial text',
+  id: '0',
 };
 
 export function getNormalizeInitialState(params: string): StateType {

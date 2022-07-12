@@ -17,10 +17,11 @@ export class Header extends ExcelComponent {
   }
 
   toHTML(): string {
-    const { title } = this.store.getState();
+    const { title, id } = this.store.getState();
 
     return `
     <input type="text" class="input" value="${title}">
+    <div>ID: <strong>${id}</strong></div>
 
     <div>
       <div class="button" data-button="delete-table">
@@ -33,7 +34,7 @@ export class Header extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    const $target = $(event.target as HTMLInputElement);
+    const $target = $(event.target);
 
     this.dispatchToStore(actions.changeTitle($target.text));
   }

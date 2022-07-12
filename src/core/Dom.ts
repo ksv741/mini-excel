@@ -1,7 +1,7 @@
-import { ToolbarStateType } from 'components/toolbar/toolbar-types';
+import { CallbackType } from 'redux/types';
 import { initialStyleState } from 'src/constants';
 
-export type SelectorType = string | HTMLElement;
+export type SelectorType = string | HTMLElement | EventTarget | null;
 
 export interface DomClass {
   html(html?: string): string | DomClass;
@@ -19,7 +19,7 @@ export class Dom implements DomClass {
       if (!elementFromDOM) throw new Error(`Can't find element with "${selector}" selector`);
       else this.$el = elementFromDOM as HTMLElement;
     } else {
-      this.$el = selector;
+      this.$el = selector as HTMLElement;
     }
   }
 
@@ -30,6 +30,8 @@ export class Dom implements DomClass {
   }
 
   set text(text: string) {
+    if (!this.$el) return;
+
     if (!text) this.$el.textContent = '';
     this.$el.textContent = text;
   }
@@ -46,22 +48,22 @@ export class Dom implements DomClass {
   }
 
   // FIXME: any
-  append(node: any) {
+  append(node: HTMLElement | Dom) {
     let child = node;
 
     if (node instanceof Dom) child = node.$el;
 
-    if (this.$el.append) this.$el.append(child);
-    else this.$el.appendChild(child);
+    if (this.$el.append) this.$el.append(child as HTMLElement);
+    else this.$el.appendChild(child as HTMLElement);
 
     return this;
   }
 
-  on(eventType: string, callback: any) {
+  on(eventType: string, callback: CallbackType) {
     this.$el.addEventListener(eventType, callback);
   }
 
-  off(eventType: string, callback: any) {
+  off(eventType: string, callback: CallbackType) {
     this.$el.removeEventListener(eventType, callback);
   }
 
@@ -93,11 +95,11 @@ export class Dom implements DomClass {
     return this.$el.querySelectorAll(selector);
   }
 
-  css(styles: any) {
+  css(styles: Partial<CSSStyleDeclaration>) {
     if (!styles) return;
 
     Object.keys(styles)?.forEach((key: any) => {
-      this.$el.style[key] = styles[key];
+      this.$el.style[key] = styles[key] as string;
     });
   }
 
@@ -113,11 +115,12 @@ export class Dom implements DomClass {
     this.$el?.classList.remove(className);
   }
 
-  getStyles(styles: any[]) {
+  getStyles(styles: string[]): Partial<CSSStyleDeclaration> {
     return styles.reduce((res, s) => {
       // replace all need if case style value have 2 or more word, this.$el.style[s] return ""word value""
       // for example font-family
-      res[s] = this.$el.style[s].replaceAll('"', '') || initialStyleState[s as keyof ToolbarStateType];
+      // @ts-ignore
+      res[s] = this.$el.style[s].replaceAll('"', '') || initialStyleState[s];
       return res;
     }, {});
   }
@@ -129,6 +132,10 @@ export class Dom implements DomClass {
     }
 
     return this.$el.getAttribute(name);
+  }
+
+  get isExist(): boolean {
+    return !!this.$el;
   }
 }
 

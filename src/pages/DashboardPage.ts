@@ -1,9 +1,9 @@
-import { $ } from 'core/Dom';
+import { $, Dom } from 'core/Dom';
 import { AbstractPage } from 'pages/AbstractPage';
 import { storage } from 'core/utils';
 
 export class DashboardPage extends AbstractPage {
-  getRoot() {
+  getRoot(): Dom {
     const id = Date.now().toString();
 
     return $.create('div', 'db').html(
@@ -24,7 +24,7 @@ export class DashboardPage extends AbstractPage {
   }
 }
 
-function toHtml(key: string) {
+function toHtml(key: string): string {
   const params = +key.split(':')[1];
   const state = storage(key);
   const link = `#excel/${params}`;
@@ -38,7 +38,7 @@ function toHtml(key: string) {
   `;
 }
 
-export function createRecordsTable() {
+export function createRecordsTable(): string {
   const keys = getAllKeys();
   if (!keys.length) return '<p>Пока не создали ни одной таблицы</p>';
 

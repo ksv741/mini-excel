@@ -3,6 +3,7 @@ import { $, Dom } from 'core/Dom';
 import { ExcelComponentState } from 'core/ExcelComponentState';
 import { ComponentOptionsType } from 'core/ExcelComponent';
 import { createToolbar } from 'components/toolbar/toolbar.template';
+import { StateType } from 'redux/types';
 import { fontSizes, initialStyleState } from 'src/constants';
 
 export class Toolbar extends ExcelComponentState {
@@ -38,15 +39,17 @@ export class Toolbar extends ExcelComponentState {
     return this.template;
   }
 
-  storeChanged(args?: any) {
+  storeChanged(args: StateType) {
+    if (!args) return;
+
     this.setComponentState(args.currentStyles);
   }
 
   onClick(event: MouseEvent) {
-    //TODO refactor, make style handler
-    const target = $(event.target as HTMLElement);
+    // TODO refactor, make style handler
+    const target = $(event.target);
 
-    if (target.closest('[data-addbtn]')) {
+    if (target.closest('[data-addbtn]').isExist) {
       this.$emitEventToObserver('toolbar:add-row');
       return;
     }
@@ -92,6 +95,7 @@ export class Toolbar extends ExcelComponentState {
     }
   }
 
+  // TODO find EventType
   onChange(e: any) {
     const target = $(e.target);
     let value = '';
