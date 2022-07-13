@@ -3,9 +3,9 @@ import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
 import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
-import { changeCurrentStyles, changeCurrentText } from 'redux/action-creators';
+import { changeCurrentStyles, changeCurrentText, changeTableSize } from 'redux/action-creators';
 import { createTable, getNewRowHTML } from 'components/table/table.template';
-import { initialStyleState } from 'src/constants';
+import { initialState, initialStyleState } from 'src/constants';
 import { parse } from 'core/utils';
 import { resizeHandler } from 'components/table/handlers/table.resize';
 import { selectHandler } from 'components/table/handlers/table.select.handler';
@@ -16,10 +16,7 @@ export class Table extends ExcelComponent {
   private selection: TableSelection;
   private isMouseDowned: boolean;
   private tableResizing = false;
-  public tableSize = {
-    row: 50,
-    col: 24,
-  };
+  public tableSize = { row: initialState.tableSize.row, col: initialState.tableSize.col };
 
   constructor($root: Dom, options: ComponentOptionsType) {
     super($root, {
@@ -29,14 +26,34 @@ export class Table extends ExcelComponent {
     });
 
     this.isMouseDowned = false;
+    const { col, row } = this.getTableSize();
+    this.tableSize = { col, row };
   }
 
   toHTML(): string {
+    console.log('Table size', this.tableSize);
     return createTable(this.tableSize.row, this.tableSize.col);
   }
 
   prepare() {
     this.selection = new TableSelection(this);
+  }
+
+  getTableSize() {
+    const { tableSize: { col, row }, colState, rowState } = this.store.getState();
+    const maxRowFromState = Math.max(...Object.keys(rowState).map(el => +el));
+    const maxColFromState = Math.max(...Object.keys(colState).map(el => +el));
+
+    const normalTableSize = {
+      col: Math.max(maxRowFromState, row),
+      row: Math.max(maxColFromState, col),
+    };
+
+    if ((maxColFromState !== this.tableSize.col) || (maxRowFromState !== this.tableSize.row)) {
+      this.dispatchToStore(changeTableSize(normalTableSize));
+    }
+
+    return normalTableSize;
   }
 
   init() {
@@ -152,6 +169,8 @@ export class Table extends ExcelComponent {
     this.$root.$el.insertAdjacentHTML('beforeend', getNewRowHTML(this.tableSize.row, this.tableSize.col));
     const $newRow = $(`[data-row="${this.tableSize.row - 1}"]`);
     this.initColSizes($newRow);
+
+    this.dispatchToStore(changeTableSize(this.tableSize));
   };
 
   onMousedown(event: MouseEvent) {

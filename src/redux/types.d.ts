@@ -15,6 +15,10 @@ export type StateType = {
   stylesState: { [k: string]: ToolbarStateType };
   title: string;
   currentText: string;
+  tableSize: {
+    col: number;
+    row: number;
+  };
 };
 
 export type ReducerType = (state: StateType, action: ActionType) => StateType | null;

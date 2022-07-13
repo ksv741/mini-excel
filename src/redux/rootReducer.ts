@@ -8,11 +8,10 @@ import {
   APPLY_STYLES,
   CHANGE_TITLE,
   DELETE_TABLE,
-  UPDATE_DATE, CHANGE_CURRENT_TEXT,
+  UPDATE_DATE, CHANGE_CURRENT_TEXT, CHANGE_TABLE_SIZE,
 } from 'redux/action-constants';
 
-export function rootReducer(state: StateType, action: ActionType) {
-// export const rootReducer: ReducerType = function (state: StateType, action: ActionType) {
+export function rootReducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case TABLE_RESIZE: {
       const newState: StateType = { ...state };
@@ -60,7 +59,7 @@ export function rootReducer(state: StateType, action: ActionType) {
       localStorage.removeItem(name);
       ActiveRoute.navigateTo = '';
 
-      return null;
+      return null as any;
     }
 
     case UPDATE_DATE: {
@@ -69,6 +68,10 @@ export function rootReducer(state: StateType, action: ActionType) {
 
     case CHANGE_CURRENT_TEXT: {
       return { ...state, currentText: action.data };
+    }
+
+    case CHANGE_TABLE_SIZE: {
+      return { ...state, tableSize: action.data };
     }
 
     default: return state;

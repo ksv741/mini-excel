@@ -7,7 +7,7 @@ import {
   APPLY_STYLES,
   CHANGE_TITLE,
   DELETE_TABLE,
-  UPDATE_DATE, CHANGE_CURRENT_TEXT,
+  UPDATE_DATE, CHANGE_CURRENT_TEXT, CHANGE_TABLE_SIZE,
 } from 'redux/action-constants';
 
 export function tableResize(resizeData: ResizeReturnDataType): ActionType {
@@ -62,6 +62,13 @@ export function updateOpenDate(data: string): ActionType {
 export function changeCurrentText(data: string): ActionType {
   return {
     type: CHANGE_CURRENT_TEXT,
+    data,
+  };
+}
+
+export function changeTableSize(data: { col: number, row: number }): ActionType {
+  return {
+    type: CHANGE_TABLE_SIZE,
     data,
   };
 }

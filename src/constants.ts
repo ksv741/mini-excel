@@ -38,6 +38,10 @@ export const initialState: StateType = {
   currentStyles: initialStyleState,
   currentText: 'initial text',
   id: '0',
+  tableSize: {
+    col: 10,
+    row: 10,
+  },
 };
 
 export function getNormalizeInitialState(params: string): StateType {
@@ -45,6 +49,7 @@ export function getNormalizeInitialState(params: string): StateType {
   if (!state) return initialState;
 
   return {
+    ...initialState,
     ...state,
     id: params,
     currentStyles: state?.stylesState?.[startCellId] || initialStyleState,
