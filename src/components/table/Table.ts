@@ -62,7 +62,7 @@ export class Table extends ExcelComponent {
     this.initTable();
 
     this.$onEventFromObserver('formula:input', this.updateCurrentText);
-    this.$onEventFromObserver('formula:enter-press', () => this.selection.current.focus());
+    this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
     this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
     this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
   }
@@ -126,12 +126,12 @@ export class Table extends ExcelComponent {
   }
 
   emitSelectCallback() {
-    this.$emitEventToObserver('table:select-cell', this.selection.current);
+    this.$emitEventToObserver('table:select-cell', this.selection.$currentCell);
 
-    const styles = this.selection.current?.getStyles(Object.keys(initialStyleState));
+    const styles = this.selection.$currentCell?.getStyles(Object.keys(initialStyleState));
 
     this.dispatchToStore(changeCurrentStyles(styles));
-    this.dispatchToStore(changeCurrentText(this.selection.current.text));
+    this.dispatchToStore(changeCurrentText(this.selection.$currentCell.text));
   }
 
   async resizeTable(event: MouseEvent) {
@@ -147,12 +147,12 @@ export class Table extends ExcelComponent {
   }
 
   updateCurrentText = (text: string) => {
-    this.selection.current.attr('data-value', text);
-    this.selection.current.text = parse(text);
+    this.selection.$currentCell.attr('data-value', text);
+    this.selection.$currentCell.text = parse(text);
 
     this.dispatchToStore(actions.changeText({
       text,
-      id: this.selection.current.data.id || startCellId,
+      id: this.selection.$currentCell.data.id || startCellId,
     }));
   };
 

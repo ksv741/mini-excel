@@ -4,17 +4,21 @@ import { getParamsFromCellId, startCellId } from 'components/table/table.functio
 
 export class TableSelection {
   static selectedClassName = 'selected';
-  private group: Dom[];
-  public current: Dom;
+  private selectedCellsGroup: Dom[];
+  // TODO remove focus, when selection
+  // $focusedCell and $currentCell can be different, f.e. if select cells with Shift key, currentCell
+  // will be last cell, focusedCell will start cell, and can be different from selectedCellsGroup first item
+  public $currentCell: Dom;
+  public $focusedCell: Dom;
   public rootTable: Table;
 
   constructor(rootTable: Table) {
-    this.group = [];
+    this.selectedCellsGroup = [];
     this.rootTable = rootTable;
   }
 
   get selectedIds() {
-    return this.group.map(el => el.data.id);
+    return this.selectedCellsGroup.map(el => el.data.id);
   }
 
   // TODO make a focus manager
@@ -32,12 +36,14 @@ export class TableSelection {
     }
   }
 
-  select($el: Dom) {
+  select($cell: Dom) {
     this.clearSelection();
-    this.group = [$el];
-    this.current = $el;
-    $el.addClass(TableSelection.selectedClassName);
-    this.focusToCell($el);
+    this.selectedCellsGroup = [$cell];
+    this.$currentCell = $cell;
+    $cell.addClass(TableSelection.selectedClassName);
+    this.focusToCell($cell);
+    this.selectHeader($cell);
+    this.$focusedCell = $cell;
   }
 
   selectByCellId(cellID: { col: number, row: number }) {
@@ -46,21 +52,19 @@ export class TableSelection {
     if (col <= 0) col = 0;
     if (row <= 0) row = 0;
 
-    this.clearSelection();
-    this.current = $(`[data-id="${row}:${col}"]`);
-    this.focusToCell(this.current);
-    this.current.addClass(TableSelection.selectedClassName);
+    this.select($(`[data-id="${row}:${col}"]`));
   }
 
   clearSelection() {
-    this.group.forEach(el => el?.removeClass(TableSelection.selectedClassName));
-    this.current?.removeClass(TableSelection.selectedClassName);
-    this.group = [];
+    this.selectedCellsGroup.forEach(el => el?.removeClass(TableSelection.selectedClassName));
+    this.$currentCell?.removeClass(TableSelection.selectedClassName);
+    this.clearHeaderSelection();
+    this.selectedCellsGroup = [];
   }
 
-  selectTo($el: Dom) {
-    const startCellParams = getParamsFromCellId(this.current.data.id || startCellId);
-    const selectedCellParams = getParamsFromCellId($el.data.id || startCellId);
+  selectFromTo($from: Dom, $cell: Dom) {
+    const startCellParams = getParamsFromCellId($from.data.id || startCellId);
+    const selectedCellParams = getParamsFromCellId($cell.data.id || startCellId);
 
     const startCol = Math.min(startCellParams.col, selectedCellParams.col);
     const endCol = Math.max(startCellParams.col, selectedCellParams.col);
@@ -71,8 +75,8 @@ export class TableSelection {
 
     for (let row = startRow; row <= endRow; row++) {
       for (let col = startCol; col <= endCol; col++) {
-        const $cell = $(`[data-id="${row}:${col}"]`);
-        this.addCellToSelection($cell);
+        const $target = $(`[data-id="${row}:${col}"]`);
+        this.addCellToSelection($target);
       }
     }
   }
@@ -83,11 +87,56 @@ export class TableSelection {
   }
 
   addCellToSelection($cell: Dom) {
-    this.group.push($cell);
+    this.selectedCellsGroup.push($cell);
     $cell.addClass(TableSelection.selectedClassName);
+    this.selectHeader($cell);
+  }
+
+  addGroupToSelectionById(cellID: { col: number, row: number }) {
+    if (this.selectedCellsGroup.length === 1) {
+      this.$focusedCell = this.selectedCellsGroup[0];
+    }
+    const { col, row } = cellID;
+    const $cell = $(`[data-id="${row}:${col}"]`);
+    const $lastCell = this.selectedCellsGroup[this.selectedCellsGroup.length - 1];
+
+    if (!$lastCell.isExist) {
+      this.select($lastCell);
+      return;
+    }
+
+    this.selectFromTo(this.$focusedCell, $cell);
+
+    this.$currentCell = $cell;
   }
 
   applyStyle(style: CSSStyleDeclaration) {
-    this.group.forEach(el => el.css(style));
+    this.selectedCellsGroup.forEach(el => el.css(style));
+  }
+
+  selectHeader($cell: Dom) {
+    if (!$cell) return;
+
+    const { headerCol, headerRow } = this.findHeadOfCell($cell);
+
+    headerRow.addClass(TableSelection.selectedClassName);
+    headerCol.addClass(TableSelection.selectedClassName);
+  }
+
+  clearHeaderSelection() {
+    this.rootTable.$root.findAll('[data-header]').forEach(header => {
+      header.classList.remove(TableSelection.selectedClassName);
+    });
+  }
+
+  findHeadOfCell($cell: Dom): { headerRow: Dom, headerCol: Dom } {
+    const headerRow = $cell.closest('[data-row]').find("[data-header='row']");
+    const headerCol = this.rootTable.$root.find(`[data-col="${$cell.data.id?.split(':')[1]}"]`);
+
+    return { headerRow, headerCol };
+  }
+
+  isCellInSelection($cell: Dom) {
+    return this.selectedCellsGroup.includes($cell);
   }
 }

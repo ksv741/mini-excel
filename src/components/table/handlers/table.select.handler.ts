@@ -29,7 +29,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
     const target = $(event.target);
 
     if (isCell(event)) {
-      if (event.shiftKey) selection.selectTo(target);
+      if (event.shiftKey) selection.selectFromTo(selection.$currentCell, target);
       else if (event.ctrlKey) selection.addCellToSelection(target);
       else selection.select(target);
     } else {
@@ -63,10 +63,10 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       'Tab',
     ];
 
-    if (!selection?.current || !handleKeys.includes(key)) return;
+    if (!selection?.$currentCell || !handleKeys.includes(key)) return;
 
     // If something goes wrong, go to start line
-    const currentCellId = selection.current.data.id || startCellId;
+    const currentCellId = selection.$currentCell.data.id || startCellId;
     let { row, col } = getParamsFromCellId(currentCellId);
 
     switch (key) {
@@ -104,13 +104,14 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       default: break;
     }
 
-    selection.selectByCellId({ row, col });
+    if (event.shiftKey) selection.addGroupToSelectionById({ row, col });
+    else selection.selectByCellId({ row, col });
   }
 
   function onMouseOverHandler() {
-    if (selection.current.$el) {
+    if (selection.$currentCell.$el) {
       // TODO find event type
-      selection.selectTo($((event as any).toElement));
+      selection.selectFromTo(selection.$currentCell, $((event as any).toElement));
     }
   }
 }

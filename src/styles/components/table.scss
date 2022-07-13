@@ -93,8 +93,22 @@
   }
   [data-header="row"] {
     cursor: e-resize;
+
+    &.selected {
+      border-right: 2px solid #3c74ff;
+    }
   }
+
   [data-header="col"] {
     cursor: n-resize;
+
+    &.selected {
+      border-bottom: 2px solid #3c74ff;
+    }
+  }
+
+  [data-header="col"].selected, [data-header="row"].selected {
+    font-weight: bold;
+    background: rgba(60, 116, 255, 0.4);
   }
 }
