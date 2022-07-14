@@ -1,3 +1,4 @@
+import { Dom } from 'core/Dom';
 import { CallbackType, StateType } from 'redux/types';
 import { fontSizes } from 'src/constants';
 
@@ -65,4 +66,12 @@ export function isSmallestFontSize(fontSize?: string): number | boolean {
 
 export function getMethodNameByEventName(eventName: string): string {
   return `on${capitalize(eventName)}`;
+}
+
+export function getCellId($cell: Dom): { row: string, col:string } | false {
+  if (!$cell.isExist) return false;
+  const id = $cell.data.id?.split(':');
+  if (!Array.isArray(id)) return false;
+  const [row, col] = id;
+  return { row, col };
 }

@@ -71,6 +71,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
 
     switch (key) {
       case 'ArrowDown': {
+        if (selection.rootTable.tableSize.row === row + 1) return;
         row++;
         break;
       }
@@ -79,6 +80,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
         break;
       }
       case 'ArrowRight': {
+        if (selection.rootTable.tableSize.col === col + 1) return;
         col++;
         break;
       }

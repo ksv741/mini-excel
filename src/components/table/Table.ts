@@ -3,10 +3,10 @@ import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
 import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
-import { changeCurrentStyles, changeCurrentText, changeTableSize } from 'redux/action-creators';
+import { changeCurrentStyles, changeCurrentText, changeTableSize, removeRowFromTable } from 'redux/action-creators';
 import { createTable, getNewRowHTML } from 'components/table/table.template';
 import { initialState, initialStyleState } from 'src/constants';
-import { parse } from 'core/utils';
+import { getCellId, parse } from 'core/utils';
 import { resizeHandler } from 'components/table/handlers/table.resize';
 import { selectHandler } from 'components/table/handlers/table.select.handler';
 
@@ -45,8 +45,8 @@ export class Table extends ExcelComponent {
     const maxColFromState = Math.max(...Object.keys(colState).map(el => +el));
 
     const normalTableSize = {
-      col: Math.max(maxRowFromState, row),
-      row: Math.max(maxColFromState, col),
+      row: Math.max(maxRowFromState, row),
+      col: Math.max(maxColFromState, col),
     };
 
     if ((maxColFromState !== this.tableSize.col) || (maxRowFromState !== this.tableSize.row)) {
@@ -65,6 +65,7 @@ export class Table extends ExcelComponent {
     this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
     this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
     this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
+    this.$onEventFromObserver('toolbar:remove-row', this.removeRowHandler);
   }
 
   initTable() {
@@ -156,7 +157,7 @@ export class Table extends ExcelComponent {
     }));
   };
 
-  updateCurrentStyles = (style: CSSStyleDeclaration) => {
+  updateCurrentStyles = (style: Partial<CSSStyleDeclaration>) => {
     this.selection.applyStyle(style);
     this.dispatchToStore(actions.applyStyle({
       value: style,
@@ -194,4 +195,17 @@ export class Table extends ExcelComponent {
   onMouseup() {
     this.isMouseDowned = false;
   }
+
+  removeRowHandler = () => {
+    const cell = this.selection.$focusedCell;
+    const cellId = getCellId(cell);
+    if (!cellId) return;
+
+    const { row } = cellId;
+    const nodeToRemove = this.$root.find(`[data-row='${row}']`);
+    this.$root.removeChild(nodeToRemove);
+    this.selection.clearSelection();
+
+    this.dispatchToStore(removeRowFromTable(+row));
+  };
 }

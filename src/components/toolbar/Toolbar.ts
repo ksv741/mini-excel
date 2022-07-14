@@ -49,8 +49,13 @@ export class Toolbar extends ExcelComponentState {
     // TODO refactor, make style handler
     const target = $(event.target);
 
-    if (target.closest('[data-addbtn]').isExist) {
+    if (target.closest('[data-add-row-btn]').isExist) {
       this.$emitEventToObserver('toolbar:add-row');
+      return;
+    }
+
+    if (target.closest('[data-remove-row-btn]').isExist) {
+      this.$emitEventToObserver('toolbar:remove-row');
       return;
     }
 

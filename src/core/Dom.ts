@@ -134,6 +134,10 @@ export class Dom implements DomClass {
     return this.$el.getAttribute(name);
   }
 
+  removeChild($child: Dom) {
+    this.$el.removeChild($child.$el);
+  }
+
   get isExist(): boolean {
     return !!this.$el;
   }

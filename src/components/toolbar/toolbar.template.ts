@@ -88,7 +88,8 @@ export function createToolbar(state: ToolbarStateType): string {
 
   buttons.push(increaseDecreaseFontSize);
   buttons.push(selectGroup);
-  buttons.push(createAddRowTable());
+  buttons.push(createAddRowButton());
+  buttons.push(createRemoveRowButton());
 
   return buttons.join('');
 }
@@ -170,10 +171,18 @@ function createButtonFromConfig(btnConfig: ButtonConfigType) {
   `;
 }
 
-function createAddRowTable() {
+function createAddRowButton() {
   return `
-    <div class="button" data-addbtn>
-      <i class="material-icons" data-addbtn>add_circle</i>
+    <div class="button" data-add-row-btn>
+      <i class="material-icons" data-add-row-btn>add_circle</i>
+    </div>
+  `;
+}
+
+function createRemoveRowButton() {
+  return `
+    <div class="button" data-remove-row-btn>
+      <i class="material-icons" data-remove-row-btn>remove_circle</i>
     </div>
   `;
 }

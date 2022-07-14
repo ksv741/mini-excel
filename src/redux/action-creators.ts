@@ -7,7 +7,7 @@ import {
   APPLY_STYLES,
   CHANGE_TITLE,
   DELETE_TABLE,
-  UPDATE_DATE, CHANGE_CURRENT_TEXT, CHANGE_TABLE_SIZE,
+  UPDATE_DATE, CHANGE_CURRENT_TEXT, CHANGE_TABLE_SIZE, REMOVE_ROW_FROM_TABLE,
 } from 'redux/action-constants';
 
 export function tableResize(resizeData: ResizeReturnDataType): ActionType {
@@ -31,7 +31,7 @@ export function changeCurrentStyles(data: Partial<CSSStyleDeclaration>): ActionT
   };
 }
 
-export function applyStyle(data: { ids: (string | undefined)[], value: CSSStyleDeclaration }): ActionType {
+export function applyStyle(data: { ids: (string | undefined)[], value: Partial<CSSStyleDeclaration> }): ActionType {
   return {
     type: APPLY_STYLES,
     data,
@@ -70,5 +70,12 @@ export function changeTableSize(data: { col: number, row: number }): ActionType 
   return {
     type: CHANGE_TABLE_SIZE,
     data,
+  };
+}
+
+export function removeRowFromTable(removedRowNumber: number) {
+  return {
+    type: REMOVE_ROW_FROM_TABLE,
+    data: removedRowNumber,
   };
 }

@@ -5,6 +5,7 @@
   position: absolute;
   left: 0;
   right: 0;
+  max-height: calc(100vh - ($header-height + $toolbar-height + $formula-height));
   top: $header-height + $toolbar-height + $formula-height;
   overflow: auto;
   font-size: $default-cell-font-size;

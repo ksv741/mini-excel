@@ -1,6 +1,7 @@
 import { Table } from 'components/table/Table';
 import { $, Dom } from 'core/Dom';
 import { getParamsFromCellId, startCellId } from 'components/table/table.functions';
+import { initialStyleState } from 'src/constants';
 
 export class TableSelection {
   static selectedClassName = 'selected';
@@ -60,6 +61,7 @@ export class TableSelection {
     this.$currentCell?.removeClass(TableSelection.selectedClassName);
     this.clearHeaderSelection();
     this.selectedCellsGroup = [];
+    this.rootTable.updateCurrentStyles(initialStyleState);
   }
 
   selectFromTo($from: Dom, $cell: Dom) {
@@ -110,7 +112,7 @@ export class TableSelection {
     this.$currentCell = $cell;
   }
 
-  applyStyle(style: CSSStyleDeclaration) {
+  applyStyle(style: Partial<CSSStyleDeclaration>) {
     this.selectedCellsGroup.forEach(el => el.css(style));
   }
 
