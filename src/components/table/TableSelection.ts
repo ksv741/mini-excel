@@ -5,7 +5,7 @@ import { initialStyleState } from 'src/constants';
 
 export class TableSelection {
   static selectedClassName = 'selected';
-  private selectedCellsGroup: Dom[];
+  public selectedCellsGroup: Dom[];
   // TODO remove focus, when selection
   // $focusedCell and $currentCell can be different, f.e. if select cells with Shift key, currentCell
   // will be last cell, focusedCell will start cell, and can be different from selectedCellsGroup first item
@@ -25,6 +25,8 @@ export class TableSelection {
   // TODO make a focus manager
   focusToCell($cell: Dom) {
     try {
+      this.$focusedCell = $cell;
+
       const range = new Range();
       const node = $cell.$el;
 
@@ -33,7 +35,7 @@ export class TableSelection {
       window.getSelection()?.removeAllRanges();
       window.getSelection()?.addRange(range);
     } catch (e) {
-      console.log('Error focus', e.message);
+      $cell.$el.focus();
     }
   }
 
@@ -41,10 +43,10 @@ export class TableSelection {
     this.clearSelection();
     this.selectedCellsGroup = [$cell];
     this.$currentCell = $cell;
+    this.$focusedCell = $cell;
     $cell.addClass(TableSelection.selectedClassName);
     this.focusToCell($cell);
     this.selectHeader($cell);
-    this.$focusedCell = $cell;
   }
 
   selectByCellId(cellID: { col: number, row: number }) {

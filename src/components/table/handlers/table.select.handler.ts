@@ -61,6 +61,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       'ArrowLeft',
       'Enter',
       'Tab',
+      'Delete',
     ];
 
     if (!selection?.$currentCell || !handleKeys.includes(key)) return;
@@ -89,24 +90,44 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
         break;
       }
       case 'Enter': {
-        if (event.shiftKey) return;
         event.preventDefault();
-        row++;
+
+        if (event.shiftKey) row--;
+        else row++;
         if (row === selection.rootTable.tableSize.row) selection.rootTable.addNewRowHandler();
         break;
       }
       case 'Tab': {
         event.preventDefault();
 
+        // Tab in selection must save focus in inner selection cells
+        if (selection.selectedCellsGroup.length > 1) {
+          const idxInSelection = selection.selectedCellsGroup.findIndex(el => el.$el === selection.$focusedCell.$el);
+          const nextIdx = idxInSelection + 1 === selection.selectedCellsGroup.length ? 0 : idxInSelection + 1;
+
+          selection.focusToCell(selection.selectedCellsGroup[nextIdx]);
+
+          break;
+        }
+
         if (event.shiftKey) col--;
         else col++;
+
+        break;
+      }
+      case 'Delete': {
+        if (selection.selectedCellsGroup.length > 1) {
+          event.preventDefault();
+
+          selection.selectedCellsGroup.forEach($cell => selection.rootTable.updateTextInCell('', $cell));
+        }
 
         break;
       }
       default: break;
     }
 
-    if (event.shiftKey) selection.addGroupToSelectionById({ row, col });
+    if (event.shiftKey && key !== 'Tab' && key !== 'Enter') selection.addGroupToSelectionById({ row, col });
     else selection.selectByCellId({ row, col });
   }
 

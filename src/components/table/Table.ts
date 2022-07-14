@@ -61,7 +61,7 @@ export class Table extends ExcelComponent {
 
     this.initTable();
 
-    this.$onEventFromObserver('formula:input', this.updateCurrentText);
+    this.$onEventFromObserver('formula:input', this.updateTextInCell);
     this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
     this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
     this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
@@ -147,21 +147,23 @@ export class Table extends ExcelComponent {
     }
   }
 
-  updateCurrentText = (text: string) => {
-    this.selection.$currentCell.attr('data-value', text);
-    this.selection.$currentCell.text = parse(text);
-
-    this.dispatchToStore(actions.changeText({
-      text,
-      id: this.selection.$currentCell.data.id || startCellId,
-    }));
-  };
-
   updateCurrentStyles = (style: Partial<CSSStyleDeclaration>) => {
     this.selection.applyStyle(style);
     this.dispatchToStore(actions.applyStyle({
       value: style,
       ids: this.selection.selectedIds,
+    }));
+  };
+
+  updateTextInCell = (text: string, $cell = this.selection.$focusedCell) => {
+    // eslint-disable-next-line no-param-reassign
+    $cell.attr('data-value', text);
+    // eslint-disable-next-line no-param-reassign
+    $cell.text = parse(text);
+
+    this.dispatchToStore(actions.changeText({
+      text,
+      id: $cell.data.id || startCellId,
     }));
   };
 
@@ -185,7 +187,7 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event: InputEvent) {
-    this.updateCurrentText((event.target as HTMLElement).innerText);
+    this.updateTextInCell((event.target as HTMLElement).innerText);
   }
 
   onMouseover(event: MouseEvent) {
