@@ -1,4 +1,5 @@
-import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
+import { BaseComponentOption } from 'components/excel/Excel';
+import { ExcelComponent } from 'core/ExcelComponent';
 import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
 import { ActiveRoute } from 'core/routes/ActiveRoute';
@@ -7,7 +8,7 @@ import { deleteTable } from 'redux/action-creators';
 export class Header extends ExcelComponent {
   static className = 'excel__header';
 
-  constructor($root: Dom, options: ComponentOptionsType) {
+  constructor($root: Dom, options: BaseComponentOption) {
     super($root, {
       ...options,
       name: 'Header',

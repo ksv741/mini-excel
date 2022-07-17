@@ -5,6 +5,11 @@ export type ActionType = {
   [k: string]: any
 };
 
+export type TableSizeType = {
+  col: number;
+  row: number;
+};
+
 export type StateType = {
   colState: { [k: number]: number };
   rowState: { [k: number]: number };
@@ -15,10 +20,7 @@ export type StateType = {
   stylesState: { [k: string]: ToolbarStateType };
   title: string;
   currentText: string;
-  tableSize: {
-    col: number;
-    row: number;
-  };
+  tableSize: TableSizeType;
 };
 
 export type ReducerType = (state: StateType, action: ActionType) => StateType | null;

@@ -1,7 +1,7 @@
+import { BaseComponentOption } from 'components/excel/Excel';
 import { startCellId } from 'components/table/table.functions';
 import { $, Dom } from 'core/Dom';
 import { ExcelComponentState } from 'core/ExcelComponentState';
-import { ComponentOptionsType } from 'core/ExcelComponent';
 import { createToolbar } from 'components/toolbar/toolbar.template';
 import { StateType } from 'redux/types';
 import { fontSizes, initialStyleState } from 'src/constants';
@@ -9,7 +9,7 @@ import { fontSizes, initialStyleState } from 'src/constants';
 export class Toolbar extends ExcelComponentState {
   static className = 'excel__toolbar';
 
-  constructor($root: Dom, options: ComponentOptionsType) {
+  constructor($root: Dom, options: BaseComponentOption) {
     super($root, {
       ...options,
       eventListeners: ['click', 'change'],
@@ -18,7 +18,7 @@ export class Toolbar extends ExcelComponentState {
     });
   }
 
-  prepare() {
+  beforeRender() {
     const currentToolbarState = this.toolbarState;
 
     this.initComponentState(currentToolbarState);

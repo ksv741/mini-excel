@@ -1,35 +1,36 @@
+import { BaseComponentOption } from 'components/excel/Excel';
+import { ComponentManager } from 'core/ComponentManager';
 import { ActionType, CallbackType, StateType } from 'redux/types';
 import { Dom } from 'core/Dom';
 import { DomListener } from 'core/DomListener';
 import { Observer } from 'core/Observer';
 import { Store } from 'core/store/Store';
 
-export type ComponentOptionsType = {
+export type ComponentOptionsType = BaseComponentOption & {
   eventListeners: string[];
   name: string;
-  observer: Observer;
-  store: Store;
-  subscribe: (keyof StateType)[],
+  subscribe?: (keyof StateType)[],
 };
 
 export abstract class ExcelComponent extends DomListener {
-  private observer: Observer;
+  observer: Observer;
   public store: Store;
   private subscribe: (keyof StateType)[];
   private unsubscribers: CallbackType[];
+  private componentManager: ComponentManager;
 
   protected constructor($root: Dom, options: ComponentOptionsType) {
     super($root, options.eventListeners);
     this.name = options.name;
     this.observer = options.observer;
     this.store = options.store;
-    this.subscribe = options.subscribe;
-
+    this.subscribe = options?.subscribe || [];
+    this.componentManager = options.componentManager;
     this.unsubscribers = [];
-    this.prepare();
+    this.beforeRender();
   }
 
-  prepare() {
+  beforeRender() {
 
   }
 
@@ -58,12 +59,16 @@ export abstract class ExcelComponent extends DomListener {
     return this.subscribe?.includes(key);
   }
 
-  init() {
+  afterRender() {
     this.initDOMListeners();
   }
 
   destroy() {
     this.removeDOMListeners();
     this.unsubscribers.forEach(unsub => unsub());
+  }
+
+  rerender() {
+    this.componentManager.rerenderComponent(this);
   }
 }

@@ -1,19 +1,26 @@
-import { $ } from 'core/Dom';
+import { ContextMenu } from 'components/ContextMenu/ContextMenu';
+import { Formula } from 'components/formula/Formula';
+import { Header } from 'components/header/Header';
+import { Table } from 'components/table/Table';
+import { Toolbar } from 'components/toolbar/Toolbar';
+import { ComponentManager } from 'core/ComponentManager';
 import { Observer } from 'core/Observer';
-import { ExcelComponent } from 'core/ExcelComponent';
 import { Store } from 'core/store/Store';
 import { StoreSubscriber } from 'core/StoreSubscriber';
 import { updateOpenDate } from 'redux/action-creators';
 
 // TODO type for components array
 interface ExcelOptionsType {
-  components: any[],
+  components: ComponentType[],
   store: Store,
 }
 
-type BaseComponentOption = {
+export type ComponentType = typeof Header | typeof Toolbar | typeof Formula | typeof Table | typeof ContextMenu;
+
+export type BaseComponentOption = {
   observer: Observer;
   store: Store;
+  componentManager: ComponentManager;
 };
 
 export class Excel {
@@ -21,44 +28,38 @@ export class Excel {
   observer: Observer;
   store: Store;
   subscriber: StoreSubscriber;
+  componentManage: ComponentManager;
 
   constructor(options: ExcelOptionsType) {
-    this.components = options.components;
-    this.observer = new Observer();
     this.store = options.store;
+    this.components = options.components;
+
     this.subscriber = new StoreSubscriber(this.store);
+    this.observer = new Observer();
+    this.componentManage = new ComponentManager();
   }
 
   getRoot() {
-    const $root = $.create('div', 'excel');
-
     const componentOptions: BaseComponentOption = {
       observer: this.observer,
       store: this.store,
+      componentManager: this.componentManage,
     };
+    this.components = this.components.map(Component => this.componentManage.createComponent(Component, componentOptions));
+    this.componentManage.addComponentsToRoot(this.components);
 
-    this.components = this.components.map(Component => {
-      const $el = $.create('div', Component.className);
-      const component: ExcelComponent = new Component($el, componentOptions);
-
-      $el.html(component.toHTML());
-      $root.append($el.$el);
-
-      return component;
-    });
-
-    return $root;
+    return this.componentManage.$rootExcelElement;
   }
 
-  init() {
+  afterRender() {
     this.subscriber.subscribeComponents(this.components);
-    this.components.forEach(component => component.init());
+    this.components.forEach(component => component.afterRender());
 
     this.store.dispatchToStore(updateOpenDate(Date.now().toString()));
   }
 
   destroy() {
     this.subscriber.unsubscribeFromStore();
-    this.components.forEach(component => component.destroy());
+    this.componentManage.destroyComponents();
   }
 }

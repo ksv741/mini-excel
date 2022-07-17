@@ -1,8 +1,7 @@
 import { startCellId } from 'components/table/table.functions';
 import { ToolbarStateType } from 'components/toolbar/toolbar-types';
-import { storageName } from 'pages/ExcelPage';
 import { StateType } from 'redux/types';
-import { storage } from 'core/utils';
+import { storage, storageName } from 'core/utils';
 
 export const fontSizes = [
   '12px',

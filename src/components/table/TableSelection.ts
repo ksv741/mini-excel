@@ -30,7 +30,7 @@ export class TableSelection {
       const range = new Range();
       const node = $cell.$el;
 
-      range.setStartAfter(node.childNodes[0]);
+      range.setStartAfter(node.childNodes[node.childNodes.length - 1]);
 
       window.getSelection()?.removeAllRanges();
       window.getSelection()?.addRange(range);
@@ -142,5 +142,24 @@ export class TableSelection {
 
   isCellInSelection($cell: Dom) {
     return this.selectedCellsGroup.includes($cell);
+  }
+
+  selectHeadRowCol($target: Dom) {
+    const row = $target.closest('[data-header="row"]');
+    const col = $target.closest('[data-header="col"]');
+    const resizer = $target.closest('[data-resize]');
+
+    if (row.$el && !resizer.$el) {
+      const cells = row.closest('[data-row]').findAll('[data-type="cell"]');
+      const $cells = Array.from(cells).map(cell => $(cell as HTMLElement));
+
+      this.selectGroupies($cells);
+    } else if (col.$el && !resizer.$el) {
+      const colNumber = col.data.col;
+      const columns = this.rootTable.$root.findAll(`[data-col="${colNumber}"]`);
+      const $cells = Array.from(columns).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
+
+      this.selectGroupies($cells);
+    }
   }
 }

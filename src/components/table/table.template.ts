@@ -62,12 +62,3 @@ export function createTable(rowsCount = 10, columnCount = 10) {
 
   return rows.join('');
 }
-
-export function getNewRowHTML(rowIndex: number, colCount: number): string {
-  const cells = new Array(colCount)
-    .fill('')
-    .map((el, colIndex) => createCell('', colIndex, rowIndex - 1))
-    .join('');
-
-  return createRow(cells, rowIndex.toString(), true, rowIndex - 1);
-}

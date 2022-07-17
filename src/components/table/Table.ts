@@ -1,11 +1,21 @@
+import { ContextSelectType } from 'components/ContextMenu/ContextMenu';
+import { BaseComponentOption } from 'components/excel/Excel';
 import { startCellId } from 'components/table/table.functions';
 import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
-import { ComponentOptionsType, ExcelComponent } from 'core/ExcelComponent';
+import { ExcelComponent } from 'core/ExcelComponent';
 import { TableSelection } from 'components/table/TableSelection';
-import { changeCurrentStyles, changeCurrentText, changeTableSize, removeRowFromTable } from 'redux/action-creators';
-import { createTable, getNewRowHTML } from 'components/table/table.template';
-import { initialState, initialStyleState } from 'src/constants';
+import {
+  addCol,
+  addRow,
+  changeCurrentStyles,
+  changeCurrentText,
+  changeTableSize, removeColFromTable,
+  removeRowFromTable,
+} from 'redux/action-creators';
+import { createTable } from 'components/table/table.template';
+import { TableSizeType } from 'redux/types';
+import { initialStyleState } from 'src/constants';
 import { getCellId, parse } from 'core/utils';
 import { resizeHandler } from 'components/table/handlers/table.resize';
 import { selectHandler } from 'components/table/handlers/table.select.handler';
@@ -15,28 +25,39 @@ export class Table extends ExcelComponent {
 
   private selection: TableSelection;
   private isMouseDowned: boolean;
-  private tableResizing = false;
-  public tableSize = { row: initialState.tableSize.row, col: initialState.tableSize.col };
+  private tableResizing: boolean;
+  public tableSize: TableSizeType;
 
-  constructor($root: Dom, options: ComponentOptionsType) {
+  constructor($root: Dom, options: BaseComponentOption) {
     super($root, {
       ...options,
       name: 'Table',
-      eventListeners: ['mousedown', 'keydown', 'input', 'mouseover', 'mouseup'],
+      eventListeners: ['mousedown', 'keydown', 'input', 'mouseover', 'mouseup', 'contextmenu'],
     });
-
-    this.isMouseDowned = false;
-    const { col, row } = this.getTableSize();
-    this.tableSize = { col, row };
   }
 
   toHTML(): string {
-    console.log('Table size', this.tableSize);
     return createTable(this.tableSize.row, this.tableSize.col);
   }
 
-  prepare() {
+  beforeRender() {
     this.selection = new TableSelection(this);
+    this.tableResizing = false;
+    this.isMouseDowned = false;
+    this.tableSize = this.getTableSize();
+  }
+
+  afterRender() {
+    super.afterRender();
+
+    this.initTable();
+
+    this.$onEventFromObserver('formula:input', this.updateTextInCell);
+    this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
+    this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
+    this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
+    this.$onEventFromObserver('toolbar:remove-row', this.removeRowHandler);
+    this.$onEventFromObserver('context-menu: select', this.contextMenuHandler);
   }
 
   getTableSize() {
@@ -49,23 +70,11 @@ export class Table extends ExcelComponent {
       col: Math.max(maxColFromState, col),
     };
 
-    if ((maxColFromState !== this.tableSize.col) || (maxRowFromState !== this.tableSize.row)) {
+    if ((maxColFromState !== this.tableSize?.col) || (maxRowFromState !== this.tableSize?.row)) {
       this.dispatchToStore(changeTableSize(normalTableSize));
     }
 
     return normalTableSize;
-  }
-
-  init() {
-    super.init();
-
-    this.initTable();
-
-    this.$onEventFromObserver('formula:input', this.updateTextInCell);
-    this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
-    this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
-    this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
-    this.$onEventFromObserver('toolbar:remove-row', this.removeRowHandler);
   }
 
   initTable() {
@@ -156,7 +165,6 @@ export class Table extends ExcelComponent {
   };
 
   updateTextInCell = (text: string, $cell = this.selection.$focusedCell) => {
-    // eslint-disable-next-line no-param-reassign
     $cell.attr('data-value', text);
     // eslint-disable-next-line no-param-reassign
     $cell.text = parse(text);
@@ -165,15 +173,91 @@ export class Table extends ExcelComponent {
       text,
       id: $cell.data.id || startCellId,
     }));
+    this.selection.focusToCell($cell);
   };
 
   addNewRowHandler = () => {
-    this.tableSize.row++;
-    this.$root.$el.insertAdjacentHTML('beforeend', getNewRowHTML(this.tableSize.row, this.tableSize.col));
-    const $newRow = $(`[data-row="${this.tableSize.row - 1}"]`);
-    this.initColSizes($newRow);
+    this.addNewColRow('row', 'after', this.tableSize.row);
+  };
 
-    this.dispatchToStore(changeTableSize(this.tableSize));
+  addNewColRow(type: 'col' | 'row', position: 'after' | 'before', targetIndex: number) {
+    if (targetIndex === undefined) return;
+    type === 'col'
+      ? this.dispatchToStore(addCol({ position, targetIndex }))
+      : this.dispatchToStore(addRow({ position, targetIndex }));
+
+    this.rerender();
+  }
+
+  removeRowHandler = () => {
+    const cell = this.selection.$focusedCell;
+    const cellId = getCellId(cell);
+    if (!cellId) return;
+
+    const { row } = cellId;
+    this.removeColRow('row', +row);
+  };
+
+  removeColRow = (type: 'col' | 'row', index: number) => {
+    if (!type || !index) return;
+
+    type === 'col'
+      ? this.dispatchToStore(removeColFromTable(index))
+      : this.dispatchToStore(removeRowFromTable(index));
+    this.rerender();
+  };
+
+  contextMenuHandler = (select: ContextSelectType) => {
+    const { event, target } = select;
+
+    switch (event) {
+      case 'add-row-before': {
+        const idx = target.closest('[data-row]').data.row;
+        if (!idx) return;
+        this.addNewColRow('row', 'before', +idx);
+        // this.selection.selectByCellId({ col: 2, row: 2 });
+        break;
+      }
+
+      case 'add-row-after': {
+        const idx = target.closest('[data-row]').data.row;
+        if (!idx) return;
+        this.addNewColRow('row', 'after', +idx);
+        break;
+      }
+
+      case 'remove-row': {
+        const idx = target.closest('[data-row]').data.row;
+        if (!idx) return;
+
+        this.removeColRow('row', +idx);
+        break;
+      }
+
+      case 'add-col-before': {
+        const idx = target.closest('[data-col]').data.col;
+        if (!idx) return;
+        this.addNewColRow('col', 'before', +idx);
+        break;
+      }
+
+      case 'add-col-after': {
+        const idx = target.closest('[data-col]').data.col;
+        if (!idx) return;
+        this.addNewColRow('col', 'after', +idx);
+        break;
+      }
+
+      case 'remove-col': {
+        const idx = target.closest('[data-col]').data.col;
+        if (!idx) return;
+
+        this.removeColRow('col', +idx);
+        break;
+      }
+
+      default: break;
+    }
   };
 
   onMousedown(event: MouseEvent) {
@@ -198,16 +282,12 @@ export class Table extends ExcelComponent {
     this.isMouseDowned = false;
   }
 
-  removeRowHandler = () => {
-    const cell = this.selection.$focusedCell;
-    const cellId = getCellId(cell);
-    if (!cellId) return;
+  onContextmenu(event: MouseEvent) {
+    const $target = $(event.target);
 
-    const { row } = cellId;
-    const nodeToRemove = this.$root.find(`[data-row='${row}']`);
-    this.$root.removeChild(nodeToRemove);
     this.selection.clearSelection();
+    this.selection.selectHeadRowCol($target);
 
-    this.dispatchToStore(removeRowFromTable(+row));
-  };
+    this.$emitEventToObserver('table:contextmenu', event);
+  }
 }

@@ -33,22 +33,7 @@ export function selectHandler(event: MouseEvent | KeyboardEvent, selection: Tabl
       else if (event.ctrlKey) selection.addCellToSelection(target);
       else selection.select(target);
     } else {
-      const row = target.closest('[data-header="row"]');
-      const col = target.closest('[data-header="col"]');
-      const resizer = target.closest('[data-resize]');
-
-      if (row.$el && !resizer.$el) {
-        const cells = row.closest('[data-row]').findAll('[data-type="cell"]');
-        const $cells = Array.from(cells).map(cell => $(cell as HTMLElement));
-
-        selection.selectGroupies($cells);
-      } else if (col.$el && !resizer.$el) {
-        const colNumber = col.data.col;
-        const columns = selection.rootTable.$root.findAll(`[data-col="${colNumber}"]`);
-        const $cells = Array.from(columns).filter(el => el !== col.$el).map(el => $(el as HTMLElement));
-
-        selection.selectGroupies($cells);
-      }
+      selection.selectHeadRowCol(target);
     }
   }
 

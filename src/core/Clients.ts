@@ -1,5 +1,4 @@
-import { storage } from 'core/utils';
-import { storageName } from 'pages/ExcelPage';
+import { storage, storageName } from 'core/utils';
 import { StateType } from 'redux/types';
 import { getNormalizeInitialState } from 'src/constants';
 

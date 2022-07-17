@@ -1,0 +1,43 @@
+@import "../_variables";
+@import "../_mixins";
+
+.excel__contextmenu_layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  user-select: none;
+
+  &.active {
+    height: 100vh;
+  }
+}
+
+
+.excel__contextmenu {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: -100px;
+  width: 170px;
+  height: 100px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+
+  .excel__contextmenu_item {
+    flex: 1;
+    border: 2px solid #cecece;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+
+    &:hover {
+      background: rgba(206, 206, 206, 1);
+    }
+  }
+}

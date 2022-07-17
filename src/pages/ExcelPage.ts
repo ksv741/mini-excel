@@ -1,3 +1,4 @@
+import { ContextMenu } from 'components/ContextMenu/ContextMenu';
 import { AbstractPage } from 'pages/AbstractPage';
 import { Excel } from 'components/excel/Excel';
 import { Formula } from 'components/formula/Formula';
@@ -9,10 +10,6 @@ import { SubscribeType } from 'redux/types';
 import { Table } from 'components/table/Table';
 import { Toolbar } from 'components/toolbar/Toolbar';
 import { rootReducer } from 'redux/rootReducer';
-
-export function storageName(param: string) {
-  return `excel:${param}`;
-}
 
 export class ExcelPage extends AbstractPage {
   private excel: Excel;
@@ -35,7 +32,7 @@ export class ExcelPage extends AbstractPage {
     this.storeSub = store.subscribeToStore(this.processor.listen);
 
     this.excel = new Excel({
-      components: [Header, Toolbar, Formula, Table],
+      components: [Header, Toolbar, Formula, Table, ContextMenu],
       store,
     });
 
@@ -43,7 +40,7 @@ export class ExcelPage extends AbstractPage {
   }
 
   afterRender() {
-    this.excel.init();
+    this.excel.afterRender();
   }
 
   destroy() {

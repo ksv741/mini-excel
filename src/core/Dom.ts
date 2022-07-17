@@ -32,8 +32,8 @@ export class Dom implements DomClass {
   set text(text: string) {
     if (!this.$el) return;
 
-    if (!text) this.$el.textContent = '';
-    this.$el.textContent = text;
+    if (!text) this.$el.innerText = '';
+    this.$el.innerText = text;
   }
 
   get text() {
@@ -47,7 +47,6 @@ export class Dom implements DomClass {
     return this;
   }
 
-  // FIXME: any
   append(node: HTMLElement | Dom) {
     let child = node;
 
@@ -126,7 +125,7 @@ export class Dom implements DomClass {
   }
 
   attr(name: string, value: string) {
-    if (value) {
+    if (value !== undefined) {
       this.$el.setAttribute(name, value);
       return this;
     }
@@ -136,6 +135,10 @@ export class Dom implements DomClass {
 
   removeChild($child: Dom) {
     this.$el.removeChild($child.$el);
+  }
+
+  replaceChild($newChild: Dom, $oldChild: Dom) {
+    this.$el.replaceChild($newChild.$el, $oldChild.$el);
   }
 
   get isExist(): boolean {

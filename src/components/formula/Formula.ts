@@ -1,12 +1,13 @@
+import { BaseComponentOption } from 'components/excel/Excel';
 import { Dom } from 'core/Dom';
-import { ExcelComponent, ComponentOptionsType } from 'core/ExcelComponent';
+import { ExcelComponent } from 'core/ExcelComponent';
 
 export class Formula extends ExcelComponent {
   static className = 'excel__formula';
 
   private formulaInput: Dom;
 
-  constructor($root: Dom, options: ComponentOptionsType) {
+  constructor($root: Dom, options: BaseComponentOption) {
     super($root, {
       ...options,
       eventListeners: ['input', 'keydown'],
@@ -22,8 +23,8 @@ export class Formula extends ExcelComponent {
     `;
   }
 
-  init() {
-    super.init();
+  afterRender() {
+    super.afterRender();
 
     this.formulaInput = this.$root.find('#formula-input');
 

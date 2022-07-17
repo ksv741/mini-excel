@@ -6,7 +6,7 @@ import { getMethodNameByEventName } from 'core/utils';
 export class DomListener {
   $root: Dom;
   eventListeners: string[];
-  protected name: string;
+  name: string;
 
   constructor($root: Dom, eventNames: string[]) {
     if (!$root) throw new Error('Не передали корневой элемент');
