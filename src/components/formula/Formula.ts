@@ -29,7 +29,7 @@ export class Formula extends ExcelComponent {
     this.formulaInput = this.$root.find('#formula-input');
 
     this.$onEventFromObserver('table:select-cell', (cell: Dom) => {
-      this.formulaInput.text = cell.data.value || '';
+      this.formulaInput.text = cell.dataValue || '';
     });
   }
 

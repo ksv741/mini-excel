@@ -20,6 +20,7 @@ export class ComponentManager {
 
   createComponent(Component: ComponentType, componentOptions: BaseComponentOption) {
     const $el = $.create('div', Component.className);
+    $el.attr('tabindex', '-1');
     const componentInstance: ExcelComponent = new Component($el, componentOptions);
 
     $el.html(componentInstance.toHTML());

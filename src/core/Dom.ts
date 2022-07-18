@@ -38,7 +38,7 @@ export class Dom implements DomClass {
 
   get text() {
     if (this.$el.closest('input')) return (this.$el as HTMLInputElement).value;
-    return (this.$el as HTMLElement).innerText;
+    return (this.$el as HTMLElement).innerText || '';
   }
 
   clear() {
@@ -70,8 +70,16 @@ export class Dom implements DomClass {
     this.$el.focus();
   }
 
+  blur() {
+    this.$el.blur();
+  }
+
   get data() {
     return this.$el.dataset || '';
+  }
+
+  get dataValue(): string {
+    return this.$el.dataset.value || '';
   }
 
   setData(name: string, value: string) {
@@ -124,7 +132,7 @@ export class Dom implements DomClass {
     }, {});
   }
 
-  attr(name: string, value: string) {
+  attr(name: string, value?: string) {
     if (value !== undefined) {
       this.$el.setAttribute(name, value);
       return this;
@@ -143,6 +151,12 @@ export class Dom implements DomClass {
 
   get isExist(): boolean {
     return !!this.$el;
+  }
+
+  isEqual($target: Dom | HTMLElement): boolean {
+    if ($target instanceof Dom) return this.$el === $target.$el;
+
+    return this.$el === $target;
   }
 }
 

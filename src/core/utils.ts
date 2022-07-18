@@ -1,4 +1,4 @@
-import { Dom } from 'core/Dom';
+import { $, Dom } from 'core/Dom';
 import { CallbackType, StateType } from 'redux/types';
 import { fontSizes } from 'src/constants';
 
@@ -42,7 +42,7 @@ export function debounce(fn: CallbackType, wait: number) {
 }
 
 export function parse(value: string) {
-  if (value.startsWith('=')) {
+  if (value.toString().startsWith('=')) {
     try {
       // eslint-disable-next-line no-eval
       return eval(value.slice(1));
@@ -68,12 +68,15 @@ export function getMethodNameByEventName(eventName: string): string {
   return `on${capitalize(eventName)}`;
 }
 
-export function getCellId($cell: Dom): { row: string, col: string } | false {
-  if (!$cell.isExist) return false;
+export function getIdByCell($cell: Dom): { row?: string, col?: string } {
   const id = $cell.data.id?.split(':');
-  if (!Array.isArray(id)) return false;
-  const [row, col] = id;
-  return { row, col };
+  return { row: id?.[0], col: id?.[1] };
+}
+
+export function getCellById(id: { row: string | number, col: string | number }): Dom | false {
+  const $cell = $(`[data-id="${id.row}:${id.col}"]`);
+  if (!$cell.isExist) return false;
+  return $cell;
 }
 
 export function storageName(param: string) {
