@@ -254,7 +254,8 @@ export class SelectionManager {
     const target = $(event.target);
     const header = target.closest('[data-header]');
     const resizer = target.closest('[data-resize]');
-    event.preventDefault();
+
+    if (!this.rootTable.focusManager.$currentFocusedCell?.isExist) event.preventDefault();
 
     if (header?.isExist && !isCell2(target) && !resizer?.isExist) {
       this.selectHeadRowCol(header);
@@ -290,7 +291,7 @@ export class SelectionManager {
   onKeyDownHandler(event: KeyboardEvent) {
     if (!isSelectionKey(event.key) || this.rootTable.focusManager.$currentFocusedCell?.isExist) {
       // TODO improve check
-      if (event.key.length === 1) {
+      if (event.key.length === 1 && !this.rootTable.focusManager.$currentFocusedCell?.isExist) {
         this.$currentSelectedCell && this.rootTable.focusManager.focusCell(this.$currentSelectedCell);
       }
 
@@ -343,7 +344,6 @@ export class SelectionManager {
 
     if (!side) return;
 
-    // $cell = this.getNeighbourCellBySide(side);
     $cell = this.getNeighbourCellBySide(side, this.$currentSelectedCell || this.$firstSelectedCell);
 
     if (event.ctrlKey && $cell?.isExist) {

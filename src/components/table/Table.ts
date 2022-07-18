@@ -3,6 +3,7 @@ import { BaseComponentOption } from 'components/excel/Excel';
 import { FocusManager } from 'components/table/FocusManager';
 import { SelectionManager } from 'components/table/SelectionManager';
 import { startCellId } from 'components/table/table.functions';
+import { parse } from 'core/utils';
 import * as actions from 'redux/action-creators';
 import { $, Dom } from 'core/Dom';
 import { ExcelComponent } from 'core/ExcelComponent';
@@ -14,7 +15,6 @@ import {
 } from 'redux/action-creators';
 import { createTable } from 'components/table/table.template';
 import { TableSizeType } from 'redux/types';
-import { parse } from 'core/utils';
 import { resizeHandler } from 'components/table/handlers/table.resize';
 import { initialStyleState } from 'src/constants';
 

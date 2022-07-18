@@ -13,13 +13,16 @@ export class Dom implements DomClass {
   $el: HTMLElement;
 
   constructor(selector: SelectorType) {
-    // Could not find element with selector in DOM, need a check
-    if (typeof selector === 'string') {
-      const elementFromDOM = document.querySelector(selector);
-      if (!elementFromDOM) throw new Error(`Can't find element with "${selector}" selector`);
-      else this.$el = elementFromDOM as HTMLElement;
-    } else {
-      this.$el = selector as HTMLElement;
+    try {
+      if (typeof selector === 'string') {
+        const elementFromDOM = document.querySelector(selector);
+        if (!elementFromDOM) throw new Error(`Can't find element with "${selector}" selector`);
+        else this.$el = elementFromDOM as HTMLElement;
+      } else {
+        this.$el = selector as HTMLElement;
+      }
+    } catch (e) {
+      console.error(e.message);
     }
   }
 
