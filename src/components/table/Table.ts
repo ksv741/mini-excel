@@ -50,8 +50,16 @@ export class Table extends ExcelComponent {
 
     this.initTable();
 
-    this.$onEventFromObserver('formula:input', this.updateTextInCell);
-    // this.$onEventFromObserver('formula:enter-press', () => this.selection.$currentCell.focus());
+    this.$onEventFromObserver('formula:input', (text) => {
+      if (!this.focusManager.$currentFocusedCell) this.updateTextInCell(text, this.selectionManager.$currentSelectedCell, true);
+      else this.updateTextInCell(text, this.focusManager.$currentFocusedCell, true);
+    });
+
+    this.$onEventFromObserver('formula:enter-press', () => {
+      this.focusManager.focusCell(this.selectionManager.$currentSelectedCell);
+      this.updateTextInCell(this.selectionManager.$currentSelectedCell?.text, this.focusManager.$currentFocusedCell, false);
+    });
+
     this.$onEventFromObserver('toolbar:applyStyle', this.updateCurrentStyles);
     this.$onEventFromObserver('toolbar:add-row', this.addNewRowHandler);
     this.$onEventFromObserver('toolbar:remove-row', this.removeRowHandler);

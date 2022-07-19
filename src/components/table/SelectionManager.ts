@@ -190,7 +190,7 @@ export class SelectionManager {
     });
   }
 
-  getNeighbourCellBySide(side: 'left' | 'right' | 'down' | 'up', $cell = this.$currentSelectedCell): Dom | undefined {
+  getSiblingCellBySide(side: 'left' | 'right' | 'down' | 'up', $cell = this.$currentSelectedCell): Dom | undefined {
     if (!$cell?.isExist) {
       console.error('Нет стартовой ячейки');
       return;
@@ -235,7 +235,7 @@ export class SelectionManager {
     const $current = this.$currentSelectedCell || this.rootTable.focusManager.$currentFocusedCell || this.$currentSelectedCell?.[0];
     if (!$current?.isExist) return;
 
-    const $movingCell = this.getNeighbourCellBySide(side, $current);
+    const $movingCell = this.getSiblingCellBySide(side, $current);
     if (!$movingCell?.isExist || !$movingCell) {
       console.error('Ошибка, не найдена ячейка для перемещения');
       return;
@@ -295,9 +295,16 @@ export class SelectionManager {
         this.$currentSelectedCell && this.rootTable.focusManager.focusCell(this.$currentSelectedCell);
       }
 
+      if (event.key === 'Enter' || event.key === 'Tab') {
+        let side;
+
+        if (event.key === 'Enter' && !event.shiftKey) side = 'down';
+        if (event.key === 'Tab') side = event.shiftKey ? 'left' : 'right';
+
+        side && this.moveSelectionTo(side);
+      }
       return;
     }
-
     event.preventDefault();
 
     let $cell: Dom | undefined;
@@ -344,7 +351,7 @@ export class SelectionManager {
 
     if (!side) return;
 
-    $cell = this.getNeighbourCellBySide(side, this.$currentSelectedCell || this.$firstSelectedCell);
+    $cell = this.getSiblingCellBySide(side, this.$currentSelectedCell || this.$firstSelectedCell);
 
     if (event.ctrlKey && $cell?.isExist) {
       this.addCellToSelection($cell);
@@ -362,7 +369,7 @@ export class SelectionManager {
       return;
     }
 
-    $cell = this.getNeighbourCellBySide(side, this.$firstSelectedCell || this.$currentSelectedCell);
+    $cell = this.getSiblingCellBySide(side, this.$firstSelectedCell || this.$currentSelectedCell);
     if (!$cell || !$cell.isExist) return;
 
     this.selectCell($cell);
