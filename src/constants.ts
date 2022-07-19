@@ -38,14 +38,14 @@ export const initialState: StateType = {
   currentText: 'initial text',
   id: '0',
   tableSize: {
-    col: 10,
-    row: 10,
+    col: 20,
+    row: 30,
   },
 };
 
 export function getNormalizeInitialState(params: string): StateType {
   const state = storage(storageName(params));
-  if (!state) return initialState;
+  // if (!state) return initialState;
 
   return {
     ...initialState,

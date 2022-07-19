@@ -7,7 +7,8 @@ function createCell(cellContent = '', colIndex = 1, rowIndex = 1) {
   return `
     <div 
       class="cell" 
-      contenteditable 
+      contenteditable
+      spellcheck="false" 
       data-col="${colIndex}" 
       data-id="${rowIndex}:${colIndex}"
       data-type="cell"

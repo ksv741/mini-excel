@@ -51,8 +51,9 @@ export abstract class ExcelComponent extends DomListener {
     this.store?.dispatchToStore(action);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   storeChanged(args: StateType) {
-    console.log('CHANGE STORE: ', args, ' in component ', this.name);
+    // console.log('CHANGE STORE: ', args, ' in component ', this.name);
   }
 
   isWatching(key: keyof StateType) {
