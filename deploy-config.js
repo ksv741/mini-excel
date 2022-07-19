@@ -3,9 +3,9 @@
 const path = require('path');
 const SftpClient = require('ssh2-sftp-client');
 const dotenv = require('dotenv');
-const { config } = require('./configs/deploy/sftp-config');
+const { config, directory } = require('./configs/deploy/sftp-config');
 
-const REMOTE_DIRECTORY = '/var/www/mysite/excel';
+const REMOTE_DIRECTORY = directory;
 const LOCAL_DIRECTORY = path.join(__dirname, 'dist');
 
 const dotenvPath = path.join(__dirname, '..', '.env');
